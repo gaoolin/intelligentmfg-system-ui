@@ -42,7 +42,7 @@ pipeline {
         stage('推送最新镜像') {
             agent none
             steps {
-                container('maven') {
+                container('nodejs') {
                     withCredentials([usernamePassword(passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME', credentialsId: "$DOCKER_CREDENTIAL_ID",)]) {
                         sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
 												sh 'docker tag ruoyi-ui:latest $REGISTRY/$DOCKERHUB_NAMESPACE/ruoyi-ui:latest'
