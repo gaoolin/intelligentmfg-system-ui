@@ -33,8 +33,8 @@ pipeline {
             agent none
             steps {
                 container('nodejs') {
-                    sh 'ls ruoyi-ui'
-										sh 'docker build -t ruoyi-ui:latest -f ruoyi-ui/Dockerfile ./ruoyi-ui/'
+                    sh 'ls'
+										sh 'docker build -t ruoyi-ui:latest -f Dockerfile .'
                 }
             }
         }
@@ -63,7 +63,7 @@ pipeline {
                         sh 'ls'
                         sh 'pwd'
 
-												sh 'envsubst < ./ruoyi-ui/deploy/deploy.yaml | kubectl apply -f -'
+												sh 'envsubst < ./deploy/deploy.yaml | kubectl apply -f -'
                     }
 //                    kubernetesDeploy(configs: 'qtech-auth/deploy/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
                 }
