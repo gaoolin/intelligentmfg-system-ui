@@ -1,5 +1,12 @@
 FROM nginx:1.22.0
+
+LABEL maintainer=gaozhilin
+
+# 调整时区
+RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+
 VOLUME /log
+
 # 将dist目录内容复制到nginx容器html内部
 COPY dist /usr/share/nginx/html/
 
