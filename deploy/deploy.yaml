@@ -37,24 +37,20 @@ spec:
           ports:
             - containerPort: 80
               protocol: TCP
-          volumeMounts:
-            - name: nginx-cm-pvc
-              mountPath: "/usr/share/nginx/html"
-            - name: nginx-cm
-              mountPath: "/etc/nginx/conf.d"
           resources:
             limits:
               cpu: 300m
               memory: 600Mi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+          volumeMounts:
+            - name: nginx-config
+              mountPath: "/etc/nginx/conf.d/"
+              readOnly: true
       volumes:
-      - name: nginx-cm-pvc
-        persistentVolumeClaim: 
-          claimName: nginx-cm-pvc
-      - name: nginx-cm
+      - name: nginx-config
         configMap:
-          name: nginx-cm
+          name: nginx-configmap
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
@@ -80,10 +76,10 @@ spec:
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: nginx-cm
+  name: nginx-config
   namespace: $KUBE_NAME_SPACE
 data:
-  a.conf: |-
+  default.conf: |
     server {
           listen       80;
           server_name  nginx-server;
