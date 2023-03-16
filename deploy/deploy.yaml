@@ -65,13 +65,14 @@ metadata:
 spec:
   ports:
     - name: http
+      nodePort: 30013
       port: 80
       protocol: TCP
       targetPort: 80
   selector:
     app: ruoyi-ui
   sessionAffinity: None
-  type: ClusterIP
+  type: NodePort
 ---
 kind: ConfigMap
 apiVersion: v1
