@@ -50,7 +50,7 @@ spec:
       volumes:
       - name: nginx-config
         configMap:
-          name: nginx-configmap
+          name: nginx-config
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
