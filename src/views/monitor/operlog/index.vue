@@ -136,7 +136,7 @@
             type="text"
             icon="el-icon-view"
             @click="handleView(scope.row,scope.index)"
-            v-hasPermi="['monitor:operlog:query']"
+            v-hasPermi="['monitor:operlog:review']"
           >详细</el-button>
         </template>
       </el-table-column>

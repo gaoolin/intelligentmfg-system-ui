@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '../../../utils/request'
 
 // 获取工厂名
 export function listFactory() {
@@ -13,6 +13,6 @@ export function listWorkshop(query) {
   return request({
     url: '/biz/workshop',
     method: 'get',
-    query: query
+    params: query
   })
 }

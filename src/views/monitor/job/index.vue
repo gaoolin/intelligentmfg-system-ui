@@ -85,7 +85,7 @@
           icon="el-icon-s-operation"
           size="mini"
           @click="handleJobLog"
-          v-hasPermi="['monitor:job:query']"
+          v-hasPermi="['monitor:job:review']"
         >日志</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -128,15 +128,15 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['monitor:job:remove']"
           >删除</el-button>
-          <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['monitor:job:changeStatus', 'monitor:job:query']">
+          <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['monitor:job:changeStatus', 'monitor:job:review']">
             <el-button size="mini" type="text" icon="el-icon-d-arrow-right">更多</el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="handleRun" icon="el-icon-caret-right"
                 v-hasPermi="['monitor:job:changeStatus']">执行一次</el-dropdown-item>
               <el-dropdown-item command="handleView" icon="el-icon-view"
-                v-hasPermi="['monitor:job:query']">任务详细</el-dropdown-item>
+                v-hasPermi="['monitor:job:review']">任务详细</el-dropdown-item>
               <el-dropdown-item command="handleJobLog" icon="el-icon-s-operation"
-                v-hasPermi="['monitor:job:query']">调度日志</el-dropdown-item>
+                v-hasPermi="['monitor:job:review']">调度日志</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
