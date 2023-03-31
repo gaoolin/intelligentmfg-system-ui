@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询金线监控列表
+// 查询金线消耗量列表
 export function listWorkshop(query) {
   return request({
     url: '/biz/monitor/workshop/list',
@@ -9,15 +9,15 @@ export function listWorkshop(query) {
   })
 }
 
-// 查询金线监控详细
-export function getWorkshop(partSpec) {
+// 查询金线消耗量详细
+export function getWorkshop(factoryName) {
   return request({
-    url: '/biz/monitor/workshop/' + partSpec,
+    url: '/biz/monitor/workshop/' + factoryName,
     method: 'get'
   })
 }
 
-// 新增金线监控
+// 新增金线消耗量
 export function addWorkshop(data) {
   return request({
     url: '/biz/monitor/workshop',
@@ -26,7 +26,7 @@ export function addWorkshop(data) {
   })
 }
 
-// 修改金线监控
+// 修改金线消耗量
 export function updateWorkshop(data) {
   return request({
     url: '/biz/monitor/workshop',
@@ -35,10 +35,10 @@ export function updateWorkshop(data) {
   })
 }
 
-// 删除金线监控
-export function delWorkshop(partSpec) {
+// 删除金线消耗量
+export function delWorkshop(factoryName) {
   return request({
-    url: '/biz/monitor/workshop/' + partSpec,
+    url: '/biz/monitor/workshop/' + factoryName,
     method: 'delete'
   })
 }

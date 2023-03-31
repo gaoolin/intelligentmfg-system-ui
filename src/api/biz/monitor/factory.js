@@ -1,7 +1,7 @@
 import request from '../../../utils/request'
 
 // 获取工厂名
-export function listFactory() {
+export function listFactoryName() {
   return request({
     url: '/biz/factoryName',
     method: 'get'
@@ -9,9 +9,9 @@ export function listFactory() {
 }
 
 // 根据工厂名获取区名
-export function listWorkshop(query) {
+export function listWorkshopName(query) {
   return request({
-    url: '/biz/workshop',
+    url: '/biz/workshopName',
     method: 'get',
     params: query
   })
