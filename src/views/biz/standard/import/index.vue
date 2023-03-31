@@ -41,7 +41,7 @@ export default {
         isUploading: false,
         headers: { Authorization: 'Bearer ' + getToken() },
 
-        url: 'http://localhost/dev-api/biz/standard/import'
+        url: 'http://10.170.6.40:30013/prod-api/biz/standard/import'
       }
     }
   },

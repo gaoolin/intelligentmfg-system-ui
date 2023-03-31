@@ -35,6 +35,7 @@ pipeline {
                 container('nodejs') {
                     sh 'ls'
                     sh 'docker rmi $REGISTRY/$DOCKERHUB_NAMESPACE/ruoyi-ui:latest --force'
+                    sh 'docker rmi $REGISTRY/$DOCKERHUB_NAMESPACE/ruoyi-ui --force'
 					          sh 'docker build -t ruoyi-ui:latest -f Dockerfile .'
                 }
             }
