@@ -18,7 +18,8 @@
       <div class="el-upload__tip text-center" slot="tip">
         <span>仅允许导入xls、xlsx格式文件。</span>
         <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
-                 @click="importTemplate">下载模板
+                 @click="importTemplate"
+        >下载模板
         </el-link>
       </div>
     </el-upload>
@@ -30,7 +31,6 @@
 </template>
 
 <script>
-import { uploadStdModel } from '@/api/biz/standard/import'
 import { getToken } from '@/utils/auth'
 
 export default {
@@ -51,26 +51,8 @@ export default {
     }
   },
   methods: {
-    uploadSuccess(response, file, fileList) {
-      if (response.code !== 200) {
-        this.$modal.msgError(response.msg)
-      } else {
-        this.$modal.msgSuccess(response.msg)
-      }
-    },
-
     uploadFail() {
       this.$modal.msgError('远程服务异常！')
-    },
-
-    httpRequest() {
-      uploadStdModel().then(res => {
-        if (res.data.code !== 200) {
-          this.$modal.msgError('模板上传失败！')
-        } else {
-          this.$modal.msgSuccess('模板上传成功！')
-        }
-      })
     },
 
     // 文件提交处理
