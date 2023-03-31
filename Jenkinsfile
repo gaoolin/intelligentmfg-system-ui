@@ -21,10 +21,10 @@ pipeline {
             agent none
             steps {
                 container('nodejs') {
-					sh 'npm install --registry=https://registry.npm.taobao.org'
+					          sh 'npm install --registry=https://registry.npm.taobao.org'
                     sh 'npm run build:prod'
-					sh '''echo "**********打印当前路径**************"
-						ls -al'''
+					          sh '''echo "**********打印当前路径**************"
+						              ls -al'''
                 }
             }
         }
@@ -34,7 +34,8 @@ pipeline {
             steps {
                 container('nodejs') {
                     sh 'ls'
-					sh 'docker build -t ruoyi-ui:latest -f Dockerfile .'
+                    sh 'docker rmi $REGISTRY/$DOCKERHUB_NAMESPACE/ruoyi-ui:latest --force'
+					          sh 'docker build -t ruoyi-ui:latest -f Dockerfile .'
                 }
             }
         }
@@ -47,7 +48,6 @@ pipeline {
                         sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
 						            sh 'docker tag ruoyi-ui:latest $REGISTRY/$DOCKERHUB_NAMESPACE/ruoyi-ui:latest'
                         sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/ruoyi-ui:latest'
-                        sh 'docker rmi $REGISTRY/$DOCKERHUB_NAMESPACE/ruoyi-ui:latest --force'
                     }
                 }
             }
