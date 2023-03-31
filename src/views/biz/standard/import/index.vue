@@ -37,11 +37,16 @@ export default {
   name: 'index',
   data() {
     return {
+      // 上传参数
       upload: {
+        // 是否禁用上传
         isUploading: false,
+        // 设置上传的请求头部
         headers: { Authorization: 'Bearer ' + getToken() },
-
-        url: 'http://10.170.6.40:30013/prod-api/biz/standard/import'
+        // 上传的地址
+        url: process.env.VUE_APP_BASE_API + '/biz/standard/import',
+        // 上传的文件列表
+        fileList: []
       }
     }
   },
