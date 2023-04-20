@@ -6,10 +6,10 @@
 
 <script>
 export default {
-  name: 'RuoYiDoc',
+  name: 'QTechDosageControlDoc',
   data() {
     return {
-      url: 'http://doc.ruoyi.vip/ruoyi-vue'
+      url: 'http://doc.qtech-dosage-control.vip/qtech-dosage-control-vue'
     }
   },
   methods: {

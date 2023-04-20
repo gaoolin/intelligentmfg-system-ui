@@ -37,7 +37,7 @@
       </el-form-item>
       <el-form-item label="日期">
         <el-date-picker
-          v-model="daterangeFiscalDate"
+          v-model="daterangeCreateDate"
           style="width: 240px"
           value-format="yyyy-MM-dd"
           type="daterange"
@@ -177,7 +177,7 @@ export default {
       // 是否显示弹出层
       open: false,
       // 日期时间范围
-      daterangeFiscalDate: [],
+      daterangeCreateDate: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -186,7 +186,7 @@ export default {
         factoryName: null,
         workshop: null,
         percents: null,
-        fiscalDate: null
+        createDate: null
       },
       // 表单参数
       form: {},
@@ -203,9 +203,9 @@ export default {
     getList() {
       this.loading = true;
       this.queryParams.params = {};
-      if (null != this.daterangeFiscalDate && '' != this.daterangeFiscalDate) {
-        this.queryParams.params["beginFiscalDate"] = this.daterangeFiscalDate[0];
-        this.queryParams.params["endFiscalDate"] = this.daterangeFiscalDate[1];
+      if (null != this.daterangeCreateDate && '' != this.daterangeCreateDate) {
+        this.queryParams.params["beginCreateDate"] = this.daterangeCreateDate[0];
+        this.queryParams.params["endCreateDate"] = this.daterangeCreateDate[1];
       }
       listWire(this.queryParams).then(response => {
         this.wireList = response.rows;
@@ -224,10 +224,10 @@ export default {
         partSpec: null,
         factoryName: null,
         workshop: null,
-        actualUsagePerPcs: null,
-        standardUsagePerPcs: null,
+        actualWireUsage: null,
+        standardWireUsage: null,
         percents: null,
-        fiscalDate: null
+        createDate: null
       };
       this.resetForm("form");
     },
@@ -238,7 +238,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.daterangeFiscalDate = [];
+      this.daterangeCreateDate = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

@@ -1,6 +1,6 @@
 /**
 * v-dialogDrag 弹窗拖拽
-* Copyright (c) 2019 ruoyi
+* Copyright (c) 2019 智能制造部
 */
 
 export default {

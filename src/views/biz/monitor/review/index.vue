@@ -65,7 +65,7 @@
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
-            v-model="daterangeFiscalDate"
+            v-model="daterangeCreateDate"
             style="width: 240px"
             value-format="yyyy-MM-dd"
             type="daterange"
@@ -145,7 +145,7 @@ export default {
       // 是否显示弹出层
       open: false,
       // 日期时间范围
-      daterangeFiscalDate: [this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)).substring(0,10),
+      daterangeCreateDate: [this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)).substring(0,10),
       this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)).substring(0,10)],
       // 查询参数
       queryParams: {
@@ -154,7 +154,7 @@ export default {
         partSpec: null,
         factoryName: null,
         workshop: null,
-        fiscalDate: null,
+        createDate: null,
         status: null
       },
       // 表单参数
@@ -205,9 +205,9 @@ export default {
     getList() {
       this.loading = true;
       this.queryParams.params = {};
-      if (null != this.daterangeFiscalDate && '' !== this.daterangeFiscalDate) {
-        this.queryParams.params["beginFiscalDate"] = this.daterangeFiscalDate[0];
-        this.queryParams.params["endFiscalDate"] = this.daterangeFiscalDate[1];
+      if (null != this.daterangeCreateDate && '' !== this.daterangeCreateDate) {
+        this.queryParams.params["beginCreateDate"] = this.daterangeCreateDate[0];
+        this.queryParams.params["endCreateDate"] = this.daterangeCreateDate[1];
       }
       listWire(this.queryParams).then(response => {
 
@@ -230,7 +230,7 @@ export default {
         actualUsagePerPcs: null,
         standardUsagePerPcs: null,
         percents: null,
-        fiscalDate: null,
+        createDate: null,
         status: null
       };
       this.resetForm("form");
@@ -242,7 +242,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.daterangeFiscalDate = [];
+      this.daterangeCreateDate = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

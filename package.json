@@ -1,5 +1,5 @@
 {
-  "name": "ruoyi",
+  "name": "qtech-dosage-control",
   "version": "3.8.5",
   "description": "金线用量偏差分析系统",
   "author": "若依",
@@ -33,7 +33,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/y_project/RuoYi-Vue.git"
+    "url": "https://gitee.com/y_project/qtech-dosage-control-Vue.git"
   },
   "dependencies": {
     "@riophae/vue-treeselect": "0.4.0",

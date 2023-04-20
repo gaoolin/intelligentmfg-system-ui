@@ -5,6 +5,7 @@
       <el-form-item label="厂区" prop="factoryName">
         <el-select
           v-model="queryParams.factoryName"
+          style="width: 240px"
           placeholder="请输入厂区"
           clearable
           filterable
@@ -13,6 +14,7 @@
         >
           <el-option
             v-for="item in factoryOptions"
+            style="width: 240px"
             :key="item"
             :label="item"
             :value="item">
@@ -22,6 +24,7 @@
       <el-form-item label="车间" prop="workshop">
         <el-select
           v-model="queryParams.workshop"
+          style="width: 240px"
           placeholder="请输入车间"
           clearable
           filterable
@@ -30,6 +33,7 @@
         >
           <el-option
             v-for="item in workshopOptions"
+            style="width: 240px"
             :key="item"
             :label="item"
             :value="item">
@@ -39,6 +43,7 @@
       <el-form-item label="EQ" prop="deviceMId">
         <el-input
           v-model="queryParams.deviceMId"
+          style="width: 240px"
           placeholder="请输入设备编号"
           clearable
           @keyup.enter.native="handleQuery"
@@ -47,6 +52,7 @@
       <el-form-item label="机型" prop="partSpec">
         <el-input
           v-model="queryParams.partSpec"
+          style="width: 240px"
           placeholder="请输入机型"
           clearable
           @keyup.enter.native="handleQuery"
@@ -55,6 +61,7 @@
       <el-form-item label="线径" prop="wireWidth">
         <el-input
           v-model="queryParams.wireWidth"
+          style="width: 240px"
           placeholder="请输入线径"
           clearable
           @keyup.enter.native="handleQuery"
@@ -62,7 +69,7 @@
       </el-form-item>
       <el-form-item label="日期">
         <el-date-picker
-          v-model="daterangeFiscalDate"
+          v-model="daterangeCreateDate"
           style="width: 240px"
           value-format="yyyy-MM-dd"
           type="daterange"
@@ -73,7 +80,7 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable style="width: 240px">
           <el-option
             v-for="dict in dict.type.wire_diff_status"
             :key="dict.value"
@@ -108,16 +115,22 @@
       <el-table-column label="序号" type="index" width="55" align="center" />
       <el-table-column label="厂区" align="center" prop="factoryName" />
       <el-table-column label="车间" align="center" prop="workshop" />
-      <el-table-column label="设备编号" align="center" prop="deviceMId" />
-      <el-table-column label="机型" align="center" prop="partSpec" />
+      <el-table-column label="设备编号" align="center" prop="deviceId" />
+      <el-table-column label="机型" align="center" prop="prodType" />
       <el-table-column label="线径" align="center" prop="wireWidth" >
         <template slot-scope="scope">{{ getBit(scope.row.wireWidth, 1) }}</template>
       </el-table-column>
-      <el-table-column label="实际用量" align="center" prop="actualUsagePerPcs" >
-        <template slot-scope="scope">{{ getBit(scope.row.actualUsagePerPcs, 4) }}</template>
+      <el-table-column label="实际用量" align="center" prop="actualWireUsage" >
+        <template slot-scope="scope">{{ getBit(scope.row.actualWireUsage, 4) }}</template>
       </el-table-column>
-      <el-table-column label="标准用量" align="center" prop="standardUsagePerPcs" >
-        <template slot-scope="scope">{{ getBit(scope.row.standardUsagePerPcs, 4) }}</template>
+      <el-table-column label="标准用量" align="center" prop="standardWireUsage" >
+        <template slot-scope="scope">{{ getBit(scope.row.standardWireUsage, 4) }}</template>
+      </el-table-column>
+      <el-table-column label="BOM用量" align="center" prop="bomWireUsage" >
+        <template slot-scope="scope">{{ getBit(scope.row.bomWireUsage, 4) }}</template>
+      </el-table-column>
+      <el-table-column label="产量" align="center" prop="yield" >
+        <template slot-scope="scope">{{ getBit(scope.row.yield, 0) }}</template>
       </el-table-column>
       <el-table-column label="占比" align="center" prop="percents" >
         <template slot-scope="scope">{{ getBit(scope.row.percents, 2) }}</template>
@@ -163,7 +176,7 @@ export default {
       // 是否显示弹出层
       open: false,
       // 状态时间范围
-      daterangeFiscalDate: [this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)).substring(0,10),
+      daterangeCreateDate: [this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)).substring(0,10),
         this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)).substring(0,10)],
       // 查询参数
       queryParams: {
@@ -171,10 +184,10 @@ export default {
         pageSize: 10,
         factoryName: null,
         workshop: null,
-        deviceMId: null,
-        partSpec: null,
+        deviceId: null,
+        prodType: null,
         wireWidth: null,
-        fiscalDate: null,
+        createDate: null,
         status: null
       },
       // 表单参数
@@ -225,9 +238,9 @@ export default {
     getList() {
       this.loading = true;
       this.queryParams.params = {};
-      if (null != this.daterangeFiscalDate && '' !== this.daterangeFiscalDate) {
-        this.queryParams.params["beginFiscalDate"] = this.daterangeFiscalDate[0];
-        this.queryParams.params["endFiscalDate"] = this.daterangeFiscalDate[1];
+      if (null != this.daterangeCreateDate && '' !== this.daterangeCreateDate) {
+        this.queryParams.params["beginCreateDate"] = this.daterangeCreateDate[0];
+        this.queryParams.params["endCreateDate"] = this.daterangeCreateDate[1];
       }
       listWorkshop(this.queryParams).then(response => {
         this.workshopList = response.rows;
@@ -245,13 +258,15 @@ export default {
       this.form = {
         factoryName: null,
         workshop: null,
-        deviceMId: null,
-        partSpec: null,
+        deviceId: null,
+        prodType: null,
         wireWidth: null,
-        actualUsagePerPcs: null,
-        standardUsagePerPcs: null,
+        actualWireUsage: null,
+        standardWireUsage: null,
+        bomWireUsage: null,
+        yield: null,
         percents: null,
-        fiscalDate: null,
+        createDate: null,
         status: null
       };
       this.resetForm("form");
@@ -263,7 +278,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.daterangeFiscalDate = [];
+      this.daterangeCreateDate = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
