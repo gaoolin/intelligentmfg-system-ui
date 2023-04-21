@@ -10,7 +10,7 @@ pipeline {
             agent none
             steps {
                 container('nodejs') {
-                    git(url: 'https://codeup.aliyun.com/6355e32a0e55ca746598544d/qtech-datadev/qtech-dosage-control-ui.git', credentialsId: 'codeup-id', branch: 'master', changelog: true, poll: false)
+                    git(url: 'https://codeup.aliyun.com/6355e32a0e55ca746598544d/qtech-dosage-control-ui.git', credentialsId: 'codeup-id', branch: 'master', changelog: true, poll: false)
                     sh '''echo "*****************打印当前路径*****************"
 						ls -al'''
                 }
