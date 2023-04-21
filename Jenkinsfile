@@ -36,6 +36,7 @@ pipeline {
                     sh 'ls'
                     sh 'docker rmi $REGISTRY/$DOCKERHUB_NAMESPACE/qtech-dosage-control-ui:latest --force'
                     sh 'docker rmi $REGISTRY/$DOCKERHUB_NAMESPACE/qtech-dosage-control-ui --force'
+                    sh 'docker rmi qtech-dosage-control-ui --force'
 					          sh 'docker build -t qtech-dosage-control-ui:latest -f Dockerfile .'
                 }
             }
@@ -46,7 +47,7 @@ pipeline {
             steps {
                 container('nodejs') {
                     withCredentials([usernamePassword(passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME', credentialsId: "$DOCKER_CREDENTIAL_ID",)]) {
-                        sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
+                        sh 'echo "$DOCKER_PASSWORD" | winpty  docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
 						            sh 'docker tag qtech-dosage-control-ui:latest $REGISTRY/$DOCKERHUB_NAMESPACE/qtech-dosage-control-ui:latest'
                         sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/qtech-dosage-control-ui:latest'
                     }
