@@ -81,6 +81,6 @@ pipeline {
         REGISTRY = 'registry.cn-shanghai.aliyuncs.com'
         DOCKERHUB_NAMESPACE = 'qtech'
         GITHUB_ACCOUNT = 'kubesphere'
-        KUBE_NAME_SPACE = 'qtech-datadev'
+        KUBE_NAME_SPACE = 'qtech-dosage-control-system'
     }
 }
