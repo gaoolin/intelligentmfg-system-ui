@@ -40,9 +40,9 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="EQ" prop="deviceMId">
+      <el-form-item label="EQ" prop="deviceId">
         <el-input
-          v-model="queryParams.deviceMId"
+          v-model="queryParams.deviceId"
           style="width: 240px"
           placeholder="请输入设备编号"
           clearable
