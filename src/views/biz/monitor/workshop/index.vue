@@ -49,9 +49,9 @@
           @keyup.enter.native="handleQuery"
           />
       </el-form-item>
-      <el-form-item label="机型" prop="partSpec">
+      <el-form-item label="机型" prop="prodType">
         <el-input
-          v-model="queryParams.partSpec"
+          v-model="queryParams.prodType"
           style="width: 240px"
           placeholder="请输入机型"
           clearable
