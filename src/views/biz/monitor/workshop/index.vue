@@ -40,9 +40,9 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="EQ" prop="deviceId">
+      <el-form-item label="EQ" prop="deviceMId">
         <el-input
-          v-model="queryParams.deviceId"
+          v-model="queryParams.deviceMId"
           style="width: 240px"
           placeholder="请输入设备编号"
           clearable
@@ -115,15 +115,15 @@
       <el-table-column label="序号" type="index" width="55" align="center" />
       <el-table-column label="厂区" align="center" prop="factoryName" />
       <el-table-column label="车间" align="center" prop="workshop" />
-      <el-table-column label="设备编号" align="center" prop="deviceId" />
       <el-table-column label="机型" align="center" prop="prodType" />
+      <el-table-column label="设备编号(EQ)" align="center" prop="deviceMId" />
       <el-table-column label="线径" align="center" prop="wireWidth" >
         <template slot-scope="scope">{{ getBit(scope.row.wireWidth, 1) }}</template>
       </el-table-column>
       <el-table-column label="实际用量" align="center" prop="actualWireUsage" >
         <template slot-scope="scope">{{ getBit(scope.row.actualWireUsage, 4) }}</template>
       </el-table-column>
-      <el-table-column label="标准用量" align="center" prop="standardWireUsage" >
+      <el-table-column label="维护用量" align="center" prop="standardWireUsage" >
         <template slot-scope="scope">{{ getBit(scope.row.standardWireUsage, 4) }}</template>
       </el-table-column>
       <el-table-column label="BOM用量" align="center" prop="bomWireUsage" >
@@ -132,7 +132,7 @@
       <el-table-column label="产量" align="center" prop="yield" >
         <template slot-scope="scope">{{ getBit(scope.row.yield, 0) }}</template>
       </el-table-column>
-      <el-table-column label="占比" align="center" prop="percents" >
+      <el-table-column label="差异(%)" align="center" prop="percents" >
         <template slot-scope="scope">{{ getBit(scope.row.percents, 2) }}</template>
       </el-table-column>
     </el-table>
@@ -176,15 +176,15 @@ export default {
       // 是否显示弹出层
       open: false,
       // 状态时间范围
-      daterangeCreateDate: [this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)).substring(0,10),
-        this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)).substring(0,10)],
+      daterangeCreateDate: [this.DateToStr(new Date(new Date().valueOf())).substring(0,10),
+        this.DateToStr(new Date(new Date().valueOf() + 1 * 1440 * 60 * 1000)).substring(0,10)],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         factoryName: null,
         workshop: null,
-        deviceId: null,
+        deviceMId: null,
         prodType: null,
         wireWidth: null,
         createDate: null,
@@ -258,7 +258,7 @@ export default {
       this.form = {
         factoryName: null,
         workshop: null,
-        deviceId: null,
+        deviceMId: null,
         prodType: null,
         wireWidth: null,
         actualWireUsage: null,

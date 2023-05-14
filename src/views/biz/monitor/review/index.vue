@@ -145,8 +145,8 @@ export default {
       // 是否显示弹出层
       open: false,
       // 日期时间范围
-      daterangeCreateDate: [this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)).substring(0,10),
-      this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)).substring(0,10)],
+      daterangeCreateDate: [this.DateToStr(new Date(new Date().valueOf())).substring(0,10),
+      this.DateToStr(new Date(new Date().valueOf() + 1 * 1440 * 60 * 1000)).substring(0,10)],
       // 查询参数
       queryParams: {
         pageNum: 1,
