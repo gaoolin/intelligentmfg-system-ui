@@ -10,9 +10,9 @@ export function listQuery(query) {
 }
 
 // 查询金线标准用量信息详细
-export function getQuery(id) {
+export function getQuery(mcId) {
   return request({
-    url: '/biz/standard/query/' + id,
+    url: '/biz/standard/query/' + mcId,
     method: 'get'
   })
 }
@@ -36,9 +36,9 @@ export function updateQuery(data) {
 }
 
 // 删除金线标准用量信息
-export function delQuery(id) {
+export function delQuery(mcId) {
   return request({
-    url: '/biz/standard/query/' + id,
+    url: '/biz/standard/query/' + mcId,
     method: 'delete'
   })
 }

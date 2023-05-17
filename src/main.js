@@ -37,6 +37,11 @@ import DictTag from '@/components/DictTag'
 import VueMeta from 'vue-meta'
 // 字典数据组件
 import DictData from '@/components/DictData'
+// 数值用千分位表示
+import { numberToCurrencyNo } from '@/utils/numberToCurrency'
+// 配置全局过滤器，实现数字千分位格式
+Vue.filter('numberToCurrency', numberToCurrencyNo)
+
 
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts

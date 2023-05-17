@@ -22,26 +22,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="车间" prop="workshop">
-          <el-select
-            v-model="queryParams.workshop"
-            style="width: 240px"
-            placeholder="请输入车间"
-            clearable
-            filterable
-            :loading="loading"
-            @focus="getWorkshopNameList"
-          >
-            <el-option
-              v-for="item in workshopOptions"
-              style="width: 240px"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="机型" prop="prodType">
           <el-input
             v-model="queryParams.prodType"
@@ -94,7 +74,7 @@
             icon="el-icon-download"
             size="mini"
             @click="handleExport"
-            v-hasPermi="['biz/monitor:workshop:export']"
+            v-hasPermi="['biz/monitor:factory:export']"
           >导出
           </el-button>
         </el-col>
@@ -103,16 +83,15 @@
     </el-card>
 
     <el-card style="margin-top: 2px">
-      <el-table v-loading="loading" :data="workshopList" @selection-change="handleSelectionChange">
+      <el-table v-loading="loading" :data="factoryList" @selection-change="handleSelectionChange">
         <el-table-column label="序号" type="index" width="55" align="center"/>
         <el-table-column label="厂区" align="center" prop="factoryName"/>
-        <el-table-column label="车间" align="center" prop="workshop"/>
         <el-table-column label="机型" align="center" prop="prodType"/>
         <el-table-column label="线径" align="center" prop="wireWidth"/>
         <el-table-column label="实际用量" align="center" prop="actualWireUsage">
           <template slot-scope="scope">{{ getBit(scope.row.actualWireUsage, 4) }}</template>
         </el-table-column>
-        <el-table-column label="维护用量" align="center" prop="standardWireUsage">
+        <el-table-column label="标准用量" align="center" prop="standardWireUsage">
           <template slot-scope="scope">{{ getBit(scope.row.standardWireUsage, 4) }}</template>
         </el-table-column>
         <el-table-column label="BOM用量" align="center" prop="bomWireUsage">
@@ -136,11 +115,11 @@
 </template>
 
 <script>
-import { listWorkshop, getWorkshop, delWorkshop, addWorkshop, updateWorkshop } from '@/api/biz/monitor/workshop'
-import { factoryNameList, workshopNameList } from '@/api/biz/monitor/factoryAndWorkshopNameList'
+import { listFactory, getFactory, delFactory, addFactory, updateFactory } from '@/api/biz/monitor/factory'
+import { factoryNameList } from '@/api/biz/monitor/factoryAndWorkshopNameList'
 
 export default {
-  name: 'Workshop',
+  name: 'Factory',
   dicts: ['wire_diff_status'],
   data() {
     return {
@@ -156,8 +135,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 车间级金线用量监控表格数据
-      workshopList: [],
+      // 厂区级金线用量监控表格数据
+      factoryList: [],
       // 弹出层标题
       title: '',
       // 是否显示弹出层
@@ -170,7 +149,6 @@ export default {
         pageNum: 1,
         pageSize: 10,
         factoryName: null,
-        workshop: null,
         prodType: null,
         wireWidth: null,
         createDate: null,
@@ -209,25 +187,24 @@ export default {
         }]
       },
       factoryOptions: [],
-      // 区选择器
-      workshopOptions: []
     }
   },
   created() {
-    this.getList()
+    console.log("--------------")
+    this.getList();
     this.getFactoryNameList()
   },
   methods: {
-    /** 查询车间级金线用量监控列表 */
+    /** 查询厂区级金线用量监控列表 */
     getList() {
       this.loading = true
       this.queryParams.params = {};
-      if (null != this.dateRangeCreateDate && '' !== this.dateRangeCreateDate) {
+      if (null != this.dateRangeCreateDate && '' !==this.dateRangeCreateDate) {
         this.queryParams.params['beginCreateDate'] = this.dateRangeCreateDate[0];
         this.queryParams.params['endCreateDate'] = this.dateRangeCreateDate[1];
       }
-      listWorkshop(this.queryParams).then(response => {
-        this.workshopList = response.rows
+      listFactory(this.queryParams).then(response => {
+        this.factoryList = response.rows
         this.total = response.total
         this.loading = false
       })
@@ -241,7 +218,6 @@ export default {
     reset() {
       this.form = {
         factoryName: null,
-        workshop: null,
         prodType: null,
         wireWidth: null,
         actualWireUsage: null,
@@ -275,16 +251,16 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = '添加车间级金线用量监控'
+      this.title = '添加厂区级金线用量监控'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset()
       const factoryName = row.factoryName || this.ids
-      getWorkshop(factoryName).then(response => {
+      getFactory(factoryName).then(response => {
         this.form = response.data
         this.open = true
-        this.title = '修改车间级金线用量监控'
+        this.title = '修改厂区级金线用量监控'
       })
     },
     /** 提交按钮 */
@@ -292,13 +268,13 @@ export default {
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.form.factoryName != null) {
-            updateWorkshop(this.form).then(response => {
+            updateFactory(this.form).then(response => {
               this.$modal.msgSuccess('修改成功')
               this.open = false
               this.getList()
             })
           } else {
-            addWorkshop(this.form).then(response => {
+            addFactory(this.form).then(response => {
               this.$modal.msgSuccess('新增成功')
               this.open = false
               this.getList()
@@ -310,8 +286,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const factoryNames = row.factoryName || this.ids
-      this.$modal.confirm('是否确认删除车间级金线用量监控编号为"' + factoryNames + '"的数据项？').then(function() {
-        return delWorkshop(factoryNames)
+      this.$modal.confirm('是否确认删除厂区级金线用量监控编号为"' + factoryNames + '"的数据项？').then(function() {
+        return delFactory(factoryNames)
       }).then(() => {
         this.getList()
         this.$modal.msgSuccess('删除成功')
@@ -320,9 +296,28 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('biz/monitor/workshop/export', {
+      this.download('biz/monitor/factory/export', {
         ...this.queryParams
-      }, `workshop_${new Date().getTime()}.xlsx`)
+      }, `factory_${new Date().getTime()}.xlsx`)
+    },
+    /** 给输入框设置值 */
+    changeOneSelection(val, fromObj, targetStr) {
+      fromObj.find(item => {
+        if (item.value === val) {
+          targetStr = item
+        }
+      })
+      console.log(this.queryParams.factoryName)
+    },
+    /** 远程获取厂区名称 */
+    getFactoryNameList() {
+      factoryNameList().then(res => {
+        console.log(res.data)
+        for (const i in res.data) {
+          this.factoryOptions.push(res.data[i]['factoryName'])
+        }
+        console.log(this.factoryOptions)
+      })
     },
     /** 日期转字符串 */
     DateToStr(date) {
@@ -349,38 +344,6 @@ export default {
         return null
       }
     },
-    /** 远程获取厂区名称 */
-    getFactoryNameList() {
-      factoryNameList().then(res => {
-        console.log(res.data)
-        for (const i in res.data) {
-          this.factoryOptions.push(res.data[i]['factoryName'])
-        }
-        console.log(this.factoryOptions)
-      })
-    },
-    /** 给输入框设置值 */
-    changeOneSelection(val, fromObj, targetStr) {
-      fromObj.find(item => {
-        if (item.value === val) {
-          targetStr = item
-        }
-      })
-      console.log(this.queryParams.factoryName)
-    },
-    /** 根据厂给定的值，查询区的值 */
-    getWorkshopNameList() {
-      console.log('已获取焦点')
-      console.log(this.queryParams)
-      workshopNameList(this.queryParams).then(res => {
-        console.log(res.data)
-        this.workshopOptions = []
-        for (const i in res.data) {
-          this.workshopOptions.push(res.data[i]['workshopName'])
-        }
-        console.log(this.workshopOptions)
-      })
-    }
   }
 }
 </script>

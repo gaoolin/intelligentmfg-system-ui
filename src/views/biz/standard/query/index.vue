@@ -74,7 +74,9 @@
       <el-table-column label="序号" type="index" align="center" />
       <el-table-column label="机型" align="center" prop="mcId" />
       <el-table-column label="线径" align="center" prop="wireWidth" />
-      <el-table-column label="标准用量" align="center" prop="standardWireUsage" />
+      <el-table-column label="标准用量" align="center" prop="standardWireUsage" >
+        <template slot-scope="scope">{{ getBit(scope.row.standardWireUsage, 4) }}</template>
+      </el-table-column>
       <el-table-column label="创建人" align="center" prop="createBy" />
       <el-table-column label="创建时间" align="center" prop="createTime" />
       <el-table-column label="更新人" align="center" prop="updateBy" />
@@ -197,7 +199,6 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        id: null,
         mcId: null,
         wireWidth: null,
         standardWireUsage: null,
@@ -223,7 +224,6 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
       this.mcIds = selection.map(item => item.mcId)
       this.single = selection.length!==1
       this.multiple = !selection.length
@@ -238,8 +238,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const id = row.id || this.ids
-      getQuery(id).then(response => {
+      const mcId = row.mcId || this.mcIds
+      getQuery(mcId).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改金线标准用量信息";
@@ -250,7 +250,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.id != null) {
+          if (this.isDisabled === true) {
             updateQuery(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -268,10 +268,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
-      const mcs = row.mcId || this.mcIds
-      this.$modal.confirm('是否确认删除金线标准用量信息编号为"' + mcs + '"的数据项？').then(function() {
-        return delQuery(ids);
+      const mcId = row.mcId || this.mcIds
+      this.$modal.confirm('是否确认删除金线标准用量信息编号为"' + mcId + '"的数据项？').then(function() {
+        return delQuery(mcId);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -282,7 +281,17 @@ export default {
       this.download('biz/standard/query/export', {
         ...this.queryParams
       }, `金线标准用量_${new Date().getTime()}.xlsx`)
-    }
+    },
+    /** 四舍五入 保留N位小数 */
+    getBit(value, bit = 2) {
+      if (value !== null && value !== '') {
+        let str = Number(value)
+        str = str.toFixed(bit)
+        return str
+      } else {
+        return null
+      }
+    },
   }
 };
 </script>
