@@ -1,4 +1,4 @@
-FROM nginx:1.22.0
+FROM registry.cn-shanghai.aliyuncs.com/kolenz/nginx:1.22.0
 
 LABEL maintainer=gaozhilin
 
