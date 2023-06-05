@@ -74,7 +74,7 @@
             icon="el-icon-download"
             size="mini"
             @click="handleExport"
-            v-hasPermi="['biz/monitor:factory:export']"
+            v-hasPermi="['biz/wire/monitor:factory:export']"
           >导出
           </el-button>
         </el-col>
@@ -115,8 +115,8 @@
 </template>
 
 <script>
-import { listFactory, getFactory, delFactory, addFactory, updateFactory } from '@/api/biz/monitor/factory'
-import { factoryNameList } from '@/api/biz/monitor/factoryAndWorkshopNameList'
+import { listFactory, getFactory, delFactory, addFactory, updateFactory } from '@/api/biz/wire/monitor/factory'
+import { factoryNameList } from '@/api/biz/wire/monitor/factoryAndWorkshopNameList'
 
 export default {
   name: 'Factory',
@@ -296,7 +296,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('biz/monitor/factory/export', {
+      this.download('biz/wire/monitor/factory/export', {
         ...this.queryParams
       }, `factory_${new Date().getTime()}.xlsx`)
     },

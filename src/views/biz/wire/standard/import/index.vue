@@ -44,7 +44,7 @@ export default {
         // 设置上传的请求头部
         headers: { Authorization: 'Bearer ' + getToken() },
         // 上传的地址
-        url: process.env.VUE_APP_BASE_API + '/biz/standard/import',
+        url: process.env.VUE_APP_BASE_API + '/biz/wire/standard/import',
         // 上传的文件列表
         fileList: []
       }
@@ -63,7 +63,7 @@ export default {
 
     /** 下载模板操作 */
     importTemplate() {
-      this.download('biz/standard/importTemplate', {}, `金线标准用量表.xlsx`)
+      this.download('biz/wire/standard/importTemplate', {}, `金线标准用量表.xlsx`)
     },
     // 文件上传中处理
     handleFileUploadProgress(event, file, fileList) {

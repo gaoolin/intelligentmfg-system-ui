@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询车间级金线用量监控列表
 export function listWorkshop(query) {
   return request({
-    url: '/biz/monitor/workshop/list',
+    url: '/biz/wire/monitor/workshop/list',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function listWorkshop(query) {
 // 查询车间级金线用量监控详细
 export function getWorkshop(factoryName) {
   return request({
-    url: '/biz/monitor/workshop/' + factoryName,
+    url: '/biz/wire/monitor/workshop/' + factoryName,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getWorkshop(factoryName) {
 // 新增车间级金线用量监控
 export function addWorkshop(data) {
   return request({
-    url: '/biz/monitor/workshop',
+    url: '/biz/wire/monitor/workshop',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addWorkshop(data) {
 // 修改车间级金线用量监控
 export function updateWorkshop(data) {
   return request({
-    url: '/biz/monitor/workshop',
+    url: '/biz/wire/monitor/workshop',
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function updateWorkshop(data) {
 // 删除车间级金线用量监控
 export function delWorkshop(factoryName) {
   return request({
-    url: '/biz/monitor/workshop/' + factoryName,
+    url: '/biz/wire/monitor/workshop/' + factoryName,
     method: 'delete'
   })
 }
