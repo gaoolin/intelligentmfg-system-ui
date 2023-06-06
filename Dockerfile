@@ -14,7 +14,8 @@ COPY dist /usr/share/nginx/html/
 RUN rm -rf /etc/nginx/conf.d/default.conf
 
 # 配置文件nginx.conf是要放在/etc/nginx/目录下, 而用于独立配置server的配置文件，需要放在/etc/nginx/conf.d/目录下
-ADD ./nginx.conf /etc/nginx/nginx.conf
+#ADD ./nginx.conf /etc/nginx/nginx.conf
+ADD nginx.conf /etc/nginx/nginx.conf
 
 # 将独立配置server的配置文件添加到默认配置目录下
 # 注意：nginx.conf需要与Dockerfile在同一目录
