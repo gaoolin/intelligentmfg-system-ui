@@ -8,7 +8,7 @@ RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shang
 VOLUME /log
 
 # 将dist目录内容复制到nginx容器html内部
-COPY dist /usr/share/nginx/html/
+COPY ./dist /usr/share/nginx/html/
 
 # 删除官方nginx镜像默认的配置
 RUN rm -rf /etc/nginx/conf.d/default.conf
