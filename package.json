@@ -2,7 +2,7 @@
   "name": "qtech-dosage-control",
   "version": "3.8.5",
   "description": "金线用量偏差分析系统",
-  "author": "若依",
+  "author": "qtech",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",
