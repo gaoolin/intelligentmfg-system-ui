@@ -132,7 +132,7 @@
           <el-input v-model="form.sharedProdType" placeholder="请输入共享机种"/>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" placeholder="请输入备注"/>
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -151,7 +151,7 @@ export default {
   data() {
     return {
       // 遮罩层
-      loading: true,
+      loading: false,
       // 选中数组
       ids: [],
       // 选择机种
@@ -183,9 +183,9 @@ export default {
       rules: {}
     }
   },
-  created() {
-    this.getList()
-  },
+  // created() {
+  //   this.getList()
+  // },
   methods: {
     /** 查询pogopin治具共享列表 */
     getList() {

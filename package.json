@@ -1,7 +1,7 @@
 {
   "name": "qtech-dosage-control",
   "version": "3.8.5",
-  "description": "金线用量偏差分析系统",
+  "description": "运营管理系统",
   "author": "qtech",
   "license": "MIT",
   "scripts": {

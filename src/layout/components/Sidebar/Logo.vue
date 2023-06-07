@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: '金线用量偏差分析系统',
+      title: '运营管理系统',
       logo: logoImg
     }
   }
