@@ -3,7 +3,7 @@ FROM registry.cn-shanghai.aliyuncs.com/kolenz/nginx:1.22.1-alpine
 LABEL maintainer=gaoolin@gmail.com
 
 # 调整时区
-RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime # && echo 'Asia/Shanghai' >/etc/timezone
+# RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
 
 VOLUME /log
 
