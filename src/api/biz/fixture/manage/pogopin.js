@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询pogopin治具共享列表
+// 查询pogopin治具列表
 export function listPogopin(query) {
   return request({
     url: '/biz/fixture/manage/pogopin/list',
@@ -9,7 +9,7 @@ export function listPogopin(query) {
   })
 }
 
-// 查询pogopin治具共享详细
+// 查询pogopin治具详细
 export function getPogopin(id) {
   return request({
     url: '/biz/fixture/manage/pogopin/' + id,
@@ -17,7 +17,7 @@ export function getPogopin(id) {
   })
 }
 
-// 新增pogopin治具共享
+// 新增pogopin治具
 export function addPogopin(data) {
   return request({
     url: '/biz/fixture/manage/pogopin',
@@ -26,7 +26,7 @@ export function addPogopin(data) {
   })
 }
 
-// 修改pogopin治具共享
+// 修改pogopin治具
 export function updatePogopin(data) {
   return request({
     url: '/biz/fixture/manage/pogopin',
@@ -35,7 +35,7 @@ export function updatePogopin(data) {
   })
 }
 
-// 删除pogopin治具共享
+// 删除pogopin治具
 export function delPogopin(id) {
   return request({
     url: '/biz/fixture/manage/pogopin/' + id,
