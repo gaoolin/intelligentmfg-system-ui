@@ -144,8 +144,7 @@
           <el-input v-model="form.prodType" placeholder="请输入机种" />
         </el-form-item>
         <el-form-item label="治具类别" prop="fixtureCategory">
-<!--          <el-input v-model="form.fixtureCategory" placeholder="请输入治具类别" />-->
-          <el-select v-model="form.fixtureCategory" placeholder="请选择状态" clearable style="width: 240px">
+          <el-select v-model="form.fixtureCategory" placeholder="请选择治具类别" clearable style="width: 240px">
             <el-option
               v-for="dict in dict.type.biz_fixture_category"
               :key="dict.value"
