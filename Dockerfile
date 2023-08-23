@@ -2,15 +2,9 @@ FROM registry.cn-shanghai.aliyuncs.com/kolenz/nginx:1.22.1-alpine
 
 LABEL maintainer=gaoolin@gmail.com
 
-# 基于Alpine的镜像 此类镜像中并没有包含tzdata，所以只设置环境变量并不能达到我们想要的效果，因此需要安装tzdata
-ENV TZ=Asia/Shanghai
-RUN apk update \
-    && apk add tzdata \
-    && echo "${TZ}" > /etc/timezone \
-    && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
-    && rm /var/cache/apk/*
-# 调整时区
-# RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+# 时区设置
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo 'Asia/Shanghai' >/etc/timezone
 
 VOLUME /log
 
