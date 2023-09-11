@@ -6,8 +6,19 @@
           v-model="queryParams.prodType"
           placeholder="请输入机种"
           clearable
+          @keyup.native="handleQuery"
           @keyup.enter.native="handleQuery"
         />
+      </el-form-item>
+      <el-form-item label="治具分类" prop="fixtureCategory">
+        <el-select v-model="queryParams.fixtureCategory" placeholder="请输入治具分类" clearable>
+          <el-option
+            v-for="dict in dict.type.biz_fixture_category"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="料号" prop="materialId">
         <el-input
@@ -94,6 +105,11 @@
           <dict-tag :options="dict.type.biz_fixture_category" :value="scope.row.fixtureCategory"/>
         </template>
       </el-table-column>
+      <el-table-column label="连接器朝向" align="center" prop="buckle" fixed>
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.fixture_buckle_status" :value="scope.row.buckle"/>
+        </template>
+      </el-table-column>
       <el-table-column label="品名" align="center" min-width="180" prop="fixtureName" fixed />
       <el-table-column label="治具版本" align="center" prop="fixtureVersion" />
       <el-table-column label="料号" align="center" prop="materialId" />
@@ -153,6 +169,16 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="连接器朝向" prop="buckle">
+          <el-select v-model="form.buckle" placeholder="请选择连接器朝向" clearable style="width: 240px">
+            <el-option
+              v-for="dict in dict.type.fixture_buckle_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="品名" prop="fixtureName">
           <el-input v-model="form.fixtureName" placeholder="请输入品名" />
         </el-form-item>
@@ -182,7 +208,7 @@ import { listPogopin, getPogopin, delPogopin, addPogopin, updatePogopin } from "
 
 export default {
   name: "Pogopin",
-  dicts: ['biz_fixture_category'],
+  dicts: ['biz_fixture_category', 'fixture_buckle_status'],
   data() {
     return {
       // 遮罩层
@@ -209,6 +235,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         prodType: null,
+        fixtureCategory: null,
         materialId: null,
       },
       // 表单参数
@@ -242,6 +269,7 @@ export default {
         id: null,
         prodType: null,
         fixtureCategory: null,
+        buckle: null,
         fixtureName: null,
         fixtureVersion: null,
         materialId: null,

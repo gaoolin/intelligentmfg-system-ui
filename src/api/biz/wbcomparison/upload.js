@@ -10,10 +10,10 @@ export function listUpload(query) {
 }
 
 // 向服务器提交标准模版
-export function addUpload(data) {
+export function addOnline(query) {
   return request({
     url: '/wbcomparison/upload/online',
-    method: 'post',
-    data: data
+    method: 'get',
+    params: query
   })
 }

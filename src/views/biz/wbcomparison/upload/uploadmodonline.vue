@@ -20,7 +20,7 @@
 
         <el-form-item label="产品序号">
           <el-input
-            v-model="queryParams.pieId"
+            v-model="queryParams.pId"
             placeholder="产品序号"
             clearable
           />
@@ -28,7 +28,7 @@
 
         <el-form-item label="时段" required>
           <el-date-picker
-            v-model="daterangeCreateDate"
+            v-model="dateRangeCreateDate"
             style="width: 370px"
             value-format="yyyy-MM-dd HH:mm:ss"
             type="datetimerange"
@@ -46,7 +46,6 @@
             v-model="leadThreshold"
             placeholder="Lead点卡控值"
             clearable
-            @blur="setLeadThreshold"
           ></el-input>
         </el-form-item>
 
@@ -82,25 +81,20 @@
     <el-table
       ref="multipleTable"
       v-loading="loading"
-      :data="detailList" border stripe
-      :header-cell-class-name="'headerBg'"
+      :data="dataList" border stripe
       highlight-current-row
-      :max-height="windowHeight"
-      :cell-style="rowClass"
-      :header-cell-style="headClass"
-      @current-change="handleCurrentChangeHighLine"
       @selection-change="handleSelectionChange"
     >
       <el-table-column prop="tableRowId" label="#" type="selection">
       </el-table-column>
-      <el-table-column prop="equipmentId" label="盒子号" min-width="110px">
+      <el-table-column prop="simId" label="盒子号" min-width="110px">
       </el-table-column>
-      <el-table-column prop="dateTime" label="时间" min-width="120px">
+      <el-table-column prop="dt" label="时间" min-width="120px">
       </el-table-column>
       <el-table-column prop="mcId" label="设备号" sortable>
       </el-table-column>
       <el-table-column label="线号">
-        <template slot-scope="scope">{{ scope.row.lineNmb }}</template>
+        <template slot-scope="scope">{{ scope.row.lineNo }}</template>
       </el-table-column>
       <el-table-column prop="leadX" label="LeadX">
       </el-table-column>
@@ -122,12 +116,12 @@
       </el-table-column>
       <el-table-column prop="checkPort" label="CheckPort">
       </el-table-column>
-      <el-table-column prop="piecesIndex" label="PiecesIndex">
+      <el-table-column prop="pId" label="产品序号">
       </el-table-column>
 
       <el-table-column prop="operation" label="操作" fixed="right">
         <template slot-scope="scope">
-          <el-button type="danger" @click="toggleSelection([detailList[scope.$index]])">删除<i
+          <el-button type="danger" @click="toggleSelection([dataList[scope.$index]])">删除<i
             class="el-icon-remove-outline"
           ></i></el-button>
         </template>
@@ -142,13 +136,13 @@
       @pagination="getList"
     />
     <div class="pd-15">
-      <el-button type="primary" size="medium" class="bigBtn" @click="stdModSubmit" @confirm>提 交 模 板</el-button>
+      <el-button type="primary" size="medium"  class="bigBtn" :disabled="hadSubmit" @click="onlineSubmit" @confirm>{{submitText}}</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { listUpload, addUpload } from '@/api/biz/wbcomparison/upload'
+import { listUpload, addOnline } from '@/api/biz/wbcomparison/upload'
 
 export default {
   name: 'UploadModOnline',
@@ -159,12 +153,16 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      // 已提交禁用
+      hadSubmit: false,
+      // 提交按钮文本
+      submitText: "提 交 模 板",
       // 显示搜索条件
       showSearch: true,
       // 总条数
       total: 0,
       // 标准模版明细表格数据
-      detailList: [],
+      dataList: [],
       // 弹出层标题
       title: '',
       // 是否显示弹出层
@@ -203,25 +201,24 @@ export default {
       },
       windowHeight: 650,
       // 状态时间范围
-      daterangeCreateDate: [this.DateToStr(new Date(new Date().valueOf())).substring(0, 10),
-        this.DateToStr(new Date(new Date().valueOf() + 1 * 1440 * 60 * 1000)).substring(0, 10)],
+      dateRangeCreateDate: [this.DateToStr(new Date(new Date().valueOf())),
+        this.DateToStr(new Date(new Date().valueOf() + 5 * 1440 * 60 * 1000))],
       // lead阈值
-      leadThreshold: null,
+      leadThreshold: 50,
       // pad阈值
-      padThreshold: null,
+      padThreshold: 10,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         mcId: null,
         simId: null,
-        pieId: null,
+        pId: null,
         beginTime: null,
-        endTime: null
+        endTime: null,
+        delLineNo: new Set()
       },
-      multipleSelection: [],
-      delLineNmbStr: '',
-      delLineNmb: new Set()
+      delBtnType: true
     }
   },
 
@@ -233,42 +230,15 @@ export default {
     getList() {
       this.loading = true
       this.queryParams.params = {}
-      if (null != this.daterangeCreateDate && '' !== this.daterangeCreateDate) {
-        this.queryParams.params['beginCreateDate'] = this.daterangeCreateDate[0]
-        this.queryParams.params['endCreateDate'] = this.daterangeCreateDate[1]
+      if (null != this.dateRangeCreateDate && '' !== this.dateRangeCreateDate) {
+        this.queryParams.params['beginCreateDate'] = this.dateRangeCreateDate[0]
+        this.queryParams.params['endCreateDate'] = this.dateRangeCreateDate[1]
       }
       listUpload(this.queryParams).then(response => {
         this.dataList = response.rows
         this.total = response.total
         this.loading = false    // 关闭加载动效必须写在回调函数的内部
       })
-    },
-
-    setLeadThreshold() {
-      /*this.request.post("/kd/setLeThr", {"data":this.tableData, "lethr": this.inputLeadThreshold}).then(res => {
-        console.log(res);
-      })*/
-      // this.$forceUpdate();
-      // console.log(this.inputLeadThreshold);
-    },
-
-    handleCurrentChangeHighLine(val) {
-      this.currentRow = val
-    },
-
-    handleCurrentChange(currentPage) {
-      this.currentPage = currentPage
-      this.getList()
-    },
-
-    handleSizeChange(pageSize) {
-      this.pageSize = pageSize
-      this.getList()
-    },
-
-    handleQuery() {
-      this.currentPage = 1
-      this.getList()
     },
 
     stdModSubmit() {
@@ -283,7 +253,7 @@ export default {
             this.queryParams.params['beginCreateDate'] = this.daterangeCreateDate[0]
             this.queryParams.params['endCreateDate'] = this.daterangeCreateDate[1]
           }
-        addUpload(this.queryParams).then(response => {
+          addOnline(this.queryParams).then(response => {
               this.loading = false
               if (response.code === 200) {
                 this.$modal.alertSuccess('标准模版已提交！')
@@ -297,6 +267,93 @@ export default {
       )
     },
 
+    /** 在线提交 */
+    onlineSubmit() {
+      this.$modal.confirm('将向服务器提交模板数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.loading = true;
+        addOnline(this.queryParams).then(response => {
+          this.loading = true;
+          this.hadSubmit = true;
+          this.submitText = "已 提 交 模 版";
+          if (response.code === 200) {
+            this.$modal.alertSuccess("标准模版已提交！");
+            this.$router.push("/");
+          } else {
+            this.$modal.alertError("标准模版提交失败！");
+            this.hadSubmit = false;
+            this.submitText = "提 交 模 版";
+          }
+        })
+      })
+    },
+    // 取消按钮
+    cancel() {
+      this.open = false;
+      this.reset();
+    },
+    // 表单重置
+    reset() {
+      this.form = {
+        simId: null,
+        mcId: null,
+        pId: null,
+        dateRangeCreateDate: [null, null],
+        leadThreshold: null,
+        padThreshold: null
+      };
+      this.resetForm("form");
+    },
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1;
+      this.getList();
+    },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
+    },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.sid)
+      this.mcIds = selection.map(item => item.mcId)
+      this.single = selection.length!==1
+      this.multiple = !selection.length
+
+      this.queryParams.delLineNo.clear();
+      for (let i = 0; i < selection.length; i++) {
+        this.queryParams.delLineNo.add(selection[i].lineNo);
+      }
+
+      console.log(this.queryParams.delLineNo);
+    },
+    /** 新增按钮操作 */
+    handleAdd() {
+      this.reset();
+      this.open = true;
+      this.title = "添加智慧打线图";
+    },
+    /** 修改按钮操作 */
+    handleUpdate(row) {
+      this.reset();
+      const sid = row.sid || this.ids;
+      getComparison(sid).then(response => {
+        this.form = response.data;
+        this.open = true;
+        this.title = "修改智慧打线图";
+      });
+    },
+    /** 导出按钮操作 */
+    handleExport() {
+      this.download('wbcomparison/upload/export', {
+        ...this.queryParams
+      }, `comparison_${new Date().getTime()}.xlsx`)
+    },
+
     toggleSelection(row) {   //取消选中
       this.$nextTick(() => {  // 页面挂载完成后操作dom
           if (row) {
@@ -306,31 +363,11 @@ export default {
           } else {
             this.$refs.multipleTable.clearSelection()
           }
-          this.delBtnType = !this.delLineNmbStr
+          this.delBtnType = !this.queryParams.delLineNo
         }
       )
+      console.log(this.queryParams.delLineNo);
     },
-
-    handleSelectionChange(row) {    //selection为当前所选数据集合，row为当前选中行数据
-      this.multipleSelection = row
-      this.delLineNmb.clear()
-      for (let i = 0; i < row.length; i++) {
-        this.delLineNmb.add(row[i].lineNmb)
-      }
-
-      let i = 0
-      this.delLineNmbStr = ''
-      for (let item of this.delLineNmb.keys()) {
-        if (i === 0) {
-          this.delLineNmbStr += item
-          i++
-        } else {
-          this.delLineNmbStr += ',' + item
-          i++
-        }
-      }
-    },
-
     rowClass() { //表格数据居中显示
       return 'text-align:center'
     },
