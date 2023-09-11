@@ -41,6 +41,11 @@
         <dict-tag :options="dict.type.biz_fixture_category" :value="scope.row.fixtureCategory"/>
       </template>
     </el-table-column>
+    <el-table-column label="连接器朝向" align="center" prop="buckle" fixed>
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.fixture_buckle_status" :value="scope.row.buckle"/>
+      </template>
+    </el-table-column>
     <el-table-column label="品名" align="center" min-width="180" prop="fixtureName" fixed />
     <el-table-column label="治具版本" align="center" prop="fixtureVersion" />
     <el-table-column label="料号" align="center" prop="materialId" />
