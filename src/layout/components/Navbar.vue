@@ -46,8 +46,8 @@ import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
-import QTechDosageControlGit from '@/components/QTechDosageControl/Git'
-import QTechDosageControlDoc from '@/components/QTechDosageControl/Doc'
+import QTechBizManagementSystemGit from '@/components/QTechBizManagementSystem/Git'
+import QTechBizManagementSystemDoc from '@/components/QTechBizManagementSystem/Doc'
 
 export default {
   components: {
@@ -57,8 +57,8 @@ export default {
     Screenfull,
     SizeSelect,
     Search,
-    QTechDosageControlGit,
-    QTechDosageControlDoc
+    QTechBizManagementSystemGit,
+    QTechBizManagementSystemDoc
   },
   computed: {
     ...mapGetters([

@@ -6,10 +6,10 @@
 
 <script>
 export default {
-  name: 'QTechDosageControlGit',
+  name: 'QTechBizManagementSystemGit',
   data() {
     return {
-      url: 'https://gitee.com/y_project/qtech-dosage-control-Vue'
+      url: 'https://qtech.com'
     }
   },
   methods: {

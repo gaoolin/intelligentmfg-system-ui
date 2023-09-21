@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { parseStrEmpty } from "@/utils/qtechDosageControl";
+import { parseStrEmpty } from "@/utils/qtechBizManagementSystem";
 
 // 查询用户列表
 export function listUser(query) {

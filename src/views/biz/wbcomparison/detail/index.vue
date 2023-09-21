@@ -75,7 +75,7 @@
       <el-table-column label="pad点间距" align="center" prop="padDiff" />
       <el-table-column label="lead点卡控" align="center" prop="leadThreshold" />
       <el-table-column label="pad点卡控" align="center" prop="padThreshold" />
-      <el-table-column label="lead到pad的线长" align="center" prop="wireLen" />
+      <el-table-column label="lead到pad线长" align="center" prop="wireLen" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">

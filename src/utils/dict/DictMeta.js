@@ -1,4 +1,4 @@
-import { mergeRecursive } from "@/utils/qtechDosageControl";
+import { mergeRecursive } from "@/utils/qtechBizManagementSystem";
 import DictOptions from './DictOptions'
 
 /**

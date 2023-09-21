@@ -6,10 +6,10 @@
 
 <script>
 export default {
-  name: 'QTechDosageControlDoc',
+  name: 'QTechBizManagementSystemDoc',
   data() {
     return {
-      url: 'http://doc.qtech-dosage-control.vip/qtech-dosage-control-vue'
+      url: 'http://qtech.com'
     }
   },
   methods: {

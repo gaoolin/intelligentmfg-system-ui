@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { mergeRecursive } from "@/utils/qtechDosageControl";
+import { mergeRecursive } from "@/utils/qtechBizManagementSystem";
 import DictMeta from './DictMeta'
 import DictData from './DictData'
 

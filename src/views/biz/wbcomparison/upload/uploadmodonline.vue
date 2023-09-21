@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <div>
-        <el-form-item label="机型" required>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+<!--      <div>-->
+        <el-form-item label="机型" prop="mcId" required>
           <el-input
             v-model="queryParams.mcId"
             placeholder="请输入机型"
@@ -10,7 +10,7 @@
           />
         </el-form-item>
 
-        <el-form-item label="盒子号">
+        <el-form-item label="盒子号" prop="simId">
           <el-input
             v-model="queryParams.simId"
             placeholder="盒子号"
@@ -18,7 +18,7 @@
           />
         </el-form-item>
 
-        <el-form-item label="产品序号">
+        <el-form-item label="产品序号" prop="pId">
           <el-input
             v-model="queryParams.pId"
             placeholder="产品序号"
@@ -39,24 +39,24 @@
           >
           </el-date-picker>
         </el-form-item>
-      </div>
-      <div>
-        <el-form-item label="Lead点卡控值" label-width="130px" required>
+<!--      </div>-->
+<!--      <div>-->
+        <el-form-item label="Lead点卡控值" prop="leadThreshold" label-width="130px" required>
           <el-input
-            v-model="leadThreshold"
+            v-model="queryParams.leadThreshold"
             placeholder="Lead点卡控值"
             clearable
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="Pad点卡控值"  label-width="130px" required>
+        <el-form-item label="Pad点卡控值" prop="padThreshold"  label-width="130px" required>
           <el-input
-            v-model="padThreshold"
+            v-model="queryParams.padThreshold"
             placeholder="Pad点卡控值"
             clearable
           />
         </el-form-item>
-      </div>
+<!--      </div>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -89,9 +89,9 @@
       </el-table-column>
       <el-table-column prop="simId" label="盒子号" min-width="110px">
       </el-table-column>
-      <el-table-column prop="dt" label="时间" min-width="120px">
+      <el-table-column prop="dt" label="时间" min-width="130px">
       </el-table-column>
-      <el-table-column prop="mcId" label="设备号" sortable>
+      <el-table-column prop="mcId" label="机型" sortable>
       </el-table-column>
       <el-table-column label="线号">
         <template slot-scope="scope">{{ scope.row.lineNo }}</template>
@@ -104,15 +104,15 @@
       </el-table-column>
       <el-table-column prop="padY" label="PadY">
       </el-table-column>
-      <el-table-column prop="leadDiff" label="LeadDiff">
+      <el-table-column prop="leadDiff" label="lead点间距">
       </el-table-column>
-      <el-table-column prop="padDiff" label="PadDiff">
+      <el-table-column prop="padDiff" label="pad点间距">
       </el-table-column>
-      <el-table-column prop="leadThreshold" label="Lead卡控值" :key="leadThreshold">{{ leadThreshold }}
+      <el-table-column prop="leadThreshold" label="Lead卡控值" :key="queryParams.leadThreshold">{{ queryParams.leadThreshold }}
       </el-table-column>
-      <el-table-column prop="padThreshold" label="Pad卡控值" :key="padThreshold">{{ padThreshold }}
+        <el-table-column prop="padThreshold" label="Pad卡控值" :key="queryParams.padThreshold">{{ queryParams.padThreshold }}
       </el-table-column>
-      <el-table-column prop="wireLen" label="WireLen">
+      <el-table-column prop="wireLen" label="lead到pad线长">
       </el-table-column>
       <el-table-column prop="checkPort" label="CheckPort">
       </el-table-column>
@@ -199,14 +199,10 @@ export default {
           }
         }]
       },
-      windowHeight: 650,
       // 状态时间范围
       dateRangeCreateDate: [this.DateToStr(new Date(new Date().valueOf())),
         this.DateToStr(new Date(new Date().valueOf() + 5 * 1440 * 60 * 1000))],
-      // lead阈值
-      leadThreshold: 50,
-      // pad阈值
-      padThreshold: 10,
+
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -216,14 +212,20 @@ export default {
         pId: null,
         beginTime: null,
         endTime: null,
-        delLineNo: new Set()
+        delLineNoStr: "",
+        // lead阈值
+        leadThreshold: 50,
+        // pad阈值
+        padThreshold: 10,
       },
+      delLineNo: new Set(),
       delBtnType: true
     }
   },
 
   created() {
-    this.getList()
+    this.getList();
+    console.log(this);
   },
 
   methods: {
@@ -240,33 +242,6 @@ export default {
         this.loading = false    // 关闭加载动效必须写在回调函数的内部
       })
     },
-
-    stdModSubmit() {
-      this.$modal.confirm('将向服务器提交模板数据, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-          this.loading = true
-          this.queryParams.params = []
-          if (null !== this.daterangeCreateDate && '' !== this.daterangeCreateDate) {
-            this.queryParams.params['beginCreateDate'] = this.daterangeCreateDate[0]
-            this.queryParams.params['endCreateDate'] = this.daterangeCreateDate[1]
-          }
-          addOnline(this.queryParams).then(response => {
-              this.loading = false
-              if (response.code === 200) {
-                this.$modal.alertSuccess('标准模版已提交！')
-                this.$router.push('/')
-              } else {
-                this.$modal.alertError('标准模版提交失败！')
-              }
-            }
-          )
-        }
-      )
-    },
-
     /** 在线提交 */
     onlineSubmit() {
       this.$modal.confirm('将向服务器提交模板数据, 是否继续?', '提示', {
@@ -275,13 +250,16 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true;
+        if (null != this.dateRangeCreateDate && '' !== this.dateRangeCreateDate) {
+          this.queryParams.beginTime = this.dateRangeCreateDate[0]
+          this.queryParams.endTime = this.dateRangeCreateDate[1]
+        }
         addOnline(this.queryParams).then(response => {
-          this.loading = true;
           this.hadSubmit = true;
           this.submitText = "已 提 交 模 版";
           if (response.code === 200) {
             this.$modal.alertSuccess("标准模版已提交！");
-            this.$router.push("/");
+            this.$router.push("/biz/wbcomparison/info");
           } else {
             this.$modal.alertError("标准模版提交失败！");
             this.hadSubmit = false;
@@ -301,7 +279,6 @@ export default {
         simId: null,
         mcId: null,
         pId: null,
-        dateRangeCreateDate: [null, null],
         leadThreshold: null,
         padThreshold: null
       };
@@ -324,28 +301,25 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
 
-      this.queryParams.delLineNo.clear();
+      this.delLineNo.clear();
       for (let i = 0; i < selection.length; i++) {
-        this.queryParams.delLineNo.add(selection[i].lineNo);
+        this.delLineNo.add(selection[i].lineNo);
       }
+      console.log(this.delLineNo)
 
-      console.log(this.queryParams.delLineNo);
-    },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加智慧打线图";
-    },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const sid = row.sid || this.ids;
-      getComparison(sid).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改智慧打线图";
-      });
+      let delLineNoTmp = "";
+      let j = 0;
+      this.queryParams.delLineNoStr = "";
+      for (let item of this.delLineNo.keys()) {
+        if (j === 0) {
+          delLineNoTmp += item.toString();
+          j++
+        } else {
+          delLineNoTmp += "," + item.toString();
+          j++;
+        }
+      }
+      this.queryParams.delLineNoStr = delLineNoTmp;
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -363,22 +337,9 @@ export default {
           } else {
             this.$refs.multipleTable.clearSelection()
           }
-          this.delBtnType = !this.queryParams.delLineNo
+          this.delBtnType = !this.delLineNo
         }
       )
-      console.log(this.queryParams.delLineNo);
-    },
-    rowClass() { //表格数据居中显示
-      return 'text-align:center'
-    },
-
-    headClass() { //表头居中显示
-      return 'text-align:center'
-    },
-
-    getHeight() {
-      // console.log(window.innerHeight);
-      this.windowHeight = window.innerHeight - 380
     },
     /** 日期转字符串 */
     DateToStr(date) {
@@ -399,13 +360,9 @@ export default {
 
   watch: {
     menuTree() {
-      ++this.leadThreshold
-      ++this.padThreshold
+      ++this.queryParams.leadThreshold
+      ++this.queryParams.padThreshold
     }
-  },
-
-  destroyed() {
-    window.removeEventListener('resize', this.getHeight)
   }
 }
 </script>

@@ -1,4 +1,4 @@
-import { parseTime } from './qtechDosageControl.js'
+import { parseTime } from './qtechBizManagementSystem.js'
 
 /**
  * 表格时间格式化
