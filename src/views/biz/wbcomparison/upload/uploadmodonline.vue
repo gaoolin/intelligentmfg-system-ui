@@ -1,65 +1,69 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-<!--      <div>-->
-        <el-form-item label="机型" prop="mcId" required>
-          <el-input
-            v-model="queryParams.mcId"
-            placeholder="请输入机型"
-            clearable
-          />
-        </el-form-item>
+      <!--      <div>-->
+      <el-form-item label="机型" prop="mcId" required>
+        <el-input
+          v-model="queryParams.mcId"
+          placeholder="请输入机型"
+          @blur="submitBtn"
+          clearable
+        />
+      </el-form-item>
 
-        <el-form-item label="盒子号" prop="simId">
-          <el-input
-            v-model="queryParams.simId"
-            placeholder="盒子号"
-            clearable
-          />
-        </el-form-item>
+      <el-form-item label="盒子号" prop="simId">
+        <el-input
+          v-model="queryParams.simId"
+          placeholder="盒子号"
+          @blur="submitBtn"
+          clearable
+        />
+      </el-form-item>
 
-        <el-form-item label="产品序号" prop="pId">
-          <el-input
-            v-model="queryParams.pId"
-            placeholder="产品序号"
-            clearable
-          />
-        </el-form-item>
+      <el-form-item label="产品序号" prop="pId">
+        <el-input
+          v-model="queryParams.pId"
+          placeholder="产品序号"
+          clearable
+        />
+      </el-form-item>
 
-        <el-form-item label="时段" required>
-          <el-date-picker
-            v-model="dateRangeCreateDate"
-            style="width: 370px"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :picker-options="pickerOptions"
-          >
-          </el-date-picker>
-        </el-form-item>
-<!--      </div>-->
-<!--      <div>-->
-        <el-form-item label="Lead点卡控值" prop="leadThreshold" label-width="130px" required>
-          <el-input
-            v-model="queryParams.leadThreshold"
-            placeholder="Lead点卡控值"
-            clearable
-          ></el-input>
-        </el-form-item>
+      <el-form-item label="时段" required>
+        <el-date-picker
+          v-model="dateRangeCreateDate"
+          style="width: 370px"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetimerange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :picker-options="pickerOptions"
+        >
+        </el-date-picker>
+      </el-form-item>
+      <!--      </div>-->
+      <!--      <div>-->
+      <el-form-item label="Lead点卡控值" prop="leadThreshold" label-width="130px" required>
+        <el-input
+          v-model="queryParams.leadThreshold"
+          placeholder="Lead点卡控值"
+          clearable
+        ></el-input>
+      </el-form-item>
 
-        <el-form-item label="Pad点卡控值" prop="padThreshold"  label-width="130px" required>
-          <el-input
-            v-model="queryParams.padThreshold"
-            placeholder="Pad点卡控值"
-            clearable
-          />
-        </el-form-item>
-<!--      </div>-->
+      <el-form-item label="Pad点卡控值" prop="padThreshold" label-width="130px" required>
+        <el-input
+          v-model="queryParams.padThreshold"
+          placeholder="Pad点卡控值"
+          clearable
+        />
+      </el-form-item>
+      <!--      </div>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+
+
       </el-form-item>
     </el-form>
 
@@ -72,6 +76,9 @@
           size="mini"
           @click="handleExport"
         >导出
+        </el-button>
+        <el-button type="primary" size="larger" class="bigBtn" :disabled="hadSubmit" @click="onlineSubmit" @confirm>
+          {{ submitText }}
         </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -108,9 +115,10 @@
       </el-table-column>
       <el-table-column prop="padDiff" label="pad点间距">
       </el-table-column>
-      <el-table-column prop="leadThreshold" label="Lead卡控值" :key="queryParams.leadThreshold">{{ queryParams.leadThreshold }}
+      <el-table-column prop="leadThreshold" label="Lead卡控值" :key="queryParams.leadThreshold">
+        {{ queryParams.leadThreshold }}
       </el-table-column>
-        <el-table-column prop="padThreshold" label="Pad卡控值" :key="queryParams.padThreshold">{{ queryParams.padThreshold }}
+      <el-table-column prop="padThreshold" label="Pad卡控值" :key="queryParams.padThreshold">{{ queryParams.padThreshold }}
       </el-table-column>
       <el-table-column prop="wireLen" label="lead到pad线长">
       </el-table-column>
@@ -135,9 +143,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-    <div class="pd-15">
-      <el-button type="primary" size="medium"  class="bigBtn" :disabled="hadSubmit" @click="onlineSubmit" @confirm>{{submitText}}</el-button>
-    </div>
+
   </div>
 </template>
 
@@ -154,9 +160,9 @@ export default {
       // 选中数组
       ids: [],
       // 已提交禁用
-      hadSubmit: false,
+      hadSubmit: true,
       // 提交按钮文本
-      submitText: "提 交 模 板",
+      submitText: '提 交 模 板',
       // 显示搜索条件
       showSearch: true,
       // 总条数
@@ -200,8 +206,7 @@ export default {
         }]
       },
       // 状态时间范围
-      dateRangeCreateDate: [this.DateToStr(new Date(new Date().valueOf())),
-        this.DateToStr(new Date(new Date().valueOf() + 5 * 1440 * 60 * 1000))],
+      dateRangeCreateDate: [this.DateToStr(new Date(new Date().valueOf() - 5 * 60 * 1000)), this.DateToStr(new Date(new Date().valueOf()))],
 
       // 查询参数
       queryParams: {
@@ -212,11 +217,11 @@ export default {
         pId: null,
         beginTime: null,
         endTime: null,
-        delLineNoStr: "",
+        delLineNoStr: '',
         // lead阈值
         leadThreshold: 50,
         // pad阈值
-        padThreshold: 10,
+        padThreshold: 10
       },
       delLineNo: new Set(),
       delBtnType: true
@@ -224,8 +229,8 @@ export default {
   },
 
   created() {
-    this.getList();
-    console.log(this);
+    this.getList()
+    console.log(this)
   },
 
   methods: {
@@ -242,6 +247,13 @@ export default {
         this.loading = false    // 关闭加载动效必须写在回调函数的内部
       })
     },
+    submitBtn() {
+      if (this.queryParams.simId!==null || this.queryParams.mcId) {
+        this.hadSubmit=false;
+      } else {
+        this.hadSubmit=true;
+      }
+    },
     /** 在线提交 */
     onlineSubmit() {
       this.$modal.confirm('将向服务器提交模板数据, 是否继续?', '提示', {
@@ -249,29 +261,29 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.loading = true;
+        this.loading = true
         if (null != this.dateRangeCreateDate && '' !== this.dateRangeCreateDate) {
           this.queryParams.beginTime = this.dateRangeCreateDate[0]
           this.queryParams.endTime = this.dateRangeCreateDate[1]
         }
         addOnline(this.queryParams).then(response => {
-          this.hadSubmit = true;
-          this.submitText = "已 提 交 模 版";
+          this.hadSubmit = true
+          this.submitText = '已 提 交 模 版'
           if (response.code === 200) {
-            this.$modal.alertSuccess("标准模版已提交！");
-            this.$router.push("/biz/wbcomparison/info");
+            this.$modal.alertSuccess('标准模版已提交！')
+            this.$router.push('/biz/wbcomparison/info')
           } else {
-            this.$modal.alertError("标准模版提交失败！");
-            this.hadSubmit = false;
-            this.submitText = "提 交 模 版";
+            this.$modal.alertError('标准模版提交失败！')
+            this.hadSubmit = false
+            this.submitText = '提 交 模 版'
           }
         })
       })
     },
     // 取消按钮
     cancel() {
-      this.open = false;
-      this.reset();
+      this.open = false
+      this.reset()
     },
     // 表单重置
     reset() {
@@ -281,45 +293,45 @@ export default {
         pId: null,
         leadThreshold: null,
         padThreshold: null
-      };
-      this.resetForm("form");
+      }
+      this.resetForm('form')
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      this.queryParams.pageNum = 1
+      this.getList()
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
+      this.resetForm('queryForm')
+      this.handleQuery()
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.sid)
       this.mcIds = selection.map(item => item.mcId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
 
-      this.delLineNo.clear();
+      this.delLineNo.clear()
       for (let i = 0; i < selection.length; i++) {
-        this.delLineNo.add(selection[i].lineNo);
+        this.delLineNo.add(selection[i].lineNo)
       }
       console.log(this.delLineNo)
 
-      let delLineNoTmp = "";
-      let j = 0;
-      this.queryParams.delLineNoStr = "";
+      let delLineNoTmp = ''
+      let j = 0
+      this.queryParams.delLineNoStr = ''
       for (let item of this.delLineNo.keys()) {
         if (j === 0) {
-          delLineNoTmp += item.toString();
+          delLineNoTmp += item.toString()
           j++
         } else {
-          delLineNoTmp += "," + item.toString();
-          j++;
+          delLineNoTmp += ',' + item.toString()
+          j++
         }
       }
-      this.queryParams.delLineNoStr = delLineNoTmp;
+      this.queryParams.delLineNoStr = delLineNoTmp
     },
     /** 导出按钮操作 */
     handleExport() {

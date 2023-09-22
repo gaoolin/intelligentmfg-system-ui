@@ -1,26 +1,27 @@
 <template>
   <div class="dashboard-editor-container">
+<!--    <el-row style="background:#fff; padding:16px 16px 0; margin-bottom:4px;">
+      <span>智慧打线图</span>
+    </el-row>-->
+
+    <panel-group @updateIndexOverviewData="updateIndexOverviewData" />
+
     <el-row style="background:#fff; padding:16px 16px 0; margin-bottom:32px;">
       <bar-chart :chart-data="barChartData"/>
-    </el-row>
-
-    <el-row :gutter="32">
-      <el-row :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-        </div>
-      </el-row>
     </el-row>
   </div>
 </template>
 
 <script>
-import statistics from './biz/wbcomparison/statistics/statistics'
+import WbComparisonTrending from './biz/wbcomparison/statistics/WbComparisonTrending'
+import WbComparisonIndexOverview from './biz/wbcomparison/statistics/WbComparisonIndexOverview'
 import { getWbComparisonIndexOverview, getWbComparisonIndexTrending } from '@/api/biz/index/index'
 
 export default {
   name: 'Index',
   components: {
-    'bar-chart': statistics
+    'bar-chart': WbComparisonTrending,
+    'panel-group': WbComparisonIndexOverview
   },
 
   data() {
@@ -56,6 +57,7 @@ export default {
       let data2 = []
       let data3 = []
       let data4 = []
+      let data5 = []
 
       let a, b, c, d, e
 
@@ -64,6 +66,8 @@ export default {
       }
 
       xAxisData = Array.from(new Set(xAxisDataTmp))
+
+      data5 = xAxisData;
 
       for (const xAxisDatum of xAxisData) {
 
@@ -119,6 +123,7 @@ export default {
       this.barChartData.data2 = data2
       this.barChartData.data3 = data3
       this.barChartData.data4 = data4
+      this.barChartData.data5 = data5
 
       this.loading = false
     })

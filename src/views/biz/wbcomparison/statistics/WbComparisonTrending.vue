@@ -69,12 +69,17 @@ export default {
         }
       };
       this.chart.setOption({
+        title: {
+          text: '打线图比对次数趋势',
+          subtext: '近15天数据',
+          left: 'center'
+        },
         xAxis: {
           data: data5,
           name: 'X Axis',
-          boundaryGap: false,
+          boundaryGap: true,
           axisTick: {
-            show: false
+            show: true
           },
           axisLine: { onZero: true},
           splitLine: { show: false },
@@ -87,53 +92,62 @@ export default {
           top: 30,
           containLabel: true
         },
+        brush: {
+          toolbox: ['rect', 'polygon', 'keep', 'clear'],
+          xAxisIndex: 0
+        },
+        toolbox: {
+          feature: {
+            magicType: {
+              type: ['stack']
+            },
+            dataView: {}
+          }
+        },
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
+          /*trigger: 'axis',*/
+          /*axisPointer: {
             type: 'cross'
-          },
+          },*/
           padding: [5, 10]
         },
         yAxis: {
-          axisTick: {
+          /*name: 'Y Axis',*/
+          /*axisTick: {
             show: false
-          }
+          }*/
         },
         legend: {
-          data: ['OK', '金线偏移', '少线', '无程序', '多线']
+          data: ['OK', '金线偏移', '少线', '无程序', '多线'],
+          left: '5%'
         },
         series: [{
           name: 'OK',
           emphasis: emphasisStyle,
-          smooth: true,
           type: 'bar',
           stack: 'one',
           data: data0
         }, {
           name: '金线偏移',
           emphasis: emphasisStyle,
-          smooth: true,
           type: 'bar',
           stack: 'one',
           data: data1
         }, {
           name: '少线',
           emphasis: emphasisStyle,
-          smooth: true,
           type: 'bar',
           stack: 'one',
           data: data2
         }, {
           name: '无程序',
           emphasis: emphasisStyle,
-          smooth: true,
           type: 'bar',
           stack: 'one',
           data: data3
         }, {
           name: '多线',
           emphasis: emphasisStyle,
-          smooth: true,
           type: 'bar',
           stack: 'one',
           data: data4
