@@ -1,10 +1,10 @@
 <template>
   <div class="dashboard-editor-container">
-<!--    <el-row style="background:#fff; padding:16px 16px 0; margin-bottom:4px;">
-      <span>智慧打线图</span>
-    </el-row>-->
+    <!--    <el-row style="background:#fff; padding:16px 16px 0; margin-bottom:4px;">
+          <span>智慧打线图</span>
+        </el-row>-->
 
-    <panel-group @updateIndexOverviewData="updateIndexOverviewData" />
+    <panel-group :panel-data="panelData" @updateIndexOverviewData="updateIndexOverviewData"/>
 
     <el-row style="background:#fff; padding:16px 16px 0; margin-bottom:32px;">
       <bar-chart :chart-data="barChartData"/>
@@ -33,22 +33,52 @@ export default {
         data3: [],
         data4: [],
         data5: []
+      },
+      panelData: {
+        modTtl: 1,
+        modAvgLine: 1,
+        ttlComparisonCnt: 1,
+        ttlInterceptCnt: 1
       }
     }
   },
 
-  created() {
-
-  },
   methods: {
     updateIndexOverviewData() {
       getWbComparisonIndexOverview().then(response => {
-        console.log(response)
+
+        this.panelData.modTtl = response.data.wbComparisonStdModelsTtlCnt
+
+        this.panelData.modAvgLine = response.data.wbComparisonStdModelAvgCnt
+
+        this.panelData.ttlComparisonCnt = this.sum2Layer(this.barChartData)
+
+        this.panelData.ttlInterceptCnt = this.panelData.ttlComparisonCnt - this.sum1Layer(this.barChartData.data0)
+
       })
+    },
+
+    sum2Layer(obj) {
+      const keys = Object.keys(obj)
+      let sum = 0
+      for (let i = 0; i < keys.length - 1; i++) {
+        for (let j = 0; j < obj[keys[i]].length; j++) {
+          sum += obj[keys[i]][j] * 1
+        }
+      }
+      return sum
+    },
+
+    sum1Layer(obj) {
+      let sum = 0
+      for (let j = 0; j < obj.length; j++) {
+        sum += obj[j] * 1
+      }
+      return sum
     }
   },
 
-  mounted() {
+  created() {
     getWbComparisonIndexTrending().then(response => {
       let xAxisDataTmp = []
       let xAxisData
@@ -57,7 +87,7 @@ export default {
       let data2 = []
       let data3 = []
       let data4 = []
-      let data5 = []
+      let data5
 
       let a, b, c, d, e
 
@@ -67,7 +97,7 @@ export default {
 
       xAxisData = Array.from(new Set(xAxisDataTmp))
 
-      data5 = xAxisData;
+      data5 = xAxisData
 
       for (const xAxisDatum of xAxisData) {
 

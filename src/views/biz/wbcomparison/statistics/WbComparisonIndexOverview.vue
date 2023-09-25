@@ -4,52 +4,55 @@
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-people">
           <!--src/assets/icons/svg-->
-          <svg-icon icon-class="clipboard" class-name="card-panel-icon" />
+          <svg-icon icon-class="clipboard" class-name="card-panel-icon"/>
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
             模板总数
           </div>
-          <count-to :start-val="0" :end-val="modTtl" :duration="2000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="panelData.modTtl" :duration="2000" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel">
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="iconmonstr-synchronization-22" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            更新模板数
-          </div>
-          <count-to :start-val="0" :end-val="updatedMod" :duration="2000" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel">
-        <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="iconmonstr-cpu-2" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            模板平均线数
-          </div>
-          <count-to :start-val="0" :end-val="modAvgLine" :duration="2000" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
+
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="iconmonstr-redo-7" class-name="card-panel-icon" />
+          <svg-icon icon-class="iconmonstr-cpu-2" class-name="card-panel-icon"/>
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            近一周更新模板数
+            模板平均金线数
           </div>
-          <count-to :start-val="0" :end-val="recentUpdatedMod" :duration="2000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="panelData.modAvgLine" :duration="2000" class="card-panel-num"/>
+        </div>
+      </div>
+    </el-col>
+
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-message">
+          <svg-icon icon-class="iconmonstr-synchronization-22" class-name="card-panel-icon"/>
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            近15天对比次数
+          </div>
+          <count-to :start-val="0" :end-val="panelData.ttlComparisonCnt" :duration="2000" class="card-panel-num"/>
+        </div>
+      </div>
+    </el-col>
+
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-money">
+          <svg-icon icon-class="iconmonstr-redo-7" class-name="card-panel-icon"/>
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            近15天反控/拦截次数
+          </div>
+          <count-to :start-val="0" :end-val="panelData.ttlInterceptCnt" :duration="2000" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -58,31 +61,27 @@
 
 <script>
 import CountTo from 'vue-count-to'
-import { getWbComparisonIndexOverview } from '@/api/biz/index/index'
 
 export default {
   components: {
     CountTo
   },
-  data() {
-    return {
-      modTtl: null,
-      updatedMod: null,
-      modAvgLine: null,
-      recentUpdatedMod: null
+  props: {
+    panelData: {
+      type: Object,
+      required: true
     }
   },
-  created() {
-    getWbComparisonIndexOverview().then(response => {
-      console.log(response.data)
-      this.modTtl = response.data.wbComparisonStdModelsTtlCnt;
-      this.updatedMod = response.data.wbComparisonStdModelsUpdatedCnt;
-      this.modAvgLine = response.data.wbComparisonStdModelAvgCnt;
-      this.recentUpdatedMod = response.data.wbComparisonStdModelsRecentUpdatedCnt;
-    })
-  },
+
   methods: {
-  }
+    updateIndexOverviewData() {
+      this.$emit('updateIndexOverviewData')
+    }
+  },
+
+  mounted() {
+    this.updateIndexOverviewData()
+  },
 }
 </script>
 
@@ -176,7 +175,7 @@ export default {
   }
 }
 
-@media (max-width:550px) {
+@media (max-width: 550px) {
   .card-panel-description {
     display: none;
   }
