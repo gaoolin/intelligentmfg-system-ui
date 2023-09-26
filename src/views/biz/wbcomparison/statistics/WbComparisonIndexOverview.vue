@@ -10,7 +10,7 @@
           <div class="card-panel-text">
             模板总数
           </div>
-          <count-to :start-val="0" :end-val="panelData.modTtl" :duration="2000" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="modTtl" :duration="2000" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -24,7 +24,7 @@
           <div class="card-panel-text">
             模板平均金线数
           </div>
-          <count-to :start-val="0" :end-val="panelData.modAvgLine" :duration="2000" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="modAvgLine" :duration="2000" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -38,7 +38,7 @@
           <div class="card-panel-text">
             近15天对比次数
           </div>
-          <count-to :start-val="0" :end-val="panelData.ttlComparisonCnt" :duration="2000" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="ttlComparisonCnt" :duration="2000" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -52,7 +52,7 @@
           <div class="card-panel-text">
             近15天反控/拦截次数
           </div>
-          <count-to :start-val="0" :end-val="panelData.ttlInterceptCnt" :duration="2000" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="ttlInterceptCnt" :duration="2000" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -66,6 +66,7 @@ export default {
   components: {
     CountTo
   },
+
   props: {
     panelData: {
       type: Object,
@@ -73,15 +74,38 @@ export default {
     }
   },
 
-  methods: {
-    updateIndexOverviewData() {
-      this.$emit('updateIndexOverviewData')
+  data() {
+    return {
+      modTtl: 0,
+      modAvgLine: 0,
+      ttlComparisonCnt: 0,
+      ttlInterceptCnt: 0
     }
   },
 
-  mounted() {
-    this.updateIndexOverviewData()
+  methods: {
+    updateIndexOverviewData() {
+      this.$emit('updateIndexOverviewData')
+    },
+
+    setPanelVal(val) {
+      this.modTtl = val.modTtl;
+      this.modAvgLine = val.modAvgLine;
+      this.ttlComparisonCnt = val.ttlComparisonCnt;
+      this.ttlInterceptCnt = val.ttlInterceptCnt
+    },
+
   },
+
+  watch: {
+    panelData: {
+      deep: true,
+      immediate: true,
+      handler(newVal) {
+        this.setPanelVal(newVal)
+      }
+    }
+  }
 }
 </script>
 
