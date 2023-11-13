@@ -39,7 +39,7 @@
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请输入比对结果状态" clearable :disabled="queryParams.category==='1'"
-                   @change="refresh()" :key="queryParams.category"
+                   :key="queryParams.category" @change="dataChange"
         >
           <el-option
             v-for="dict in dict.type.comparison_result_code"
@@ -50,7 +50,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="查询类型" prop="category">
-        <el-select v-model="queryParams.category" placeholder="请输入查询类型" clearable @change="dataChange()">
+        <el-select v-model="queryParams.category" placeholder="请输入查询类型" clearable @change="handleRefresh">
           <el-option
             v-for="dict in dict.type.comparison_search_type"
             :key="dict.value"
@@ -79,7 +79,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="resultList">
+    <el-table v-loading="loading" :data="resultList" :key="refreshKey">
       <el-table-column type="index" label="序号" width="55" align="center" fixed/>
       <el-table-column prop="companyName" label="厂区" align="center" fixed/>
       <el-table-column prop="groupName" label="车间" align="center" fixed/>
@@ -118,6 +118,7 @@ export default {
       showSearch: true,
       total: 0,
       resultList: [],
+      refreshKey: 0,
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -151,7 +152,13 @@ export default {
         })
       }
     },
-    /** 强制刷新 */
+    handleRefresh() {
+      /* 在 Vue 中，每个组件都有一个唯一的 key 属性。当组件的 key 属性发生改变时，Vue 会视为这是一个新的组件，而不是复用之前的组件。这样就会触发组件的重新渲染，从而实现页面的刷新 */
+      // 点击刷新按钮，改变 refreshKey 的值触发组件的重新渲染
+      this.refreshKey++
+      this.getList()
+    },
+      /** 强制刷新 */
     refresh() {
       this.$router.go(0);
     },
