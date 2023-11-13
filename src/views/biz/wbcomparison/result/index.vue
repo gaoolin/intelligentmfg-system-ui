@@ -1,0 +1,188 @@
+<template>
+  <div class="app-container">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="设备号" prop="eqId">
+        <el-input
+          v-model="queryParams.eqId"
+          placeholder="请输入设备号"
+          clearable
+          :disabled="queryParams.category==='0'"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="盒子号" prop="simId">
+        <el-input
+          v-model="queryParams.simId"
+          placeholder="请输入盒子号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="机台号" prop="mcId">
+        <el-input
+          v-model="queryParams.mcId"
+          placeholder="请输入机型"
+          clearable
+          :disabled="queryParams.category==='0'"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="机型" prop="prodType">
+        <el-input
+          v-model="queryParams.prodType"
+          placeholder="请输入机型"
+          clearable
+          :disabled="queryParams.category==='0'"
+          @change="dataChange()"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请输入比对结果状态" clearable :disabled="queryParams.category==='1'"
+                   @change="refresh()" :key="queryParams.category"
+        >
+          <el-option
+            v-for="dict in dict.type.comparison_result_code"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="查询类型" prop="category">
+        <el-select v-model="queryParams.category" placeholder="请输入查询类型" clearable @change="dataChange()">
+          <el-option
+            v-for="dict in dict.type.comparison_search_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+        >导出
+        </el-button>
+      </el-col>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+    </el-row>
+
+    <el-table v-loading="loading" :data="resultList">
+      <el-table-column type="index" label="序号" width="55" align="center" fixed/>
+      <el-table-column prop="companyName" label="厂区" align="center" fixed/>
+      <el-table-column prop="groupName" label="车间" align="center" fixed/>
+      <el-table-column prop="eqId" label="设备号" align="center" fixed/>
+      <el-table-column prop="mcId" label="机台号" align="center" fixed/>
+      <el-table-column prop="prodType" label="机型" align="center" fixed/>
+      <el-table-column prop="simId" label="盒子号" align="center" fixed/>
+      <el-table-column prop="dt" label="时间" align="center" v-if="this.queryParams.category==='0'" fixed/>
+      <el-table-column prop="status" label="状态" align="center" v-if="this.queryParams.category==='0'" fixed>
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.comparison_result_code" :value="scope.row.status.toString()"/>
+        </template>
+      </el-table-column>
+      <el-table-column prop="description" label="描述" align="center" show-overflow-tooltip
+                       v-if="this.queryParams.category==='0'" fixed/>
+    </el-table>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+  </div>
+</template>
+
+<script>
+import { listEqInfo, listWbComparison } from '@/api/biz/wbcomparison/result'
+
+export default {
+  name: 'index',
+  dicts: ['comparison_result_code', 'comparison_search_type'],
+  data() {
+    return {
+      loading: true,
+      showSearch: true,
+      total: 0,
+      resultList: [],
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        eqId: null,
+        simId: null,
+        mcId: null,
+        prodType: null,
+        status: null,
+        category: '0'
+      }
+    }
+  },
+
+  created() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      this.loading = true
+      if (this.queryParams.category === '1') {
+        listEqInfo(this.queryParams).then(response => {
+          this.resultList = response.rows
+          this.total = response.total
+          this.loading = false
+        })
+      } else {
+        listWbComparison(this.queryParams).then(response => {
+          this.resultList = response.rows
+          this.total = response.total
+          this.loading = false
+        })
+      }
+    },
+    /** 强制刷新 */
+    refresh() {
+      this.$router.go(0);
+    },
+    dataChange() {
+      this.getList()
+    },
+    handleQuery() {
+      this.queryParams.pageNum = 1
+      this.getList()
+    },
+
+    resetQuery() {
+      this.resetForm('queryForm')
+      this.handleQuery()
+    },
+
+    handleExport() {
+      if (this.queryParams.category === '1') {
+        this.download('wbcomparison/result/emsInfo/export', {
+          ...this.queryParams
+        }, `eqInfo_${new Date().getTime()}.xlsx`)
+      } else if (this.queryParams.category === '0') {
+        this.download('wbcomparison/result/export', {
+          ...this.queryParams
+        }, `wbcomparison_${new Date().getTime()}.xlsx`)
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

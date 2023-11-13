@@ -307,16 +307,13 @@ export default {
           targetStr = item
         }
       })
-      console.log(this.queryParams.factoryName)
     },
     /** 远程获取厂区名称 */
     getFactoryNameList() {
       factoryNameList().then(res => {
-        console.log(res.data)
         for (const i in res.data) {
           this.factoryOptions.push(res.data[i]['factoryName'])
         }
-        console.log(this.factoryOptions)
       })
     },
     /** 日期转字符串 */

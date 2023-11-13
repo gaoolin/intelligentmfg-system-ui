@@ -1,18 +1,18 @@
 <template>
 <div class="app-container">
   <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-    <el-form-item label="机种" prop="prodType">
-      <el-input
-        v-model="queryParams.prodType"
-        placeholder="请输入机种"
-        clearable
-        @keyup.enter.native="handleQuery"
-      />
-    </el-form-item>
     <el-form-item label="料号" prop="materialId">
       <el-input
         v-model="queryParams.materialId"
         placeholder="请输入料号"
+        clearable
+        @keyup.enter.native="handleQuery"
+      />
+    </el-form-item>
+    <el-form-item label="机种" prop="prodType">
+      <el-input
+        v-model="queryParams.prodType"
+        placeholder="请输入机种"
         clearable
         @keyup.enter.native="handleQuery"
       />
@@ -30,26 +30,27 @@
     :cell-style="{padding:'0px'}"
     :row-style="{height:'50px'}"
     fit
-    :header-cell-style="{color: '#848484', fontSize: '5px', backgroundColor: '#qua'}"
-    style="font-size: 10px"
+    style="font-size: 13px"
+    cell-mouse-enter
+    cell-mouse-leave
+    cell-class-name
     border
   >
     <el-table-column type="index" label="序号" width="55" align="center" fixed />
+    <el-table-column label="料号" align="center" prop="materialId" fixed />
+    <el-table-column label="品名" align="center" min-width="180" prop="fixtureName" fixed />
     <el-table-column label="机种" align="center" min-width="90" prop="prodType" fixed />
     <el-table-column label="治具类别" align="center" prop="fixtureCategory" fixed>
       <template slot-scope="scope">
         <dict-tag :options="dict.type.biz_fixture_category" :value="scope.row.fixtureCategory"/>
       </template>
     </el-table-column>
+    <el-table-column label="治具版本" align="center" prop="fixtureVersion" />
     <el-table-column label="连接器朝向" align="center" prop="buckle" fixed>
       <template slot-scope="scope">
         <dict-tag :options="dict.type.fixture_buckle_status" :value="scope.row.buckle"/>
       </template>
     </el-table-column>
-    <el-table-column label="品名" align="center" min-width="180" prop="fixtureName" fixed />
-    <el-table-column label="治具版本" align="center" prop="fixtureVersion" />
-    <el-table-column label="料号" align="center" prop="materialId" />
-    <el-table-column label="共享机型" align="center" prop="sharedProdType" />
     <el-table-column label="创建人" align="center" prop="createBy" />
     <el-table-column label="创建时间" align="center" width="140" prop="createTime">
       <template slot-scope="scope">

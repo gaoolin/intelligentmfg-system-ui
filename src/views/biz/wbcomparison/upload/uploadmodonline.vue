@@ -6,7 +6,7 @@
         <el-input
           v-model="queryParams.mcId"
           placeholder="请输入机型"
-          @change="submitBtn"
+          @change="submitBtn()"
           clearable
         />
       </el-form-item>
@@ -248,14 +248,11 @@ export default {
       })
     },
     submitBtn() {
-      console.log(1)
       if ((this.queryParams.simId === null || this.queryParams.simId === "") && (this.queryParams.mcId === null || this.queryParams.mcId === "")) {
         this.hadSubmit=true;
       } else {
         this.hadSubmit=false;
       }
-      console.log(this.queryParams.simId)
-      console.log(this.queryParams.mcId)
     },
     /** 在线提交 */
     onlineSubmit() {

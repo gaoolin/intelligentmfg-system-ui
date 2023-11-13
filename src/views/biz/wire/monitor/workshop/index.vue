@@ -352,11 +352,9 @@ export default {
     /** 远程获取厂区名称 */
     getFactoryNameList() {
       factoryNameList().then(res => {
-        console.log(res.data)
         for (const i in res.data) {
           this.factoryOptions.push(res.data[i]['factoryName'])
         }
-        console.log(this.factoryOptions)
       })
     },
     /** 给输入框设置值 */
@@ -366,19 +364,14 @@ export default {
           targetStr = item
         }
       })
-      console.log(this.queryParams.factoryName)
     },
     /** 根据厂给定的值，查询区的值 */
     getWorkshopNameList() {
-      console.log('已获取焦点')
-      console.log(this.queryParams)
       workshopNameList(this.queryParams).then(res => {
-        console.log(res.data)
         this.workshopOptions = []
         for (const i in res.data) {
           this.workshopOptions.push(res.data[i]['workshopName'])
         }
-        console.log(this.workshopOptions)
       })
     }
   }

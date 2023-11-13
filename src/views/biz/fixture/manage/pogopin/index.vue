@@ -1,37 +1,47 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="机种" prop="prodType">
-        <el-input
-          v-model="queryParams.prodType"
-          placeholder="请输入机种"
-          clearable
-          @keyup.native="handleQuery"
-          @keyup.enter.native="handleQuery"
+    <el-form-item label="料号" prop="materialId">
+      <el-input
+        v-model="queryParams.materialId"
+        placeholder="请输入料号"
+        clearable
+        @keyup.enter.native="handleQuery"
+      />
+    </el-form-item>
+    <el-form-item label="机种" prop="prodType">
+      <el-input
+        v-model="queryParams.prodType"
+        placeholder="请输入机种"
+        clearable
+        @keyup.native="handleQuery"
+        @keyup.enter.native="handleQuery"
+      />
+    </el-form-item>
+    <el-form-item label="治具类型" prop="fixtureCategory">
+      <el-select v-model="queryParams.fixtureCategory" placeholder="请输入治具分类" clearable>
+        <el-option
+          v-for="dict in dict.type.biz_fixture_category"
+          :key="dict.value"
+          :label="dict.label"
+          :value="dict.value"
         />
-      </el-form-item>
-      <el-form-item label="治具分类" prop="fixtureCategory">
-        <el-select v-model="queryParams.fixtureCategory" placeholder="请输入治具分类" clearable>
-          <el-option
-            v-for="dict in dict.type.biz_fixture_category"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="料号" prop="materialId">
-        <el-input
-          v-model="queryParams.materialId"
-          placeholder="请输入料号"
-          clearable
-          @keyup.enter.native="handleQuery"
+      </el-select>
+    </el-form-item>
+    <el-form-item label="类别" prop="flag">
+      <el-select v-model="queryParams.flag" placeholder="请输入类别" clearable>
+        <el-option
+          v-for="dict in dict.type.biz_fixture_flag"
+          :key="dict.value"
+          :label="dict.label"
+          :value="dict.value"
         />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
+      </el-select>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+      <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+    </el-form-item>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
@@ -81,7 +91,7 @@
     </el-row>
 
     <el-alert
-      title="注意：查到共用信息后须与治具设计核对后方可使用，确保信息的准确性！"
+      title="注意：为确保信息的准确性,查到共用信息后须与治具设计核对后方可使用！"
       type="warning"
       show-icon
       style="font-weight: bolder"
@@ -90,44 +100,51 @@
 
     <el-table
       v-loading="loading"
-      :data="pogopinList"
-      :cell-style="{padding:'0px'}"
-      :row-style="{height:'50px'}"
+      :data="dataList"
       fit
-      :header-cell-style="{color: '#848484', fontSize: '5px', backgroundColor: '#qua'}"
       @selection-change="handleSelectionChange"
-      style="font-size: 10px"
+      :span-method="objectSpanMethod"
+      class="tableArea"
+      style="font-size: 13px;"
+      cell-mouse-enter
+      cell-mouse-leave
+      cell-class-name
       border>
       <el-table-column type="selection" width="40" align="center" fixed />
+      <el-table-column label="料号" align="center" prop="materialId" fixed />
+      <el-table-column label="品名" align="center" min-width="180" prop="fixtureName" fixed />
       <el-table-column label="机种" align="center" min-width="90" prop="prodType" fixed />
-      <el-table-column label="治具类别" align="center" prop="fixtureCategory" fixed>
+      <el-table-column label="治具类型" align="center" prop="fixtureCategory" fixed >
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.biz_fixture_category" :value="scope.row.fixtureCategory"/>
+          {{fixtureCategoryFormat(scope.row.fixtureCategory)}}
         </template>
       </el-table-column>
+      <el-table-column label="治具版本" align="center" prop="fixtureVersion" fixed />
       <el-table-column label="连接器朝向" align="center" prop="buckle" fixed>
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.fixture_buckle_status" :value="scope.row.buckle"/>
+<!--          <dict-tag :option="dict.type.fixture_buckle_status" :value="scope.row.buckle" />-->
+          {{buckleFormat(scope.row.buckle)}}
         </template>
       </el-table-column>
-      <el-table-column label="品名" align="center" min-width="180" prop="fixtureName" fixed />
-      <el-table-column label="治具版本" align="center" prop="fixtureVersion" />
-      <el-table-column label="料号" align="center" prop="materialId" />
-      <el-table-column label="共享机型" align="center" prop="sharedProdType" />
-      <el-table-column label="创建人" align="center" prop="createBy" />
-      <el-table-column label="创建时间" align="center" width="140" prop="createTime">
+      <el-table-column label="治具类别" align="center" prop="flag" fixed>
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+          {{flagFormat(scope.row.flag)}}
+        </template>
+      </el-table-column>
+      <el-table-column label="创建人" align="center" prop="createBy" />
+      <el-table-column label="创建时间" align="center" width="140" prop="createTime" >
+        <template slot-scope="scope">
+          <span>{{parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="更新人" align="center" prop="updateBy" />
-      <el-table-column label="更新时间" align="center" width="140" prop="updateTime">
+      <el-table-column label="更新时间" align="center" width="140" prop="updateTime" >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" min-width="120" prop="remark" />
-      <el-table-column label="操作" align="center" min-width="80" class-name="small-padding fixed-width" style="font-size: 8px">
+      <el-table-column label="操作" align="center" min-width="80" class-name="small-padding fixed-width" style="font-size: 8px" >
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -156,11 +173,18 @@
     <!-- 添加或修改pogopin治具对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="料号" prop="materialId">
+          <el-input v-model="form.materialId" placeholder="请输入料号" />
+        </el-form-item>
+        <el-form-item label="品名" prop="fixtureName">
+          <el-input v-model="form.fixtureName" placeholder="请输入品名" />
+        </el-form-item>
         <el-form-item label="机种" prop="prodType">
           <el-input v-model="form.prodType" placeholder="请输入机种" />
         </el-form-item>
-        <el-form-item label="治具类别" prop="fixtureCategory">
-          <el-select v-model="form.fixtureCategory" placeholder="请选择治具类别" clearable style="width: 240px">
+        <el-form-item label="治具类型" prop="fixtureCategory">
+          <!-- 请求返回的form.fixtureCategory是 int 类型，字典的key是string类型，需要把int转成string，否则输入框不能自动转换成value/label -->
+          <el-select v-model="form.fixtureCategory+''" placeholder="请选择治具类别" clearable style="width: 240px">
             <el-option
               v-for="dict in dict.type.biz_fixture_category"
               :key="dict.value"
@@ -169,30 +193,29 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="治具版本" prop="fixtureVersion">
+          <el-input v-model="form.fixtureVersion" placeholder="请输入治具版本" />
+        </el-form-item>
         <el-form-item label="连接器朝向" prop="buckle">
-          <el-select v-model="form.buckle" placeholder="请选择连接器朝向" clearable style="width: 240px">
+          <el-select v-model="form.buckle+''" placeholder="请选择连接器朝向" clearable style="width: 240px">
             <el-option
               v-for="dict in dict.type.fixture_buckle_status"
               :key="dict.value"
               :label="dict.label"
-              :value="dict.value"
-            />
+              :value="dict.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="品名" prop="fixtureName">
-          <el-input v-model="form.fixtureName" placeholder="请输入品名" />
-        </el-form-item>
-        <el-form-item label="治具版本" prop="fixtureVersion">
-          <el-input v-model="form.fixtureVersion" placeholder="请输入治具版本" />
-        </el-form-item>
-        <el-form-item label="料号" prop="materialId">
-          <el-input v-model="form.materialId" placeholder="请输入料号" />
-        </el-form-item>
-        <el-form-item label="共享机型" prop="sharedProdType">
-          <el-input v-model="form.sharedProdType" placeholder="请输入共享机型" />
+        <el-form-item label="治具类别" prop="flag">
+          <el-select v-model="form.flag+''" placeholder="请选择治具类型" clearable style="width: 240px">
+            <el-option
+              v-for="dict in dict.type.biz_fixture_flag"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value" />
+            </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" placeholder="请输入备注" />
+          <el-input v-model="form.remark" placeholder="请输入备注" type="textarea"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -202,13 +225,12 @@
     </el-dialog>
   </div>
 </template>
-
 <script>
-import { listPogopin, getPogopin, delPogopin, addPogopin, updatePogopin } from "@/api/biz/fixture/manage/pogopin";
+import { addPogopin, delPogopin, getPogopin, listPogopin, updatePogopin } from '@/api/biz/fixture/manage/pogopin'
 
 export default {
-  name: "Pogopin",
-  dicts: ['biz_fixture_category', 'fixture_buckle_status'],
+  name: 'fixture',
+  dicts: ['biz_fixture_category', 'fixture_buckle_status', 'biz_fixture_flag'],
   data() {
     return {
       // 遮罩层
@@ -224,8 +246,6 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // pogopin治具表格数据
-      pogopinList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -234,27 +254,50 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        materialId: null,
         prodType: null,
         fixtureCategory: null,
-        materialId: null,
+        flag: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      // 治具表格数据
+      dataList: [],
+      arr1: [],
+      arr2: [],
+      arr3: [],
+      arr4: [],
+      arr5: [],
+      arr6: [],
+      position1: 0,
+      position2: 0,
+      position3: 0,
+      position4: 0,
+      position5: 0,
+      position6: 0
     };
   },
+
   created() {
     this.getList();
   },
   methods: {
-    /** 查询pogopin治具列表 */
+    /** 查询治具列表 */
     getList() {
       this.loading = true;
       listPogopin(this.queryParams).then(response => {
-        this.pogopinList = response.rows;
+        this.dataList = response.rows;
         this.total = response.total;
+        this.resetSpan();
+        this.rowspan(this.arr1, this.position1, "materialId");
+        this.rowspan(this.arr2, this.position2, "fixtureName");
+        this.rowspan(this.arr3, this.position6, "prodType");
+        this.rowspan(this.arr4, this.position3, "fixtureCategory");
+        this.rowspan(this.arr5, this.position4, "fixtureVersion");
+        this.rowspan(this.arr6, this.position5, "buckle");
         this.loading = false;
       });
     },
@@ -273,15 +316,30 @@ export default {
         fixtureName: null,
         fixtureVersion: null,
         materialId: null,
-        sharedProdType: null,
         createBy: null,
         createTime: null,
         updateBy: null,
         updateTime: null,
         isDelete: null,
+        flag: null,
         remark: null
       };
       this.resetForm("form");
+    },
+    /** */
+    resetSpan() {
+      this.arr1 = [];
+      this.arr2 = [];
+      this.arr3 = [];
+      this.arr4 = [];
+      this.arr5 = [];
+      this.arr6 = [];
+      this.position1 = 0;
+      this.position2 = 0;
+      this.position3 = 0;
+      this.position4 = 0;
+      this.position5 = 0;
+      this.position6 = 0;
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -311,6 +369,8 @@ export default {
       this.reset();
       const id = row.id || this.ids
       getPogopin(id).then(response => {
+        // response.data.fixtureCategory = this.fixtureCategoryFormat(response.data.fixtureCategory);
+        // response.data.buckle = this.fixtureCategoryFormat(response.data.buckle);
         this.form = response.data;
         this.open = true;
         this.title = "修改pogopin治具";
@@ -352,7 +412,94 @@ export default {
       this.download('biz/fixture/manage/pogopin/export', {
         ...this.queryParams
       }, `pogopin_${new Date().getTime()}.xlsx`)
+    },
+
+    rowspan(spanArr, position, spanName) {
+      this.dataList.forEach((item, index) => {
+        if (index === 0) {
+          spanArr.push(1);
+          position = 0;
+        } else {
+          if (
+            this.dataList[index][spanName] ===
+            this.dataList[index - 1][spanName]
+          ) {
+            spanArr[position] += 1;
+            spanArr.push(0);
+          } else {
+            spanArr.push(1);
+            position = index;
+          }
+        }
+      });
+    },
+    // 表格合并行
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 0) {
+        const _row = this.arr1[rowIndex];
+        const _col = _row > 0 ? 1 : 0; /*定义的这个单元格列的合并，我们项目只合并行，不合并列；*/
+        return {
+          rowspan: _row,
+          colspan: _col,
+        };
+      }
+      if (columnIndex === 1) {
+        const _row = this.arr2[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col,
+        };
+      }
+      if (columnIndex === 2) {
+        const _row = this.arr3[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col,
+        };
+      }
+      if (columnIndex === 3) {
+        const _row = this.arr4[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col,
+        };
+      }
+      if (columnIndex === 4) {
+        const _row = this.arr5[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col,
+        };
+      }
+      if (columnIndex === 5) {
+        const _row = this.arr6[rowIndex];
+        const _col = _row > 0 ? 1 : 0;
+        return {
+          rowspan: _row,
+          colspan: _col,
+        };
+      }
+    },
+    fixtureCategoryFormat(key) {
+      return this.selectDictLabel(this.dict.type.biz_fixture_category, key);
+    },
+    buckleFormat(key) {
+      return this.selectDictLabel(this.dict.type.fixture_buckle_status, key);
+    },
+    flagFormat(key) {
+      return this.selectDictLabel(this.dict.type.biz_fixture_flag, key);
     }
-  }
+  },
+  mounted() {
+    // this.queryData();
+  },
 };
 </script>
+
+<style scoped>
+
+</style>

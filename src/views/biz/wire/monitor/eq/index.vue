@@ -342,7 +342,6 @@ export default {
           targetStr = item
         }
       })
-      console.log(this.queryParams.factoryName)
     },
     /** 根据厂给定的值，查询区的值 */
     getWorkshopNameList() {
