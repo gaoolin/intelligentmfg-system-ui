@@ -156,6 +156,13 @@ export default {
       /* 在 Vue 中，每个组件都有一个唯一的 key 属性。当组件的 key 属性发生改变时，Vue 会视为这是一个新的组件，而不是复用之前的组件。这样就会触发组件的重新渲染，从而实现页面的刷新 */
       // 点击刷新按钮，改变 refreshKey 的值触发组件的重新渲染
       this.refreshKey++
+      if (this.queryParams.category==='0') {
+        this.queryParams.eqId=null;
+        this.queryParams.mcId=null;
+        this.queryParams.prodType=null;
+      } else if (this.queryParams.category==='1') {
+        this.queryParams.status=null;
+      }
       this.getList()
     },
       /** 强制刷新 */
