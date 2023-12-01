@@ -406,8 +406,7 @@ export default {
     };
   },
   created() {
-    // this.onLoad();
-    // this.getFixtureCategoryList();
+    this.onLoad();
   },
   methods: {
     onLoad() {
@@ -522,7 +521,7 @@ export default {
         createTime: null,
         updateBy: null,
         updateTime: null,
-        deptId: 0,
+        deptId: null,
         remark: null
       };
       this.resetForm("form");
@@ -544,15 +543,17 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.isDeptIdAll();
-      this.getList();
+      if (this.isDeptIdAll()) {
+        this.queryParams.pageNum = 1;
+        this.getList();
+      }
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
-      this.isDeptIdAll();
-      this.handleQuery();
+      if (this.isDeptIdAll()) {
+        this.resetForm("queryForm");
+        this.handleQuery();
+      }
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -631,23 +632,24 @@ export default {
     handleDelete(row, flag) {
       if (this.isDeptIdAll()) {
         if (flag === 1) {
-          this.$modal.confirm("是否删除治具料号为 " + row.materialId + '“的数据项？').then(function() {
+          this.$modal.confirm("是否删除治具料号为 " + row.materialId + '“的数据项？').then(response => {
             const label = '' + row.mId + '-' + row.pId + '-' + 0 + '-' + this.form.deptId;
             return delFixture(label).then(() => {
               this.$modal.msgSuccess("删除成功");
+              this.getList();
+              this.reset();
             }).catch(() => {});
           })
-          this.getList();
         } else if (flag === 2) {
-          this.$modal.confirm('是否确认删除治具编号为"' + row.prodType + '"的数据项？').then(function() {
+          this.$modal.confirm('是否确认删除治具编号为"' + row.prodType + '"的数据项？').then(response => {
             const label = '' + row.mId + '-' + row.pId + '-' + 1 + '-' + this.form.deptId;
             return delFixture(label).then(() => {
               this.$modal.msgSuccess("删除成功");
+              this.getList();
+              this.reset();
             }).catch(() => {});
           })
-          this.getList();
         }
-        this.reset();
       }
     },
     /** 导出按钮操作 */
@@ -655,7 +657,7 @@ export default {
       if (this.isDeptIdAll()) {
         this.download('biz/fixture/manage/export', {
           ...this.queryParams
-        }, `pogopin_${new Date().getTime()}.xlsx`)
+        }, `共治具_${new Date().getTime()}.xlsx`)
       }
       this.reset();
     },
@@ -804,15 +806,18 @@ export default {
     },
     //这个删除按钮主要控制点击删除按钮后的弹窗显示，然后存储你点击按钮的当前行
     deleteData(row, $index) {
-      this.$modal.confirm('是否确认删除治具类型为"' + row.fixtureCategory + '"的数据项？').then(function() {
-        return deleteFixtureCategory(row.cId);
-      }).then(() => {
-        this.categoryOptions = [];
-        this.getFixtureCategoryList();
-        this.getFixtureCategoryListTab();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
-      this.reset();
+      if (this.isDeptIdAll()) {
+        this.$modal.confirm('是否确认删除治具类型为"' + row.fixtureCategory + '"的数据项？').then(function() {
+          return deleteFixtureCategory(row.cId);
+        }).then(() => {
+          this.categoryOptions = [];
+          this.getFixtureCategoryList();
+          this.getFixtureCategoryListTab();
+          this.$modal.msgSuccess("删除成功");
+        }).catch(() => {
+        });
+        this.reset();
+      }
     },
     tabCancel(row, $index) {
       row.compile = "编辑";
@@ -821,7 +826,7 @@ export default {
     }
   },
   mounted() {
-    this.onLoad();
+    // this.onLoad();
   },
 };
 </script>
