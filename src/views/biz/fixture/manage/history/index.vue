@@ -17,6 +17,17 @@
         @keyup.enter.native="handleQuery"
       />
     </el-form-item>
+    <el-form-item label="时段" required>
+      <el-date-picker
+        v-model="dateRangeCreateDate"
+        style="width: 370px"
+        value-format="yyyy-MM-dd HH:mm:ss"
+        type="datetimerange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions"></el-date-picker>
+    </el-form-item>
     <el-form-item>
       <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
       <el-button type="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -26,7 +37,6 @@
   <el-table
     v-loading="loading"
     :data="historyList"
-    @selection-change="handleSelectionChange"
     :cell-style="{padding:'0px'}"
     :row-style="{height:'50px'}"
     fit
@@ -37,33 +47,38 @@
     border
   >
     <el-table-column type="index" label="序号" width="55" align="center" fixed />
-    <el-table-column label="料号" align="center" prop="materialId" fixed />
-    <el-table-column label="品名" align="center" min-width="180" prop="fixtureName" fixed />
-    <el-table-column label="机种" align="center" min-width="90" prop="prodType" fixed />
-    <el-table-column label="治具类别" align="center" prop="fixtureCategory" fixed>
-      <template slot-scope="scope">
-        <dict-tag :options="dict.type.biz_fixture_category" :value="scope.row.fixtureCategory"/>
-      </template>
+    <el-table-column label="料号" align="center" min-width="50" prop="materialId" fixed />
+    <el-table-column label="品名" align="center" min-width="120" prop="fixtureName" fixed show-overflow-tooltip/>
+    <el-table-column label="规格" align="center" min-width="120" prop="fixtureSpec" fixed show-overflow-tooltip/>
+    <el-table-column label="机种" align="center" min-width="50" prop="prodType" fixed />
+    <el-table-column label="治具类别" align="center" min-width="70" prop="fixtureCategory" fixed  show-overflow-tooltip>
+      <template slot-scope="scope">{{scope.row.fixtureCategory}}</template>
     </el-table-column>
-    <el-table-column label="治具版本" align="center" prop="fixtureVersion" />
-    <el-table-column label="连接器朝向" align="center" prop="buckle" fixed>
+    <el-table-column label="治具版本" align="center" min-width="35" prop="fixtureVersion" />
+    <el-table-column label="连接器朝向" align="center" min-width="35" prop="buckle" fixed>
       <template slot-scope="scope">
         <dict-tag :options="dict.type.fixture_buckle_status" :value="scope.row.buckle"/>
       </template>
     </el-table-column>
-    <el-table-column label="创建人" align="center" prop="createBy" />
-    <el-table-column label="创建时间" align="center" width="140" prop="createTime">
+    <el-table-column label="创建人" align="center" min-width="35" prop="createBy" />
+    <el-table-column label="创建时间" align="center" width="155" prop="createTime">
       <template slot-scope="scope">
         <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="更新人" align="center" prop="updateBy" />
-    <el-table-column label="更新时间" align="center" width="140" prop="updateTime">
+    <el-table-column label="更新人" align="center" min-width="35" prop="updateBy" />
+    <el-table-column label="更新时间" align="center" width="155" prop="updateTime">
       <template slot-scope="scope">
         <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="备注" align="center" prop="remark" />
+    <el-table-column label="类别" align="center" min-width="35" prop="deptId">
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.biz_fixture_project" :value="scope.row.deptId" />
+      </template>
+    </el-table-column>
+    <el-table-column label="操作时间" align="center" width="155" prop="opsTime" />
+    <el-table-column label="备注" align="center" min-width="50" prop="remark" show-overflow-tooltip />
   </el-table>
 
   <pagination
@@ -73,7 +88,6 @@
     :limit.sync="queryParams.pageSize"
     @pagination="getList"
     />
-
 </div>
 </template>
 
@@ -81,7 +95,7 @@
 import { listHistory, getHistory, delHistory, addHistory, updateHistory } from "@/api/biz/fixture/manage/history";
 export default {
   name: 'History',
-  dicts: ['biz_fixture_category'],
+  dicts: ['fixture_buckle_status', 'biz_fixture_project'],
   data() {
     return {
       loading: true,
@@ -93,6 +107,8 @@ export default {
       total: 0,
       historyList: [],
       title: "",
+      // 状态时间范围
+      dateRangeCreateDate: [this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)), this.DateToStr(new Date(new Date().valueOf()))],
       open: false,
       queryParams: {
         pageNum: 1,
@@ -101,7 +117,34 @@ export default {
         materialId: null,
       },
       form: {},
-      rules: {}
+      rules: {},
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      },
     };
   },
 
@@ -111,32 +154,33 @@ export default {
   methods: {
     getList() {
       this.loading = true;
+      this.queryParams.params = {}
+      if (null != this.dateRangeCreateDate && '' !== this.dateRangeCreateDate) {
+        this.queryParams.params['beginCreateDate'] = this.dateRangeCreateDate[0]
+        this.queryParams.params['endCreateDate'] = this.dateRangeCreateDate[1]
+      }
       listHistory(this.queryParams).then(res => {
-        console.log(">>>>" + res.rows)
         this.historyList = res.rows;
         this.total = res.total;
         this.loading = false;
       });
     },
-
     cancel() {
       this.open = false;
       this.reset();
     },
-
     reset() {
       this.form = {
-        id: null,
+        hid: null,
         prodType: null,
         fixtureCategory: null,
         fixtureName: null,
         materialId: null,
-        sharedProdType: null,
         createBy: null,
         createTime: null,
         updateBy: null,
         updateTime: null,
-        isDelete: null,
+        project: null,
         remark: null
       };
       this.resetForm("form");
@@ -149,54 +193,26 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.prodTypes = selection.map(item => item.prodType)
-      this.single = selection.length !== 1
-      this.multiple = !selection.length
-    },
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加pogopin治具历史"
-    },
-    handleUpdate(row) {
-      this.reset();
-      const id = id.id || this.ids
-      getHistory(id).then(res => {
-        this.form = res.data;
-        this.open = true;
-        this.titile = "修改pogopin治具历史";
-      });
-    },
-    submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.id != null) {
-            updateHistory(this.form).then(res => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          }
-        }
-      });
-    },
-    handleDelete(row) {
-      const ids = row.id || this.ids;
-      const prodTypes = row.prodType || this.prodTypes
-      this.$modal.confirm('是否确认删除pogopin治具编号为"' + prodTypes + '"的数据项？').then(function() {
-        return delHistory(ids);
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
-    },
     handleExport() {
       this.download('biz/fixture/mange/history/export', {
         ...this.queryParams
       }, `pogopin_history_${new Date().getTime}.xlsx`)
-    }
+    },
+    /** 日期转字符串 */
+    DateToStr(date) {
+      const year = date.getFullYear()
+      const month = date.getMonth()
+      const day = date.getDate()
+      const hours = date.getHours()
+      const min = date.getMinutes()
+      const second = date.getSeconds()
+      return year + '-' +
+        ((month + 1) > 9 ? (month + 1) : '0' + (month + 1)) + '-' +
+        (day > 9 ? day : ('0' + day)) + ' ' +
+        (hours > 9 ? hours : ('0' + hours)) + ':' +
+        (min > 9 ? min : ('0' + min)) + ':' +
+        (second > 9 ? second : ('0' + second))
+    },
   }
 };
 </script>

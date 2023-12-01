@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <!--      <div>-->
       <el-form-item label="机型" prop="mcId" required>
         <el-input
           v-model="queryParams.mcId"
@@ -27,7 +26,6 @@
           clearable
         />
       </el-form-item>
-
       <el-form-item label="时段" required>
         <el-date-picker
           v-model="dateRangeCreateDate"
@@ -41,8 +39,6 @@
         >
         </el-date-picker>
       </el-form-item>
-      <!--      </div>-->
-      <!--      <div>-->
       <el-form-item label="Lead点卡控值" prop="leadThreshold" label-width="130px" required>
         <el-input
           v-model="queryParams.leadThreshold"
@@ -152,7 +148,6 @@ import { listUpload, addOnline } from '@/api/biz/wbcomparison/upload'
 
 export default {
   name: 'UploadModOnline',
-
   data() {
     return {
       // 遮罩层

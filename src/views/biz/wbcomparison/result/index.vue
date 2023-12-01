@@ -33,7 +33,7 @@
           placeholder="请输入机型"
           clearable
           :disabled="queryParams.category==='0'"
-          @change="dataChange()"
+          @change="dataChange"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
