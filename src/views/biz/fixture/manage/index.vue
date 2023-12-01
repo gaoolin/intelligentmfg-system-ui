@@ -417,7 +417,7 @@ export default {
     getList() {
       this.loading = true;
       listFixture(this.queryParams).then(response => {
-        console.log(response.rows)
+        // console.log(response.rows)
         response.rows.forEach(row => {
           if (row['buckle'] != null && row['buckle'] !== '') {
             row['buckle'] = row['buckle'].toString();
@@ -435,39 +435,39 @@ export default {
         this.rowspan(this.arr6, this.position6, "fixtureVersion");
 
         this.loading = false;
-        console.log("获取数据完成4")
+        // console.log("获取数据完成4")
         this.getFixtureCategoryList()
       });
     },
     getDeptIds() {
       getDeptIds().then(response => {
         this.deptIds = response.data
-        console.log("getDeptIds执行完1")
+        // console.log("getDeptIds执行完1")
         this.getDict();
       })
     },
     getDict() {
       this.dictProjectObject = [];
       this.getDicts("biz_fixture_project").then(response => {
-        console.log(this.deptIds)
-        console.log(response.data)
+        // console.log(this.deptIds)
+        // console.log(response.data)
         response.data.forEach(item => {
-          console.log(item["dictValue"])
-          console.log((this.deptIds.indexOf(item["dictValue"]) !== -1))
+          // console.log(item["dictValue"])
+          // console.log((this.deptIds.indexOf(item["dictValue"]) !== -1))
           if (this.deptIds.indexOf(item["dictValue"]) !== -1) {
             var o = {}
             o.dictValue = item["dictValue"];
-            console.log("++++++++++++++++++++++")
+            // console.log("++++++++++++++++++++++")
             o.dictLabel = item["dictLabel"];
-            console.log(o)
+            // console.log(o)
             this.dictProjectObject.push(o);
-            console.log("getDicts执行完2")
-            console.log(this.dictProjectObject)
+            // console.log("getDicts执行完2")
+            // console.log(this.dictProjectObject)
           }
         })
         if (this.dictProjectObject[0] !== undefined) {
           this.queryParams.deptId = this.dictProjectObject[0].dictValue
-          console.log("已给选择器赋值3")
+          // console.log("已给选择器赋值3")
           this.getList();
         }
       })
@@ -743,7 +743,7 @@ export default {
           }
         })
       }
-      console.log("治具类别5")
+      // console.log("治具类别5")
       this.reset();
     },
     getFixtureCategoryListTab() {
