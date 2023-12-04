@@ -85,3 +85,20 @@ export function getDeptIds() {
     method: 'get'
   })
 }
+
+// 查询所有料号
+export function getFixtureMaterialIds(deptId) {
+  return request({
+    url: '/biz/fixture/manage/materialInfo/' + deptId,
+    method: 'get'
+  })
+}
+
+// 查询料号是否存在
+export function materialIdRules(query) {
+  return request({
+    url: '/biz/fixture/manage/materialInfo/exist',
+    method: 'get',
+    params: query
+  })
+}
