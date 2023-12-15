@@ -91,12 +91,13 @@
     >
     </el-alert>
 
+    <!--      :span-method="objectSpanMethod"-->
     <el-table
       v-loading="loading"
       :data="dataList"
       fit
       @selection-change="handleSelectionChange"
-      :span-method="objectSpanMethod"
+      :span-method="arraySpanMethod"
       class="tableArea"
       style="font-size: 14px;"
       cell-mouse-enter
@@ -381,14 +382,38 @@ export default {
       position4: 0,
       position5: 0,
       position6: 0,
+      // 需要合并项的列
+      needMergeArr: [
+        {
+          colName: "materialId",
+          mergeCheckNames: ["materialId"],
+        },
+        {
+          colName: "fixtureName",
+          mergeCheckNames: ["materialId", "fixtureName"],
+        },
+        {
+          colName: "fixtureSpec",
+          mergeCheckNames: ["materialId", "fixtureName", "fixtureSpec"],
+        },
+        {
+          colName: "fixtureCategory",
+          mergeCheckNames: ["materialId", "fixtureName", "fixtureSpec", "fixtureCategory"],
+        },
+        {
+          colName: "fixtureVersion",
+          mergeCheckNames: ["materialId", "fixtureName", "fixtureSpec", "fixtureCategory", "fixtureVersion"],
+        },
+        {
+          colName: "prodType",
+          mergeCheckNames: ["materialId", "fixtureName", "fixtureSpec", "prodType", "fixtureCategory", "prodType"],
+        },
+      ],
+      rowMergeArrs: {}, // 包含需要一个或多个合并项信息的对象
     };
   },
-  created() {
-    this.onLoad();
-  },
+
   methods: {
-    onLoad() {
-    },
     /** 查询治具列表 */
     getList() {
       this.loading = true;
@@ -401,13 +426,8 @@ export default {
         })
         this.dataList = response.rows;
         this.total = response.total;
-        this.resetSpan();
-        this.rowspan(this.arr1, this.position1, "materialId");
-        this.rowspan(this.arr2, this.position2, "fixtureName");
-        this.rowspan(this.arr3, this.position3, "fixtureSpec");
-        this.rowspan(this.arr4, this.position4, "prodType");
-        this.rowspan(this.arr5, this.position5, "fixtureCategory");
-        this.rowspan(this.arr6, this.position6, "fixtureVersion");
+
+        this.rowMergeArrs = this.rowMergeHandle(this.needMergeArr, response.rows);
 
         this.loading = false;
         this.getFixtureCategoryList(); // 首页治具类型下拉框数据
@@ -629,74 +649,67 @@ export default {
     },
 
     /** 表格合并行 */
-    rowspan(spanArr, position, spanName) {
-      this.dataList.forEach((item, index) => {
-        if (index === 0) {
-          spanArr.push(1);
-          position = 0;
-        } else {
-          if (
-            this.dataList[index][spanName] ===
-            this.dataList[index - 1][spanName]
-          ) {
-            spanArr[position] += 1;
-            spanArr.push(0);
-          } else {
-            spanArr.push(1);
-            position = index;
-          }
-        }
+    arraySpanMethod({row, column, rowIndex, columnIndex}) {
+      let needMerge = this.needMergeArr.some((item) => {
+        return item.colName === column.property;
       });
+      if (needMerge === true) {
+        return this.mergeAction(column.property, rowIndex, column);
+      }
     },
-    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0) {
-        const _row = this.arr1[rowIndex];
-        const _col = _row > 0 ? 1 : 0; /*定义的这个单元格列的合并，我们项目只合并行，不合并列；*/
-        return {
-          rowspan: _row,
-          colspan: _col,
+
+    mergeAction(val, rowIndex, colData) {
+      let _row = this.rowMergeArrs[val].rowArr[rowIndex];
+      let _col = _row > 0 ? 1 : 0;
+      return [_row, _col];
+    },
+
+    rowMergeHandle(arr, data) {
+      if (!Array.isArray(arr) && !arr.length) return false;
+      if (!Array.isArray(data) && !data.length) return false;
+      let needMerge = {};
+
+      arr.forEach((mergeItem) => {
+        // 创建合并管理对象
+        needMerge[mergeItem.colName] = {
+          rowArr: [],
+          rowMergeNum: 0,
         };
+        let currentMergeItemData = needMerge[mergeItem.colName];
+
+        // 进行合并管理对象数据的遍历整理
+        data.forEach((item, index) => {
+          if (index === 0) {
+            currentMergeItemData.rowArr.push(1);
+            currentMergeItemData.rowMergeNum = 0;
+          } else {
+            let currentRowData = data[index];
+            let preRowData = data[index - 1];
+
+            if (this.colMergeCheck(currentRowData, preRowData, mergeItem.mergeCheckNames)) {
+              currentMergeItemData.rowArr[currentMergeItemData.rowMergeNum] += 1;
+              currentMergeItemData.rowArr.push(0);
+            } else {
+              currentMergeItemData.rowArr.push(1);
+              currentMergeItemData.rowMergeNum = index;
+            }
+          }
+        });
+      });
+      return needMerge;
+    },
+
+    colMergeCheck(currentRowData, preRowData, mergeCheckNames) {
+      if (!Array.isArray(mergeCheckNames) && !mergeCheckNames.length) return false;
+      let result = true;
+      for (let index = 0; index < mergeCheckNames.length; index++) {
+        const mergeCheckName = mergeCheckNames[index];
+        if (currentRowData[mergeCheckName] !== preRowData[mergeCheckName]) {
+          result = false;
+          break;
+        }
       }
-      if (columnIndex === 1) {
-        const _row = this.arr2[rowIndex];
-        const _col = _row > 0 ? 1 : 0;
-        return {
-          rowspan: _row,
-          colspan: _col,
-        };
-      }
-      if (columnIndex === 2) {
-        const _row = this.arr3[rowIndex];
-        const _col = _row > 0 ? 1 : 0;
-        return {
-          rowspan: _row,
-          colspan: _col,
-        };
-      }
-      if (columnIndex === 3) {
-        const _row = this.arr4[rowIndex];
-        const _col = _row > 0 ? 1 : 0;
-        return {
-          rowspan: _row,
-          colspan: _col,
-        };
-      }
-      if (columnIndex === 4) {
-        const _row = this.arr5[rowIndex];
-        const _col = _row > 0 ? 1 : 0;
-        return {
-          rowspan: _row,
-          colspan: _col,
-        };
-      }
-      if (columnIndex === 5) {
-        const _row = this.arr6[rowIndex];
-        const _col = _row > 0 ? 1 : 0;
-        return {
-          rowspan: _row,
-          colspan: _col,
-        };
-      }
+      return result;
     },
 
     /** 获取字典信息 */
