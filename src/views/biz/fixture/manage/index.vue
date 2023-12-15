@@ -172,7 +172,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加pog治具对话框 -->
+    <!-- 添加治具对话框 -->
     <el-dialog :title="title" :visible.sync="addOpen" width="500px" append-to-body>
       <el-form
         ref="form"
@@ -236,7 +236,7 @@
         <el-tab-pane label="新增治具类型" name="first">
           <el-form ref="form" :model="form" label-width="155px">
             <el-form-item label="治具类型名称" prop="fixtureCategory" >
-              <el-input v-model="form.fixtureCategory" @change="fixtureCategoryChange" placeholder="请输入治具类型" />
+              <el-input v-model="form.fixtureCategory" @change="fixtureCategoryChange" placeholder="请输入治具类型名称" />
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -726,7 +726,7 @@ export default {
       this.getList();
     },
 
-    /** 治具类型管理 */
+    /** 治具类型管理 治具类型下拉框赋值*/
     getFixtureCategoryList() {
       this.reset();
       if (this.isDeptIdAll()) {
