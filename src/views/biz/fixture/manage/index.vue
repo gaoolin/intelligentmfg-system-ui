@@ -6,7 +6,6 @@
         v-model="queryParams.materialId"
         placeholder="请输入料号"
         clearable
-        @keyup.native="handleQuery"
         @keyup.enter.native="handleQuery"
       />
     </el-form-item>
@@ -15,7 +14,6 @@
         v-model="queryParams.prodType"
         placeholder="请输入机种"
         clearable
-        @keyup.native="handleQuery"
         @keyup.enter.native="handleQuery"
       />
     </el-form-item>
@@ -25,7 +23,6 @@
         style="width: 280px"
         placeholder="请输入治具类型"
         clearable
-        @keyup.native="handleQuery"
         @keyup.enter.native="handleQuery"
         @change="changeOneSelection($event, categoryOptions, queryParams.fixtureCategory)">
         <el-option
@@ -41,9 +38,7 @@
         style="width: 100px"
         v-model="queryParams.deptId"
         v-for="item in dictProjectObject"
-        placeholder="请输入类别"
         clearable
-        @keyup.native="handleQuery"
         @keyup.enter.native="handleQuery"
         @change="changeOneSelection($event, dictProjectObject, queryParams.deptId)">
         <el-radio :label="item.dictValue">{{ item.dictLabel }}</el-radio>
@@ -372,7 +367,6 @@ export default {
       othersDisabled: false,
       fixtureCategoryList: [],
       activeName: "first",
-      restaurants: [],
       state: '',
       timeout:  null,
       arr1: [],
@@ -416,8 +410,7 @@ export default {
         this.rowspan(this.arr6, this.position6, "fixtureVersion");
 
         this.loading = false;
-        this.getFixtureCategoryList();
-        this.getFixtureMaterialIds();
+        this.getFixtureCategoryList(); // 首页治具类型下拉框数据
       });
     },
     getDeptIds() {
@@ -717,7 +710,8 @@ export default {
         if (item.value === val) {
           targetStr = item
         }
-      })
+      });
+      this.getList();
     },
 
     /** 治具类型管理 */
@@ -796,23 +790,7 @@ export default {
     },
 
     /** 新增料号对话框 */
-    querySearchAsync(queryString, cb) {
-      const restaurants = this.restaurants
-      const results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
 
-      clearTimeout(this.timeout);
-      this.timeout = setTimeout(() => {
-        cb(results);
-      }, 3000 * Math.random());
-    },
-    createStateFilter(queryString) {
-      return (state) => {
-        return (state.materialId.toLowerCase().match(queryString.toLowerCase()));
-      };
-    },
-    handleSelect(item) {
-      console.log(item);
-    },
     getFixtureMaterialIds() {
       if (this.isDeptIdAll()) {
         getFixtureMaterialIds(this.form.deptId).then(response => {
