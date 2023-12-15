@@ -84,14 +84,13 @@
     </el-row>
 
     <el-alert
-      title="注意：为确保信息的准确性,查到共用信息后须与治具设计核对后方可使用！"
+      title="注意：为确保信息的准确,查到共用信息后须与治具设计核对后方可使用！"
       type="warning"
       show-icon
       style="font-weight: bolder"
     >
     </el-alert>
 
-    <!--      :span-method="objectSpanMethod"-->
     <el-table
       v-loading="loading"
       :data="dataList"
