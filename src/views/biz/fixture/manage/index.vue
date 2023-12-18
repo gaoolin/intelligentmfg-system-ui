@@ -290,7 +290,7 @@ import {
   getDeptIds,
   getFixtureMaterialIds,
   materialIdRules
-} from '@/api/biz/fixture/manage/fixture'
+} from '@/api/biz/fixture/fixture'
 
 export default {
   name: 'fixture',

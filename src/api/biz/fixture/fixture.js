@@ -102,3 +102,11 @@ export function materialIdRules(query) {
     params: query
   })
 }
+
+// 获取环形图数据
+export function getFixturePanelData() {
+  return request({
+    url: '/biz/fixture/statistics/',
+    method: 'get'
+  })
+}

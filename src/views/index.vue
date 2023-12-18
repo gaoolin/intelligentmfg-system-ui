@@ -31,10 +31,10 @@ export default {
         data5: []
       },
       panelData: {
-        modTtl: 1,
-        modAvgLine: 1,
-        ttlComparisonCnt: 1,
-        ttlInterceptCnt: 1
+        modTtl: 0,
+        modAvgLine: 0,
+        ttlComparisonCnt: 0,
+        ttlInterceptCnt: 0
       }
     }
   },

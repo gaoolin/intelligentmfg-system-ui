@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { listHistory, getHistory, delHistory, addHistory, updateHistory } from "@/api/biz/fixture/manage/history";
+import { listHistory, getHistory, delHistory, addHistory, updateHistory } from "@/api/biz/fixture/history";
 export default {
   name: 'History',
   dicts: ['fixture_buckle_status', 'biz_fixture_project'],
