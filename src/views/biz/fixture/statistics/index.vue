@@ -2,7 +2,7 @@
   <div class="dashboard-editor-container">
     <fixture-panel v-if="flag" :fixture-panel-data="fixturePanelData"/>
 
-<!--    <fixture-trending-bar :fixtureTrendingBarData="fixtureTrendingBarData"/>-->
+    <fixture-trending-bar :fixtureTrendingBarData="fixtureTrendingBarData"/>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       fixturePanelData: [],
-      fixtureTrendingBarData: [],
+      fixtureTrendingBarData: {},
       flag: false
     }
   },

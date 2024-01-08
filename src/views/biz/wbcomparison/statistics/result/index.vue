@@ -90,7 +90,7 @@
       <el-table-column prop="dt" label="时间" align="center" v-if="this.queryParams.category==='0'" fixed/>
       <el-table-column prop="status" label="状态" align="center" v-if="this.queryParams.category==='0'" fixed>
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.comparison_result_code" :value="scope.row.status.toString()"/>
+          <dict-tag :options="dict.type.comparison_result_code" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column prop="description" label="描述" align="center" show-overflow-tooltip

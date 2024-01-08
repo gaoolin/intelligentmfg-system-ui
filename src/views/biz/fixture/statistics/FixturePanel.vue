@@ -8,6 +8,7 @@ require('echarts/theme/macarons') // echarts theme
 import resize from '../../../dashboard/mixins/resize'
 
 export default {
+  name: 'FixturePanel',
   mixins: [resize],
   props: {
     className: {
@@ -20,7 +21,7 @@ export default {
     },
     height: {
       type: String,
-      default: '500px'
+      default: '450px'
     },
     autoResize: {
       type: Boolean,
@@ -37,12 +38,9 @@ export default {
     }
   },
   mounted() {
-    console.log("pieData:"+JSON.stringify(this.fixturePanelData))
-    this.initChart()
-
-    // this.$nextTick(() => {
-    //   this.initChart()
-    // })
+    this.$nextTick(() => {
+      this.initChart()
+    })
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -53,7 +51,6 @@ export default {
   },
   methods: {
     setOptions() {
-      console.log( this.fixturePanelData[0])
       this.chart.setOption({
         title: [{
           text: '治具共用信息',
@@ -102,8 +99,8 @@ export default {
           formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
-          left: 'center',
-          bottom: '0',
+          left: 'right',
+          top: '10',
           data: ['共享治具', '未共享治具']
         },
         labelLine: {
@@ -208,8 +205,7 @@ export default {
     },
 
     initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
-
+      this.chart = echarts.init(this.$el, 'macarons');
       this.setOptions();
     }
   }

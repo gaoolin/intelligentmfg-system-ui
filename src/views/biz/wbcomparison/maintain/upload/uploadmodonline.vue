@@ -88,42 +88,42 @@
       highlight-current-row
       @selection-change="handleSelectionChange"
     >
-      <el-table-column prop="tableRowId" label="#" type="selection">
+      <el-table-column prop="tableRowId" label="#" type="selection" align="center">
       </el-table-column>
-      <el-table-column prop="simId" label="盒子号" min-width="110px">
+      <el-table-column prop="simId" label="盒子号" min-width="110px" align="center">
       </el-table-column>
-      <el-table-column prop="dt" label="时间" min-width="130px">
+      <el-table-column prop="dt" label="时间" min-width="130px" align="center">
       </el-table-column>
-      <el-table-column prop="mcId" label="机型" sortable>
+      <el-table-column prop="mcId" label="机型" sortable align="center">
       </el-table-column>
-      <el-table-column label="线号">
+      <el-table-column label="线号" align="center">
         <template slot-scope="scope">{{ scope.row.lineNo }}</template>
       </el-table-column>
-      <el-table-column prop="leadX" label="LeadX">
+      <el-table-column prop="leadX" label="LeadX" align="center">
       </el-table-column>
-      <el-table-column prop="leadY" label="LeadY">
+      <el-table-column prop="leadY" label="LeadY" align="center">
       </el-table-column>
-      <el-table-column prop="padX" label="PadX">
+      <el-table-column prop="padX" label="PadX" align="center">
       </el-table-column>
-      <el-table-column prop="padY" label="PadY">
+      <el-table-column prop="padY" label="PadY" align="center">
       </el-table-column>
-      <el-table-column prop="leadDiff" label="lead点间距">
+      <el-table-column prop="leadDiff" label="lead点间距" align="center">
       </el-table-column>
-      <el-table-column prop="padDiff" label="pad点间距">
+      <el-table-column prop="padDiff" label="pad点间距" align="center">
       </el-table-column>
-      <el-table-column prop="leadThreshold" label="Lead卡控值" :key="queryParams.leadThreshold">
+      <el-table-column prop="leadThreshold" label="Lead卡控值" :key="queryParams.leadThreshold" align="center">
         {{ queryParams.leadThreshold }}
       </el-table-column>
-      <el-table-column prop="padThreshold" label="Pad卡控值" :key="queryParams.padThreshold">{{ queryParams.padThreshold }}
+      <el-table-column prop="padThreshold" label="Pad卡控值" :key="queryParams.padThreshold"  align="center">{{ queryParams.padThreshold }}
       </el-table-column>
-      <el-table-column prop="wireLen" label="lead到pad线长">
+      <el-table-column prop="wireLen" label="lead到pad线长" align="center">
       </el-table-column>
-      <el-table-column prop="checkPort" label="CheckPort">
+      <el-table-column prop="checkPort" label="CheckPort" align="center">
       </el-table-column>
-      <el-table-column prop="pId" label="产品序号">
+      <el-table-column prop="pId" label="产品序号" align="center">
       </el-table-column>
 
-      <el-table-column prop="operation" label="操作" fixed="right">
+      <el-table-column prop="operation" label="操作" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button type="danger" @click="toggleSelection([dataList[scope.$index]])">删除<i
             class="el-icon-remove-outline"

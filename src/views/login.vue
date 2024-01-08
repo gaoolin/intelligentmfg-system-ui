@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">运营管理系统</h3>
+      <h3 class="title">智能制造管理系统</h3>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -56,7 +56,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2022-2023 智能制造部 </span>
+      <span>Copyright © 2022-2024 智能制造部 </span>
     </div>
   </div>
 </template>

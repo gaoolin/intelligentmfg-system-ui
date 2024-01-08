@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: '运营管理系统',
+      title: '智能制造管理系统',
       logo: logoImg
     }
   }

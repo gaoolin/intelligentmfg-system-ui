@@ -432,13 +432,13 @@ export default {
         this.getFixtureCategoryList(); // 首页治具类型下拉框数据
       });
     },
-    getDeptIds() {
+    getAllowedData() {
       getDeptIds().then(response => {
         this.deptIds = response.data
-        this.getDict();
+        this.getDataScope();
       })
     },
-    getDict() {
+    getDataScope() {
       this.dictProjectObject = [];
       this.getDicts("biz_fixture_project").then(response => {
         response.data.forEach(item => {
@@ -860,7 +860,7 @@ export default {
     },
   },
   mounted() {
-    this.getDeptIds();
+    this.getAllowedData();
   },
 };
 </script>
