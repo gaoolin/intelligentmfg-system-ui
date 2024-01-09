@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { getWbComparisonIndexOverview, getWbComparisonIndexTrending } from '@/api/biz/index/index'
+import { getWbComparisonIndexOverview, getWbComparisonIndexTrending } from '@/api/biz/wbcomparison/index'
 import WbComparisonIndexOverview from './WbComparisonIndexOverview'
 import WbComparisonTrending from './WbComparisonTrending'
 

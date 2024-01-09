@@ -11,7 +11,7 @@
 <script>
 import WbComparisonTrending from './biz/wbcomparison/statistics/WbComparisonTrending'
 import WbComparisonIndexOverview from './biz/wbcomparison/statistics/WbComparisonIndexOverview'
-import { getWbComparisonIndexOverview, getWbComparisonIndexTrending } from '@/api/biz/index/index'
+import { getWbComparisonIndexOverview, getWbComparisonIndexTrending } from '@/api/biz/wbcomparison/index'
 
 export default {
   name: 'Index',
