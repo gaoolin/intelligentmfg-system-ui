@@ -65,6 +65,7 @@
 import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
+import { Message } from 'element-ui'
 
 export default {
   name: "Login",
@@ -141,13 +142,47 @@ export default {
             Cookies.remove('rememberMe');
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
-          }).catch(() => {
-            this.loading = false;
-            if (this.captchaEnabled) {
-              this.getCode();
-            }
-          });
+          //   this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
+          // }).catch(() => {
+          //   this.loading = false;
+          //   if (this.captchaEnabled) {
+          //     this.getCode();
+          //   }
+          // });
+
+
+            // 1、跳到登录后指定跳转的页面或者登录后跳到首页
+            // this.$router.push({ path: this.redirect || '/' }).catch(() => {})
+            // 2、登录后跳到路由默认的第一个路由页面
+            this.$store.dispatch('GetInfo').then(res => {
+              // 拉取完user_info信息
+              const roles = res.roles
+              this.$store.dispatch('GenerateRoutes', { roles }).then(accessRoutes => {
+                // 根据roles权限生成可访问的路由表
+                // console.log(accessRoutes)
+                this.$router.addRoutes(accessRoutes) // 动态添加可访问路由表
+                let pathIndex = ''
+                pathIndex = accessRoutes[0].path + '/' + accessRoutes[0].children[0].path // 设置默认首页地址indexPage
+                // console.log(this.redirect, pathIndex)
+                // 1、this.redirect == undefined,主要针对直接从http://172.16.6.205:9090/login，登入系统。
+                // 2、this.redirect == '/'、 '/index'，主要针对直接从这个http://172.16.6.205:9090/login?redirect=%2F，登入系统。因为没有设置重定向的路由
+                // 如果登录的时候出现1、2两种情况，那么就跳到路由的第一个路由页面，如果登录的时候，有设置可以访问的重定向地址，那么登录后就跳到重定向地址。
+                if (pathIndex !== '') {
+                  this.$router.push({ path: this.redirect === '/' || this.redirect === '/index' || this.redirect === undefined ? pathIndex : this.redirect }).catch(() => {}) // 跳转重定向页面或跳到默认首页indexPage
+                }
+              })
+            }).catch(err => {
+                this.$store.dispatch('LogOut').then(() => {
+                  Message.error(err)
+                  next({ path: '/login' })
+                })
+              })
+          }).catch(error => {
+              this.errorMsg = error
+              this.loading = false
+              this.getCode()
+            })
+
         }
       });
     }

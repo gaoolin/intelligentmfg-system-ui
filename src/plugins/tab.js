@@ -31,12 +31,22 @@ export default {
   },
   // 关闭指定tab页签
   closePage(obj) {
+    /* 隐藏首页增加 */
+    let indexPage = store.state.permission.indexPage;
     if (obj === undefined) {
       return store.dispatch('tagsView/delView', router.currentRoute).then(({ lastPath }) => {
-        return router.push(lastPath || '/');
+        return router.push(lastPath || indexPage);
       });
     }
     return store.dispatch('tagsView/delView', obj);
+
+    /* 隐藏首页释放 */
+    // if (obj === undefined) {
+    //   return store.dispatch('tagsView/delView', router.currentRoute).then(({ lastPath }) => {
+    //     return router.push(lastPath || '/');
+    //   });
+    // }
+    // return store.dispatch('tagsView/delView', obj);
   },
   // 关闭所有tab页签
   closeAllPage() {

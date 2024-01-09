@@ -12,9 +12,11 @@
         <h6>对不起，您没有访问权限，请不要进行非法操作！您可以返回主页面</h6>
         <ul class="list-unstyled">
           <li class="link-type">
-            <router-link to="/">
+<!--    隐藏首页需要添加        -->
+<!--            <router-link to="/">
               回首页
-            </router-link>
+            </router-link>-->
+
           </li>
         </ul>
       </el-col>
@@ -28,6 +30,9 @@
 <script>
 import errGif from '@/assets/401_images/401.gif'
 
+/* 隐藏首页增加 */
+import {mapState} from "vuex";
+
 export default {
   name: 'Page401',
   data() {
@@ -35,6 +40,15 @@ export default {
       errGif: errGif + '?' + +new Date()
     }
   },
+
+  /* 隐藏首页增加 */
+  computed: {
+    ...mapState({
+      indexPage: state => state.permission.indexPage
+    }),
+  },
+
+
   methods: {
     back() {
       if (this.$route.query.noGoBack) {

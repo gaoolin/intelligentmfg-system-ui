@@ -190,7 +190,6 @@ export default {
     }
   },
   created() {
-    console.log("--------------")
     this.getList();
     this.getFactoryNameList()
   },

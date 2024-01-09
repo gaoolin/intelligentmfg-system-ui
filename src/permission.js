@@ -22,12 +22,80 @@ router.beforeEach((to, from, next) => {
       if (store.getters.roles.length === 0) {
         isRelogin.show = true
         // 判断当前用户是否已拉取完user_info信息
-        store.dispatch('GetInfo').then(() => {
+        store.dispatch('GetInfo').then((res) => {
+
+          /* 方案2 隐藏首页增加 */
+          // 拉取user_info
+          const roles = res.roles
+          store.dispatch('GenerateRoutes', { roles }).then(accessRoutes => {
+            // console.log(accessRoutes)
+            // 根据roles权限生成可访问的路由表
+            // 修改默认首页
+            // console.log(accessRoutes, from, to.fullPath)
+            router.addRoutes(accessRoutes) // 动态添加可访问路由表
+            if (to.fullPath === '/') {
+              // 当登录之后，直接通过ip地址和端口号访问时，跳转到第一个路由页面indexPage。如：http://10.12.7.76:6090/，这样直接访问。
+              let pathIndex = ''
+              pathIndex = accessRoutes[0].path + '/' + accessRoutes[0].children[0].path
+              // replace: true只是一个设置信息，告诉VUE本次操作后，不能通过浏览器后退按钮，返回前一个路由。
+              next({ path: pathIndex, replace: true }) // hack方法 确保addRoutes已完成
+            } else {
+              // 如果是点击了一个菜单，然后刷新，保持在当前的页面。
+              // 如果是从其他页面点击，通过打开新窗口跳转路由。如从当前故障报警详情里跳到实时监控页面。
+              next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
+              // 使用next({ ...to, replace: true })来确保addRoutes()时动态添加的路由已经被完全加载上去。
+            }
+            // 修改默认首页end
+          })
+        }).catch(err => {
+            store.dispatch('LogOut').then(() => {
+              Message.error(err)
+              next({ path: '/login' })
+            })
+          })
+      } else {
+        // 跳转到对应的页面
+        next()
+      }
+    }
+
+
+          /* 方案1 隐藏首页增加 */
+          /*
           isRelogin.show = false
           store.dispatch('GenerateRoutes').then(accessRoutes => {
             // 根据roles权限生成可访问的路由表
             router.addRoutes(accessRoutes) // 动态添加可访问路由表
-            next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
+            /!* 隐藏首页加入代码 *!/
+            let path = '';
+            path = accessRoutes[0].path + '/' + accessRoutes[0].children[0].path //获取第一路由路径
+            if (accessRoutes[0].children[0].query !== undefined) { //如果当前路由存在路由参数，则带入
+              let query = JSON.parse(accessRoutes[0].children[0].query);
+              let temp = '';
+              for (const val in query) {
+                if (temp.length === 0) {
+                  temp = "?";
+                } else {
+                  temp = temp + "&";
+                }
+                temp = temp + val + "=" + query[val];
+              }
+              path = path + temp;
+            }
+
+            if (from.path === '/login') {
+              console.log("2222")
+              next({path, replace: true}) // hack方法 确保addRoutes已完成
+            } else {
+              console.log("3333")
+              next({...to, replace: true}) // hack方法 确保addRoutes已完成
+            }
+            /!* 隐藏首页加入代码 *!/
+
+            console.log(to)
+            /!* 显示首页需释放 *!/
+            // next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
+
           })
         }).catch(err => {
           store.dispatch('LogOut').then(() => {
@@ -39,6 +107,8 @@ router.beforeEach((to, from, next) => {
         next()
       }
     }
+    */
+
   } else {
     // 没有token
     if (whiteList.indexOf(to.path) !== -1) {

@@ -32,6 +32,9 @@
 import ScrollPane from './ScrollPane'
 import path from 'path'
 
+/* 隐藏首页添加 */
+import {mapState} from 'vuex'
+
 export default {
   components: { ScrollPane },
   data() {
@@ -52,7 +55,13 @@ export default {
     },
     theme() {
       return this.$store.state.settings.theme;
-    }
+    },
+
+    /* 隐藏首页添加 */
+    ...mapState({
+      indexPage: state => state.permission.indexPage
+    })
+
   },
   watch: {
     $route() {
@@ -83,7 +92,15 @@ export default {
       };
     },
     isAffix(tag) {
-      return tag.meta && tag.meta.affix
+      /* 隐藏首页添加 */
+      if (tag.fullPath === this.indexPage) {
+        return true
+      } else {
+        return tag.meta && tag.meta.affix
+      }
+
+      /* 隐藏首页释放 */
+      // return tag.meta && tag.meta.affix
     },
     isFirstView() {
       try {
@@ -206,7 +223,11 @@ export default {
           // to reload home page
           this.$router.replace({ path: '/redirect' + view.fullPath })
         } else {
-          this.$router.push('/')
+          /* 隐藏首页增加 */
+          this.$router.push(this.indexPage)
+
+          /* 隐藏首页释放 */
+          // this.$router.push('/')
         }
       }
     },

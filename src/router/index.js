@@ -61,7 +61,8 @@ export const constantRoutes = [
     component: () => import('@/views/error/401'),
     hidden: true
   },
-  {
+  /* 隐藏首页释放 */
+/*  {
     path: '',
     component: Layout,
     redirect: 'index',
@@ -73,7 +74,7 @@ export const constantRoutes = [
         meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
-  },
+  },*/
   {
     path: '/user',
     component: Layout,

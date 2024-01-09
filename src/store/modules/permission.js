@@ -11,7 +11,10 @@ const permission = {
     addRoutes: [],
     defaultRoutes: [],
     topbarRouters: [],
-    sidebarRouters: []
+    sidebarRouters: [],
+
+    /* 隐藏首页添加 */
+    indexPage: '',
   },
   mutations: {
     SET_ROUTES: (state, routes) => {
@@ -27,6 +30,11 @@ const permission = {
     SET_SIDEBAR_ROUTERS: (state, routes) => {
       state.sidebarRouters = routes
     },
+
+    /* 隐藏首页添加 */
+    SET_INDEX_PAGE: (state, routes) => {
+      state.indexPage = routes
+    }
   },
   actions: {
     // 生成路由
@@ -36,6 +44,25 @@ const permission = {
         getRouters().then(res => {
           const sdata = JSON.parse(JSON.stringify(res.data))
           const rdata = JSON.parse(JSON.stringify(res.data))
+
+
+          /* 隐藏首页添加 */
+          let indexdata = res.data[0].path + "/" + res.data[0].children[0].path
+          if (res.data[0].children[0].query !== undefined) { //如果当前路由存在路由参数，则带入
+            let query = JSON.parse(res.data[0].children[0].query);
+            let temp = '';
+            for (const val in query) {
+              if (temp.length === 0) {
+                temp = "?";
+              } else {
+                temp = temp + "&";
+              }
+              temp = temp + val + "=" + query[val];
+            }
+            indexdata = indexdata + temp;
+          }
+          /* 隐藏首页添加 */
+
           const sidebarRoutes = filterAsyncRouter(sdata)
           const rewriteRoutes = filterAsyncRouter(rdata, false, true)
           const asyncRoutes = filterDynamicRoutes(dynamicRoutes);
@@ -45,6 +72,12 @@ const permission = {
           commit('SET_SIDEBAR_ROUTERS', constantRoutes.concat(sidebarRoutes))
           commit('SET_DEFAULT_ROUTES', sidebarRoutes)
           commit('SET_TOPBAR_ROUTES', sidebarRoutes)
+
+
+          /* 隐藏首页添加 */
+          commit('SET_INDEX_PAGE', indexdata)
+
+
           resolve(rewriteRoutes)
         })
       })
