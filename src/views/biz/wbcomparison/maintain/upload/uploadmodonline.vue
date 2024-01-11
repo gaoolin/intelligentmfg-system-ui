@@ -7,6 +7,7 @@
           placeholder="请输入机型"
           @change="submitBtn()"
           clearable
+          style="width: 130px"
         />
       </el-form-item>
 
@@ -16,6 +17,7 @@
           placeholder="盒子号"
           @change="submitBtn()"
           clearable
+          style="width: 160px"
         />
       </el-form-item>
 
@@ -24,6 +26,7 @@
           v-model="queryParams.pId"
           placeholder="产品序号"
           clearable
+          style="width: 100px"
         />
       </el-form-item>
       <el-form-item label="时段" required>
@@ -39,19 +42,21 @@
         >
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="Lead点卡控值" prop="leadThreshold" label-width="130px" required>
+      <el-form-item label="Lead点卡控值" prop="leadThreshold" label-width="120px" required fixed>
         <el-input
           v-model="queryParams.leadThreshold"
-          placeholder="Lead点卡控值"
+          placeholder="卡控值"
           clearable
+          style="width: 100px"
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="Pad点卡控值" prop="padThreshold" label-width="130px" required>
+      <el-form-item label="Pad点卡控值" prop="padThreshold" label-width="120px" required fixed>
         <el-input
           v-model="queryParams.padThreshold"
-          placeholder="Pad点卡控值"
+          placeholder="卡控值"
           clearable
+          style="width: 100px"
         />
       </el-form-item>
       <!--      </div>-->
@@ -63,8 +68,7 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+    <el-row class="mb8">
         <el-button
           type="warning"
           plain
@@ -73,11 +77,13 @@
           @click="handleExport"
         >导出
         </el-button>
-        <el-button type="primary" size="larger" class="bigBtn" :disabled="hadSubmit" @click="onlineSubmit" @confirm>
+
+        <el-button type="primary" size="mini" class="bigBtn" :disabled="hadSubmit" @click="onlineSubmit" @confirm
+        style="margin-left: 25px">
           {{ submitText }}
         </el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+
+        <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <!-- ref="multipleTable"必须写，用于 toggleSelection方法通过vue调用dom的方法      -->

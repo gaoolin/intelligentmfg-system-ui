@@ -7,7 +7,7 @@
       <el-form-item label="时段" prop="dtRange">
         <el-date-picker
           v-model="queryParams.dtRange"
-          style="width: 380px"
+          style="width: 370px"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="datetimerange"
           range-separator="至"
