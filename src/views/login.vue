@@ -56,7 +56,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2022-2024 智能制造部 </span>
+      <span>Copyright © 2021-2024 智能制造部 </span>
     </div>
   </div>
 </template>
@@ -191,7 +191,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.login {
+/*.login {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -250,5 +250,71 @@ export default {
 }
 .login-code-img {
   height: 38px;
+}*/
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-image: url("../assets/images/login-background.jpg");
+  background-size: cover;
+}
+.title {
+  margin: 0px auto 30px auto;
+  text-align: center;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 500;
+}
+.login-form {
+  border-radius: 6px;
+  background: rgba(0,0,0,0);
+  width: 380px;
+  padding: 25px 25px 5px 25px;
+  .el-input {
+    height: 38px;
+    input {
+      height: 38px;
+    }
+  }
+  .input-icon {
+    height: 39px;
+    width: 14px;
+    margin-left: 2px;
+  }
+}
+.login-tip {
+  font-size: 13px;
+  text-align: center;
+  color: #bfbfbf;
+}
+.login-code {
+  width: 33%;
+  height: 38px;
+  float: right;
+  img {
+    cursor: pointer;
+    vertical-align: middle;
+  }
+}
+.el-login-footer {
+  height: 40px;
+  line-height: 40px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-family: Arial,sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+.login-code-img {
+  height: 38px;
+}
+.login-btn{
+  background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+  font-size: 16px;
 }
 </style>
