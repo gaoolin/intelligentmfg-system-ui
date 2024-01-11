@@ -17,6 +17,7 @@
                     :key="route.path  + index"
                     :item="route"
                     :base-path="route.path"
+                    style="font-weight: bold;"
                 />
             </el-menu>
         </el-scrollbar>
