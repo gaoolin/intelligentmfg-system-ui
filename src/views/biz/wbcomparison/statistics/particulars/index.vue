@@ -87,7 +87,7 @@
       <el-table-column prop="prodType" label="机种" align="center" min-width="120" fit></el-table-column>
       <el-table-column prop="dt" label="时间" align="center" min-width="160" fit></el-table-column>
       <el-table-column prop="code" label="状态码" align="center" min-width="120" fit></el-table-column>
-      <el-table-column prop="description" label="描述" align="center" min-width="120" fit></el-table-column>
+      <el-table-column prop="description" label="描述" align="center" min-width="120" show-overflow-tooltip></el-table-column>
     </el-table>
 
     <pagination

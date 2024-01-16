@@ -105,10 +105,10 @@
       :cell-style="changeCellStyle"
       border>
       <el-table-column label="料号" align="center" min-width="50" prop="materialId" fixed/>
-      <el-table-column label="品名" align="center" min-width="60" prop="fixtureName" show-overflow-tooltip fixed />
+      <el-table-column label="品名" align="center" min-width="60" prop="fixtureName" fixed show-overflow-tooltip />
       <el-table-column label="规格" align="center" min-width="120" prop="fixtureSpec" fixed show-overflow-tooltip/>
       <el-table-column label="机种" align="center" min-width="50" prop="prodType" fixed />
-      <el-table-column label="治具类型" align="center" min-width="50" prop="fixtureCategory" show-overflow-tooltip fixed >
+      <el-table-column label="治具类型" align="center" min-width="50" prop="fixtureCategory" fixed show-overflow-tooltip >
         <template slot-scope="scope">{{scope.row.fixtureCategory}}</template>
       </el-table-column>
       <el-table-column label="治具版本" align="center" min-width="35" prop="fixtureVersion" fixed />

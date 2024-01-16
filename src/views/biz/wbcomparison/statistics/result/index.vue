@@ -83,12 +83,12 @@
       <el-table-column type="index" label="序号" width="55" align="center" fixed/>
       <el-table-column prop="companyName" label="厂区" align="center" fixed/>
       <el-table-column prop="groupName" label="车间" align="center" fixed/>
-      <el-table-column prop="eqId" label="设备号" align="center" fixed/>
-      <el-table-column prop="mcId" label="机台号" align="center" fixed/>
-      <el-table-column prop="prodType" label="机型" align="center" fixed/>
-      <el-table-column prop="simId" label="盒子号" align="center" fixed/>
-      <el-table-column prop="dt" label="时间" align="center" v-if="this.queryParams.category==='0'" fixed/>
-      <el-table-column prop="status" label="状态" align="center" v-if="this.queryParams.category==='0'" fixed>
+      <el-table-column prop="eqId" label="设备号" align="center" />
+      <el-table-column prop="mcId" label="机台号" align="center" />
+      <el-table-column prop="prodType" label="机型" align="center" />
+      <el-table-column prop="simId" label="盒子号" align="center" />
+      <el-table-column prop="dt" label="时间" align="center" v-if="this.queryParams.category==='0'" />
+      <el-table-column prop="status" label="状态" align="center" v-if="this.queryParams.category==='0'" >
         <template slot-scope="scope">
           <dict-tag :options="dict.type.comparison_result_code" :value="scope.row.status"/>
         </template>
