@@ -94,7 +94,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="description" label="描述" align="center" show-overflow-tooltip
-                       v-if="this.queryParams.category==='0'" fixed/>
+                       v-if="this.queryParams.category==='0'" />
     </el-table>
     <pagination
       v-show="total>0"
