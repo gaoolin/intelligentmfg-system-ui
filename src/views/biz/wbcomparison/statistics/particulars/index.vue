@@ -435,10 +435,12 @@ export default {
 
     /** 样式控制方法 */
     tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
-      if ((columnIndex === 7 || columnIndex === 8) && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder;'
+      if (columnIndex === 6 && row[column.property] > 0) {
+        return 'background:#FF3030; color: #FFFFFF; font-size: 18px;'
+      } else if ((columnIndex === 7 && row[column.property] !== 'qualified')) {
+        return 'background:#FF3030; color: #FFFFFF; font-size: 11px;'
       } else {
-        return 'font-size: 20px; font-weight: bolder;'
+        return 'font-size: 18px;'
       }
     },
 

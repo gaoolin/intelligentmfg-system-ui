@@ -440,9 +440,9 @@ export default {
     /** 样式控制方法 */
     tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
       if ((columnIndex === 7 || columnIndex === 8) && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder;'
+        return 'background:#FF3030; color: #FFFFFF; font-size: 18px; font-weight: bolder;'
       } else {
-        return 'font-size: 20px; font-weight: bolder;'
+        return 'font-size: 18px;'
       }
     },
 
