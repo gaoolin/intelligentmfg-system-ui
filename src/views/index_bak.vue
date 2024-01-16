@@ -1,23 +1,23 @@
 <template>
   <div class="dashboard-editor-container">
-    <panel-group :panel-data="panelData" />
+<!--    <panel-group :panel-data="panelData" />-->
 
-    <el-row style="background:#fff; padding:16px 16px 0; margin-bottom:32px;">
-      <bar-chart :chart-data="barChartData"/>
-    </el-row>
+<!--    <el-row style="background:#fff; padding:16px 16px 0; margin-bottom:32px;">-->
+<!--      <bar-chart :chart-data="barChartData"/>-->
+<!--    </el-row>-->
   </div>
 </template>
 
 <script>
-import WbComparisonTrending from './biz/wbcomparison/statistics/WbComparisonTrending'
-import WbComparisonIndexOverview from './biz/wbcomparison/statistics/WbComparisonIndexOverview'
+// import WbComparisonTrending from './biz/wbcomparison/statistics/WbComparisonTrending'
+// import WbComparisonIndexOverview from './biz/wbcomparison/statistics/WbComparisonIndexOverview'
 import { getWbComparisonIndexOverview, getWbComparisonIndexTrending } from '@/api/biz/wbcomparison/index'
 
 export default {
   name: 'Index',
   components: {
-    'bar-chart': WbComparisonTrending,
-    'panel-group': WbComparisonIndexOverview
+    // 'bar-chart': WbComparisonTrending,
+    // 'panel-group': WbComparisonIndexOverview
   },
 
   data() {

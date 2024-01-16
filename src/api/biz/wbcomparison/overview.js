@@ -25,3 +25,11 @@ export function getGroupNames(query) {
     params: query
   })
 }
+
+// 获取数据更新时间
+export function getUpdateTime() {
+  return request({
+    url: '/wbcomparison/statistics/updateTime',
+    method: 'get'
+  })
+}

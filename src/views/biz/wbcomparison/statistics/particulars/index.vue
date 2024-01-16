@@ -1,8 +1,6 @@
 <template>
-  <div class="app-container center">
-    <h1 style="text-align:center">打线图比对数据概览</h1>
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px"
-             :rules="rules">
+  <div class="app-container">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px" :rules="rules">
       <el-form-item label="时段" prop="dtRange">
         <el-date-picker
           v-model="queryParams.dtRange"
@@ -27,8 +25,7 @@
             :key="item"
             :label="item"
             :value="item"
-          >
-          </el-option>
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="车间" prop="groupName">
@@ -44,34 +41,35 @@
             style="width: 240px"
             :key="item"
             :label="item"
-            :value="item"
-          >
+            :value="item">
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="机型" prop="prodType">
+        <el-input
+          v-model="queryParams.prodType"
+          placeholder="请输入车间"
+          clearable/>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="restQuery">重置</el-button>
       </el-form-item>
     </el-form>
-    <!--  :span是每个元素所占此row比例，一行是24。:gutter是该row内元素之间的间隙，也就是col占6，gutter占6中的20px  -->
     <el-row :gutter="10" class="mb8">
-      <el-col :span="3.5" style="font-weight: bolder;">
-        <span>更新时间：</span>
-        <span style="text-align: center; color: red">{{ updateTime === null ? '-' : updateTime }}</span>
-      </el-col>
-      <el-col :span="2">
+      <el-col :span="12">
         <el-button
-          type="success"
+          type="warning"
           plain
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['wbcomparison:statistics:export']"
-        >导出
-        </el-button>
+          v-hasPermi="['wbcomparison:percentage:export']"
+        >导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <el-col :span="12">
+        <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      </el-col>
     </el-row>
 
     <el-table
@@ -80,66 +78,32 @@
       :span-method="arraySpanMethod"
       :cell-style="tableBodyCellStyle"
       :header-cell-style="tableHeaderCellStyle"
-      :row-style="{height: '25px'}"
-      style="width: 100%; color: #363636">
-      <el-table-column prop="companyName" label="厂区" align="center" min-width="120" fit>
-      </el-table-column>
-      <el-table-column prop="groupName" label="车间" align="center" min-width="160" fit>
-      </el-table-column>
-      <!--      <el-table-column prop="ttlEqs" label="设备总数" align="center" width="150">
-            </el-table-column>
-            <el-table-column prop="onlineEqs" label="联网机台数" align="center" width="150">
-            </el-table-column>
-            <el-table-column prop="offlineEqs" label="未联网机台数" align="center" width="150">
-            </el-table-column>-->
-      <el-table-column prop="computeCnt" label="比对次数" align="center" min-width="120">
-        <template scope="scope">
-          <span v-if="scope.row.computeCnt > 0">{{ scope.row.computeCnt | numberToCurrency }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="okCnt" label="正确次数" align="center" min-width="120">
-        <template scope="scope">
-          <span v-if="scope.row.okCnt > 0">{{ scope.row.okCnt | numberToCurrency }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="异常信息" align="center">
-        <el-table-column prop="errCnt" label="错误次数" align="center" min-width="120">
-          <template scope="scope">
-            <span>{{ scope.row.errCnt | numberToCurrency }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="offsetCnt" label="金线偏移" align="center" fit>
-          <template scope="scope">
-            <span v-if="scope.row.offsetCnt > 0">{{ scope.row.offsetCnt | numberToCurrency }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="npCnt" label="无线图模版" align="center" fit>
-          <template scope="scope">
-            <span v-if="scope.row.npCnt > 0">{{ scope.row.npCnt | numberToCurrency }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="lackCnt" label="少线" align="center" fit>
-          <template scope="scope">
-            <span v-if="scope.row.lackCnt > 0">{{ scope.row.lackCnt | numberToCurrency }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="overCnt" label="多线" align="center" fit>
-          <template scope="scope">
-            <span v-if="scope.row.overCnt > 0">{{ scope.row.overCnt | numberToCurrency }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="errRatio" label="错误率" align="center" fit>
-          <template scope="scope">
-            <span>{{ toPercent(getBit(scope.row.errRatio, 6), 2) }}</span>
-          </template>
-        </el-table-column>
-      </el-table-column>
+      style="width: 100%; color: #363636"
+    >
+      <el-table-column prop="companyName" label="厂区" align="center" min-width="120" fit></el-table-column>
+      <el-table-column prop="groupName" label="车间" align="center" min-width="160" fit></el-table-column>
+      <el-table-column prop="eqId" label="设备编号" align="center" min-width="160" fit></el-table-column>
+      <el-table-column prop="mcId" label="机台号" align="center" min-width="160" fit></el-table-column>
+      <el-table-column prop="prodType" label="机种" align="center" min-width="120" fit></el-table-column>
+      <el-table-column prop="dt" label="时间" align="center" min-width="160" fit></el-table-column>
+      <el-table-column prop="code" label="状态码" align="center" min-width="120" fit></el-table-column>
+      <el-table-column prop="description" label="描述" align="center" min-width="120" fit></el-table-column>
     </el-table>
+
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
   </div>
 </template>
 
 <script>
-import { listOverview, getFactoryNames, getGroupNames, getUpdateTime } from '@/api/biz/wbcomparison/overview'
+import { listComparisonDetail } from '@/api/biz/wbcomparison/percentage'
+import { getFactoryNames, getGroupNames } from '@/api/biz/wbcomparison/overview'
+// import overview from "../overview/index";
 
 export default {
   name: 'index',
@@ -147,6 +111,8 @@ export default {
     return {
       // 显示搜索条件
       showSearch: true,
+      // 总条数
+      total: 0,
       loading: true,
       tableData: null,
       pickerOptions: {
@@ -236,15 +202,17 @@ export default {
           }
         }]
       },
-      open: false,
       // 厂选择器
       factoryOptions: [],
       // 区选择器
       workshopOptions: [],
       queryParams: {
+        pageNum: 1,
+        pageSize: 10,
         companyName: null,
         groupName: null,
-        dtRange: []
+        dtRange: [],
+        prodType: null
       },
       // 需要合并项的列
       needMergeArr: [
@@ -275,38 +243,50 @@ export default {
             validator: this.checkDtRange, trigger: 'blur'
           }]
       },
-      updateTime: null
     }
   },
 
   created() {
     // 日期区间回显
-    this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().valueOf()))])
+    this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().valueOf()))]);
   },
+
   mounted() {
-    this.getList()
-    this.getFactoryNames()
+    this.getList();
+    // overview.methods.getFactoryNames()
+    this.getFactoryNames();
   },
+
   methods: {
     getList() {
       this.$refs['queryForm'].validate(valid => {
         if (valid) {
-          this.loading = true
+          this.loading = true;
           this.queryParams.params = {}
           if (null != this.queryParams.dtRange && '' !== this.queryParams.dtRange) {
             this.queryParams.params['beginDate'] = this.queryParams.dtRange[0]
             this.queryParams.params['endDate'] = this.queryParams.dtRange[1]
-            listOverview(this.queryParams).then(response => {
+            listComparisonDetail(this.queryParams).then(response => {
+              console.log(response.rows)
               this.tableData = response.rows
+              this.total = response.total;
               this.rowMergeArrs = this.rowMergeHandle(this.needMergeArr, response.rows)
               this.loading = false
             })
-            this.getUpdateTime()
           }
         }
       })
     },
-
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1;
+      this.getList();
+    },
+    /** 重置按钮操作 */
+    restQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
+    },
     getFactoryNames() {
       getFactoryNames().then(response => {
         for (const i in response.data) {
@@ -322,12 +302,6 @@ export default {
         }
       })
     },
-    getUpdateTime() {
-      getUpdateTime().then(response => {
-        this.updateTime = response.data
-      })
-    },
-
     /** 表格合并行 */
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
       let needMerge = this.needMergeArr.some((item) => {
@@ -392,58 +366,17 @@ export default {
       return result
     },
 
-    /** 样式控制方法 */
-    tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
-      if (row.companyName === '总计') {
-        return 'background:#DDDDDD; color: #00008B; font-size: 21px; font-weight: bolder;'
-      } else if (row.groupName === '小计') {
-        return 'background:#DDDDDD; font-size: 20px; font-weight: bolder;'
-      } else if (columnIndex === 4 && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder;'
-      } else if (columnIndex === 3 && row[column.property] > 0) {
-        return 'background:#228B22; color: #FFFFFF; font-size: 19px; font-weight: bolder;'
-      } else if (columnIndex === 9 && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder;'
-      } else {
-        return 'font-size: 20px; font-weight: bolder;'
-      }
+    /** 导出 */
+    handleExport() {
+      this.download('wbcomparison/particulars/export', {
+        ...this.queryParams
+      }, `打线图机台比对明细_${new Date().getTime()}.xlsx`)
     },
-
-    tableHeaderCellStyle({ row, column, rowIndex, columnIndex }) {
-      let cellStyle1
-      let cellStyle2
-      let cellStyle3
-      cellStyle1 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#436EEE'
-      cellStyle2 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#FF3030'
-      cellStyle3 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#00BFBF'
-      if (columnIndex >= 0 && columnIndex < 4 && rowIndex === 0) {
-        return cellStyle1
-      }
-      if (columnIndex >= 0 && columnIndex <= 5 && rowIndex === 1) {
-        return cellStyle1
-      }
-      if (rowIndex === 0) {
-        return cellStyle2
-      }
-    },
-
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.getList()
-    },
-
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm('queryForm')
-      this.handleQuery()
+      this.resetForm("queryForm");
+      this.handleQuery();
     },
-
-    handleExport() {
-      this.download('wbcomparison/statistics/export', {
-        ...this.queryParams
-      }, `打线图比对概览_${new Date().getTime()}.xlsx`)
-    },
-
     /** 四舍五入 保留N位小数 */
     getBit(value, bit = 2) {
       if (value !== null && value !== '') {
@@ -454,7 +387,6 @@ export default {
         return null
       }
     },
-
     /** 小数转化为百分数 */
     toPercent(point, n) {
       let str = Number(point * 100).toFixed(n)
@@ -464,7 +396,6 @@ export default {
     isNUmber(num) {
       return /^[0-9]+.?[0-9]*$/.test(num)
     },
-
     /** 日期转字符串 */
     DateToStr(date) {
       const year = date.getFullYear()
@@ -483,8 +414,8 @@ export default {
 
     checkDtRange(rule, value, callback) {
       const days = this.getDiffDay(value[0], value[1])
-      if (days > 365) {
-        return callback(new Error('时间跨度不能超过一年'))
+      if (days > 90) {
+        return callback(new Error('时间跨度不能超过90天'))
       } else {
         callback()
       }
@@ -500,7 +431,27 @@ export default {
       diffDate = Math.abs(myDate_1 - myDate_2) // 取相差毫秒数的绝对值
       totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
       return totalDays // 相差的天数
-    }
+    },
+
+    /** 样式控制方法 */
+    tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
+      if ((columnIndex === 7 || columnIndex === 8) && row[column.property] > 0) {
+        return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder;'
+      } else {
+        return 'font-size: 20px; font-weight: bolder;'
+      }
+    },
+
+    tableHeaderCellStyle({ row, column, rowIndex, columnIndex }) {
+      let cellStyle1
+      let cellStyle2
+      let cellStyle3
+      cellStyle1 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#436EEE'
+      cellStyle2 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#FF3030'
+      cellStyle3 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#00BFBF'
+
+      return cellStyle3
+    },
   }
 }
 </script>
@@ -508,3 +459,4 @@ export default {
 <style scoped>
 
 </style>
+

@@ -182,7 +182,6 @@ export default {
               this.loading = false
               this.getCode()
             })
-
         }
       });
     }

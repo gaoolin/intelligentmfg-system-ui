@@ -4,7 +4,7 @@
       <el-form-item label="机型" prop="mcId" required>
         <el-input
           v-model="queryParams.mcId"
-          placeholder="请输入机型"
+          placeholder="机型"
           @change="submitBtn()"
           clearable
           style="width: 130px"
@@ -32,7 +32,7 @@
       <el-form-item label="时段" required>
         <el-date-picker
           v-model="dateRangeCreateDate"
-          style="width: 370px"
+          style="width: 340px"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="datetimerange"
           range-separator="至"
@@ -47,7 +47,7 @@
           v-model="queryParams.leadThreshold"
           placeholder="卡控值"
           clearable
-          style="width: 100px"
+          style="width: 90px"
         ></el-input>
       </el-form-item>
 
@@ -56,34 +56,30 @@
           v-model="queryParams.padThreshold"
           placeholder="卡控值"
           clearable
-          style="width: 100px"
+          style="width: 90px"
         />
       </el-form-item>
-      <!--      </div>-->
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
 
-
-      </el-form-item>
     </el-form>
 
     <el-row class="mb8">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-        >导出
-        </el-button>
+      <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+      <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
 
-        <el-button type="primary" size="mini" class="bigBtn" :disabled="hadSubmit" @click="onlineSubmit" @confirm
-        style="margin-left: 25px">
-          {{ submitText }}
-        </el-button>
+      <el-button type="danger" size="mini" class="bigBtn" :disabled="hadSubmit" @click="onlineSubmit" @confirm>
+        {{ submitText }}
+      </el-button>
 
-        <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <el-button
+        type="warning"
+        plain
+        icon="el-icon-download"
+        size="mini"
+        @click="handleExport"
+      >导出
+      </el-button>
+
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <!-- ref="multipleTable"必须写，用于 toggleSelection方法通过vue调用dom的方法      -->
@@ -96,40 +92,41 @@
     >
       <el-table-column prop="tableRowId" label="#" type="selection" align="center">
       </el-table-column>
-      <el-table-column prop="simId" label="盒子号" min-width="110px" align="center">
+      <el-table-column prop="simId" label="盒子号" min-width="90px" align="center">
       </el-table-column>
-      <el-table-column prop="dt" label="时间" min-width="130px" align="center">
+      <el-table-column prop="dt" label="时间" min-width="100px" align="center">
       </el-table-column>
-      <el-table-column prop="mcId" label="机型" sortable align="center">
+      <el-table-column prop="mcId" label="机型" align="center" min-width="90px">
       </el-table-column>
-      <el-table-column label="线号" align="center">
+      <el-table-column label="线号" align="center" min-width="40px">
         <template slot-scope="scope">{{ scope.row.lineNo }}</template>
       </el-table-column>
-      <el-table-column prop="leadX" label="LeadX" align="center">
+      <el-table-column prop="leadX" label="LeadX" align="center" min-width="70px">
       </el-table-column>
-      <el-table-column prop="leadY" label="LeadY" align="center">
+      <el-table-column prop="leadY" label="LeadY" align="center" min-width="70px">
       </el-table-column>
-      <el-table-column prop="padX" label="PadX" align="center">
+      <el-table-column prop="padX" label="PadX" align="center" min-width="70px">
       </el-table-column>
-      <el-table-column prop="padY" label="PadY" align="center">
+      <el-table-column prop="padY" label="PadY" align="center" min-width="70px">
       </el-table-column>
-      <el-table-column prop="leadDiff" label="lead点间距" align="center">
+      <el-table-column prop="leadDiff" label="lead点间距" align="center" min-width="50px">
       </el-table-column>
-      <el-table-column prop="padDiff" label="pad点间距" align="center">
+      <el-table-column prop="padDiff" label="pad点间距" align="center" min-width="50px">
       </el-table-column>
-      <el-table-column prop="leadThreshold" label="Lead卡控值" :key="queryParams.leadThreshold" align="center">
+      <el-table-column prop="leadThreshold" label="Lead卡控值" :key="queryParams.leadThreshold" align="center" min-width="50px">
         {{ queryParams.leadThreshold }}
       </el-table-column>
-      <el-table-column prop="padThreshold" label="Pad卡控值" :key="queryParams.padThreshold"  align="center">{{ queryParams.padThreshold }}
+      <el-table-column prop="padThreshold" label="Pad卡控值" :key="queryParams.padThreshold" align="center" min-width="50px">
+        {{ queryParams.padThreshold }}
       </el-table-column>
-      <el-table-column prop="wireLen" label="lead到pad线长" align="center">
+      <el-table-column prop="wireLen" label="金线长" align="center" min-width="50px">
       </el-table-column>
-      <el-table-column prop="checkPort" label="CheckPort" align="center">
+      <el-table-column prop="checkPort" label="校验值" align="center" min-width="40px">
       </el-table-column>
-      <el-table-column prop="pId" label="产品序号" align="center">
+      <el-table-column prop="pId" label="产品序号" align="center" min-width="30px">
       </el-table-column>
 
-      <el-table-column prop="operation" label="操作" fixed="right" align="center">
+      <el-table-column prop="operation" label="操作" fixed="right" align="center" width="108px">
         <template slot-scope="scope">
           <el-button type="danger" @click="toggleSelection([dataList[scope.$index]])">删除<i
             class="el-icon-remove-outline"
@@ -206,6 +203,7 @@ export default {
           }
         }]
       },
+
       // 状态时间范围
       dateRangeCreateDate: [this.DateToStr(new Date(new Date().valueOf() - 5 * 60 * 1000)), this.DateToStr(new Date(new Date().valueOf()))],
 
@@ -231,7 +229,6 @@ export default {
 
   created() {
     this.getList()
-    console.log(this)
   },
 
   methods: {
@@ -249,12 +246,9 @@ export default {
       })
     },
     submitBtn() {
-      if ((this.queryParams.simId === null || this.queryParams.simId === "") && (this.queryParams.mcId === null || this.queryParams.mcId === "")) {
-        this.hadSubmit=true;
-      } else {
-        this.hadSubmit=false;
-      }
+      this.hadSubmit = (this.queryParams.simId === null || this.queryParams.simId === '') && (this.queryParams.mcId === null || this.queryParams.mcId === '')
     },
+
     /** 在线提交 */
     onlineSubmit() {
       this.$modal.confirm('将向服务器提交模板数据, 是否继续?', '提示', {
@@ -305,6 +299,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm('queryForm')
+      this.hadSubmit = true
       this.handleQuery()
     },
     // 多选框选中数据

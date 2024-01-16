@@ -7,6 +7,7 @@ import { blobValidate, tansParams } from '@/utils/qtechBizManagementSystem'
 import cache from '@/plugins/cache'
 import { saveAs } from 'file-saver'
 
+
 let downloadLoadingInstance;
 // 是否显示重新登录
 export let isRelogin = { show: false };
