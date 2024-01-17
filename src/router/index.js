@@ -162,7 +162,33 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
-  }
+  },
+  {
+    path: '/biz/wbcomparison',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'statistics/percentage',
+        component: () => import('@/views/biz/wbcomparison/statistics/percentage/index'),
+        name: 'percentage',
+        meta: { title: '阶1', activeMenu: '/biz/wbcomparison/statistics' }
+      }
+    ]
+  },
+  {
+    path: '/biz/wbcomparison',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'statistics/particulars',
+        component: () => import('@/views/biz/wbcomparison/statistics/particulars/index'),
+        name: 'particulars',
+        meta: { title: '阶2', activeMenu: '/biz/wbcomparison/statistics' }
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错

@@ -55,23 +55,25 @@
       </el-form-item>
     </el-form>
     <!--  :span是每个元素所占此row比例，一行是24。:gutter是该row内元素之间的间隙，也就是col占6，gutter占6中的20px  -->
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="3.5" style="font-weight: bolder;">
-        <span>更新时间：</span>
-        <span style="text-align: center; color: red">{{ updateTime === null ? '-' : updateTime }}</span>
+    <el-row :gutter="5" class="mb5" type="flex" align="middle">
+      <el-col :span="4" style="font-weight: bolder">
+        <div style="display:flex; position: relative; top:50%; transform: translateX(-0%);">
+          更新时间：<sapn style="color: red;">{{ updateTime === null ? '-' : updateTime }}</sapn>
+        </div>
       </el-col>
-      <el-col :span="2">
+      <el-col :span="16">
         <el-button
-          type="success"
+          type="warning"
           plain
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['wbcomparison:statistics:export']"
         >导出
         </el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <el-col :span="4">
+        <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      </el-col>
     </el-row>
 
     <el-table
@@ -93,6 +95,7 @@
             <el-table-column prop="offlineEqs" label="未联网机台数" align="center" width="150">
             </el-table-column>-->
       <el-table-column prop="computeCnt" label="比对次数" align="center" min-width="120">
+        <!-- 注意：router-link中链接如果是'/'开始就是从根路由开始，如果开始不带'/'，则从当前路由开始。 -->
         <template scope="scope">
           <span v-if="scope.row.computeCnt > 0">{{ scope.row.computeCnt | numberToCurrency }}</span>
         </template>
@@ -105,7 +108,9 @@
       <el-table-column label="异常信息" align="center">
         <el-table-column prop="errCnt" label="错误次数" align="center" min-width="120">
           <template scope="scope">
-            <span>{{ scope.row.errCnt | numberToCurrency }}</span>
+<!--            <router-link :to="{ path: '/biz/wbcomparison/statistics/percentage', query: {companyName: scope.row.companyName, groupName: scope.row.groupName}}" class="table-link-font">-->
+              <span>{{ scope.row.errCnt | numberToCurrency }}</span>
+<!--            </router-link>-->
           </template>
         </el-table-column>
         <el-table-column prop="offsetCnt" label="金线偏移" align="center" fit>

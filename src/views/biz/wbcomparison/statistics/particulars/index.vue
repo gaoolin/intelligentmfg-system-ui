@@ -64,7 +64,6 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['wbcomparison:percentage:export']"
         >导出</el-button>
       </el-col>
       <el-col :span="12">

@@ -23,7 +23,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['wbcomparison:particulars:add']"
+          v-hasPermi="['wbcomparison:detail:add']"
         >新增</el-button>
       </el-col>-->
       <el-col :span="1.5">
@@ -34,7 +34,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['wbcomparison:particulars:edit']"
+          v-hasPermi="['wbcomparison:detail:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -45,7 +45,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['wbcomparison:particulars:remove']"
+          v-hasPermi="['wbcomparison:detail:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -55,7 +55,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['wbcomparison:particulars:export']"
+          v-hasPermi="['wbcomparison:detail:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -73,9 +73,9 @@
       <el-table-column label="padY" align="center" prop="padY" />
       <el-table-column label="lead点间距" align="center" prop="leadDiff" />
       <el-table-column label="pad点间距" align="center" prop="padDiff" />
-      <el-table-column label="lead点卡控" align="center" prop="leadThreshold" />
-      <el-table-column label="pad点卡控" align="center" prop="padThreshold" />
-      <el-table-column label="lead到pad线长" align="center" prop="wireLen" />
+      <el-table-column label="lead卡控值" align="center" prop="leadThreshold" />
+      <el-table-column label="pad卡控值" align="center" prop="padThreshold" />
+      <el-table-column label="金线长" align="center" prop="wireLen" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -84,14 +84,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['wbcomparison:particulars:edit']"
+            v-hasPermi="['wbcomparison:detail:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['wbcomparison:particulars:remove']"
+            v-hasPermi="['wbcomparison:detail:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -301,7 +301,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('wbcomparison/particulars/export', {
+      this.download('wbcomparison/detail/export', {
         ...this.queryParams
       }, `detail_${new Date().getTime()}.xlsx`)
     }
