@@ -247,7 +247,17 @@ export default {
 
   created() {
     // 日期区间回显
-    this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().valueOf()))]);
+    if (this.$route.query.dtRange === undefined || this.$route.query.dtRange === null || this.$route.query.dtRange === '') {
+      this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().valueOf()))]);
+    } else {
+      this.queryParams.dtRange = this.$route.query.dtRange
+      this.queryParams.companyName = this.$route.query.companyName
+      this.queryParams.groupName = this.$route.query.groupName
+      this.queryParams.eqId = this.$route.query.eqId
+      this.queryParams.prodType = this.$route.query.prodType
+      this.queryParams.flag = this.$route.query.flag
+    }
+
   },
 
   mounted() {
@@ -435,11 +445,11 @@ export default {
     /** 样式控制方法 */
     tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 6 && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 18px;'
+        return 'background:#FF3030; color: #FFFFFF; font-size: 18px; font-weight: bolder;'
       } else if ((columnIndex === 7 && row[column.property] !== 'qualified')) {
         return 'background:#FF3030; color: #FFFFFF; font-size: 11px;'
       } else {
-        return 'font-size: 18px;'
+        return 'font-size: 18px; font-weight: bolder;'
       }
     },
 
@@ -447,6 +457,7 @@ export default {
       let cellStyle1
       let cellStyle2
       let cellStyle3
+
       cellStyle1 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#436EEE'
       cellStyle2 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#FF3030'
       cellStyle3 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#00BFBF'
@@ -458,6 +469,35 @@ export default {
 </script>
 
 <style scoped>
+/*.table-content-font {
+  font-size: 20px;
+  color: #ff007b;
+}*/
 
+.table-link-font {
+  font-size: 18px;
+  font-weight: bolder;
+}
+
+/*a:link {
+  text-decoration: none;
+  color: brown;
+}*/
+
+a:visited {
+  text-decoration: none;
+  color: brown;
+}
+
+a:hover {
+  font-size: 22px;
+  text-decoration: none;
+  color: #00afff;
+}
+
+a:active {
+  text-decoration: none;
+  color: black;
+}
 </style>
 

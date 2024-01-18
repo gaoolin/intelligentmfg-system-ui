@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="机型" prop="mcId" required>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px" :rules="rules">
+      <el-form-item label="机型" prop="mcId">
         <el-input
           v-model="queryParams.mcId"
           placeholder="机型"
@@ -29,9 +29,9 @@
           style="width: 100px"
         />
       </el-form-item>
-      <el-form-item label="时段" required>
+      <el-form-item label="时段" prop="dtRange" required>
         <el-date-picker
-          v-model="dateRangeCreateDate"
+          v-model="queryParams.dtRange"
           style="width: 340px"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="datetimerange"
@@ -204,9 +204,6 @@ export default {
         }]
       },
 
-      // 状态时间范围
-      dateRangeCreateDate: [this.DateToStr(new Date(new Date().valueOf() - 5 * 60 * 1000)), this.DateToStr(new Date(new Date().valueOf()))],
-
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -220,31 +217,59 @@ export default {
         // lead阈值
         leadThreshold: 50,
         // pad阈值
-        padThreshold: 10
+        padThreshold: 10,
+        dtRange: []
       },
       delLineNo: new Set(),
-      delBtnType: true
+      delBtnType: true,
+      // 表单校验
+      rules: {
+        dtRange: [
+          {
+            type: 'array',
+            required: true,
+            message: '请选择日期区间',
+            trigger: 'blur',
+            fields: {
+              // type类型试情况而定,所以如果返回的是date就改成date
+              0: { type: 'string', required: true, message: '请选择开始日期' },
+              1: { type: 'string', required: true, message: '请选择结束日期' }
+            }
+          }, {
+            validator: this.checkDtRange, trigger: 'change'
+          }]
+      },
     }
   },
 
   created() {
+    // 日期区间回显
+    this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().valueOf() - 5 * 60 * 1000)), this.DateToStr(new Date(new Date().valueOf()))])
+  },
+
+  mounted() {
     this.getList()
   },
 
   methods: {
     getList() {
-      this.loading = true
-      this.queryParams.params = {}
-      if (null != this.dateRangeCreateDate && '' !== this.dateRangeCreateDate) {
-        this.queryParams.params['beginCreateDate'] = this.dateRangeCreateDate[0]
-        this.queryParams.params['endCreateDate'] = this.dateRangeCreateDate[1]
-      }
-      listUpload(this.queryParams).then(response => {
-        this.dataList = response.rows
-        this.total = response.total
-        this.loading = false    // 关闭加载动效必须写在回调函数的内部
+      this.$refs['queryForm'].validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.queryParams.params = {}
+          if (null != this.queryParams.dtRange && '' !== this.queryParams.dtRange) {
+            this.queryParams.params['beginCreateDate'] = this.queryParams.dtRange[0]
+            this.queryParams.params['endCreateDate'] = this.queryParams.dtRange[1]
+            listUpload(this.queryParams).then(response => {
+              this.dataList = response.rows
+              this.total = response.total
+              this.loading = false    // 关闭加载动效必须写在回调函数的内部
+            })
+          }
+        }
       })
     },
+
     submitBtn() {
       this.hadSubmit = (this.queryParams.simId === null || this.queryParams.simId === '') && (this.queryParams.mcId === null || this.queryParams.mcId === '')
     },
@@ -257,9 +282,9 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
-        if (null != this.dateRangeCreateDate && '' !== this.dateRangeCreateDate) {
-          this.queryParams.beginTime = this.dateRangeCreateDate[0]
-          this.queryParams.endTime = this.dateRangeCreateDate[1]
+        if (null != this.dtRange && '' !== this.dtRange) {
+          this.queryParams.beginTime = this.dtRange[0]
+          this.queryParams.endTime = this.dtRange[1]
         }
         addOnline(this.queryParams).then(response => {
           this.hadSubmit = true
@@ -363,7 +388,33 @@ export default {
         (hours > 9 ? hours : ('0' + hours)) + ':' +
         (min > 9 ? min : ('0' + min)) + ':' +
         (second > 9 ? second : ('0' + second))
-    }
+    },
+
+    /** 规则校验 */
+    checkDtRange(rule, value, callback) {
+      if (value === null || value === '') {
+        return callback(new Error('请选择日期区间'))
+      } else {
+        const seconds = this.getDiffDay(value[0], value[1])
+        if (seconds > 30) {
+          return callback(new Error('时间跨度不能超过30分钟'))
+        } else {
+          callback()
+        }
+      }
+    },
+
+    /** 计算日期间隔天数 */
+    getDiffDay(date_1, date_2) {
+      // 计算两个日期之间的差值
+      let totalSeconds, diffDate
+      let myDate_1 = Date.parse(date_1)
+      let myDate_2 = Date.parse(date_2)
+      // 将两个日期都转换为毫秒格式，然后做差
+      diffDate = Math.abs(myDate_1 - myDate_2) // 取相差毫秒数的绝对值
+      totalSeconds = Math.floor(diffDate / (1000 * 60)) // 向下取整
+      return totalSeconds // 相差的分钟
+    },
   },
 
   watch: {

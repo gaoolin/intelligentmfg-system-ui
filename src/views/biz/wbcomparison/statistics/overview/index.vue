@@ -6,7 +6,7 @@
       <el-form-item label="时段" prop="dtRange">
         <el-date-picker
           v-model="queryParams.dtRange"
-          style="width: 350px"
+          style="width: 340px"
           value-format="yyyy-MM-dd HH:mm:ss"
           type="datetimerange"
           range-separator="至"
@@ -58,7 +58,7 @@
     <el-row :gutter="5" class="mb5" type="flex" align="middle">
       <el-col :span="4" style="font-weight: bolder">
         <div style="display:flex; position: relative; top:50%; transform: translateX(-0%);">
-          更新时间：<sapn style="color: red;">{{ updateTime === null ? '-' : updateTime }}</sapn>
+          更新时间：<span style="color: red;">{{ updateTime === null ? '-' : updateTime }}</span>
         </div>
       </el-col>
       <el-col :span="16">
@@ -108,9 +108,13 @@
       <el-table-column label="异常信息" align="center">
         <el-table-column prop="errCnt" label="错误次数" align="center" min-width="120">
           <template scope="scope">
-<!--            <router-link :to="{ path: '/biz/wbcomparison/statistics/percentage', query: {companyName: scope.row.companyName, groupName: scope.row.groupName}}" class="table-link-font">-->
+            <router-link :to="{ path: '/biz/wbcomparison/statistics/percentage', query: {
+              dtRange: queryParams.dtRange,
+              companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
+              groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
+              flag: 'err' }}" >
               <span>{{ scope.row.errCnt | numberToCurrency }}</span>
-<!--            </router-link>-->
+            </router-link>
           </template>
         </el-table-column>
         <el-table-column prop="offsetCnt" label="金线偏移" align="center" fit>
@@ -123,19 +127,25 @@
             <span v-if="scope.row.npCnt > 0">{{ scope.row.npCnt | numberToCurrency }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="lackCnt" label="少线" align="center" fit>
+        <el-table-column label="少线/多线" align="center" fit>
           <template scope="scope">
-            <span v-if="scope.row.lackCnt > 0">{{ scope.row.lackCnt | numberToCurrency }}</span>
+            <span v-if="(scope.row.lackCnt + scope.row.overCnt) > 0">{{ scope.row.lackCnt + scope.row.overCnt | numberToCurrency }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="overCnt" label="多线" align="center" fit>
+<!--        <el-table-column prop="overCnt" label="多线" align="center" fit>
           <template scope="scope">
             <span v-if="scope.row.overCnt > 0">{{ scope.row.overCnt | numberToCurrency }}</span>
           </template>
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column prop="errRatio" label="错误率" align="center" fit>
           <template scope="scope">
-            <span>{{ toPercent(getBit(scope.row.errRatio, 6), 2) }}</span>
+            <router-link :to="{ path: '/biz/wbcomparison/statistics/percentage', query: {
+              dtRange: queryParams.dtRange,
+              companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
+              groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
+              flag: 'err' }}" >
+              <span>{{ toPercent(getBit(scope.row.errRatio, 6), 2) }}</span>
+            </router-link>
           </template>
         </el-table-column>
       </el-table-column>
@@ -404,11 +414,11 @@ export default {
       } else if (row.groupName === '小计') {
         return 'background:#DDDDDD; font-size: 20px; font-weight: bolder;'
       } else if (columnIndex === 4 && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder;'
+        return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder; text-decoration: underline;'
       } else if (columnIndex === 3 && row[column.property] > 0) {
         return 'background:#228B22; color: #FFFFFF; font-size: 19px; font-weight: bolder;'
-      } else if (columnIndex === 9 && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder;'
+      } else if (columnIndex === 8 && row[column.property] > 0) {
+        return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder; text-decoration: underline;'
       } else {
         return 'font-size: 20px; font-weight: bolder;'
       }
@@ -418,9 +428,11 @@ export default {
       let cellStyle1
       let cellStyle2
       let cellStyle3
+
       cellStyle1 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#436EEE'
       cellStyle2 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#FF3030'
       cellStyle3 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#00BFBF'
+
       if (columnIndex >= 0 && columnIndex < 4 && rowIndex === 0) {
         return cellStyle1
       }
@@ -486,6 +498,7 @@ export default {
         (second > 9 ? second : ('0' + second))
     },
 
+    /** 规则校验 */
     checkDtRange(rule, value, callback) {
       const days = this.getDiffDay(value[0], value[1])
       if (days > 365) {
@@ -511,5 +524,36 @@ export default {
 </script>
 
 <style scoped>
+/*.table-content-font {
+  font-size: 20px;
+  color: #ff007b;
+}*/
+
+.table-link-font {
+  font-size: 19px;
+  font-weight: bolder;
+}
+
+a:link {
+  /*text-decoration: underline;*/
+  /*color: brown;*/
+}
+
+a:visited {
+  /*下划线*/
+  /*text-decoration: none;*/
+  color: brown;
+}
+
+a:hover {
+  font-size: 25px;
+  /*text-decoration: none;*/
+  color: #00afff;
+}
+
+a:active {
+  /*text-decoration: none;*/
+  color: black;
+}
 
 </style>

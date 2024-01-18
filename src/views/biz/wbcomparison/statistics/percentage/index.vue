@@ -86,10 +86,30 @@
       <el-table-column prop="prodType" label="机种" align="center" min-width="160" fit></el-table-column>
       <el-table-column prop="computeCnt" label="比对次数" align="center" min-width="120" fit></el-table-column>
       <el-table-column prop="okCnt" label="正确次数" align="center" min-width="120" fit></el-table-column>
-      <el-table-column prop="errCnt" label="错误次数" align="center" min-width="120" fit></el-table-column>
+      <el-table-column prop="errCnt" label="错误次数" align="center" min-width="120" fit>
+        <template scope="scope">
+          <router-link :to="{ path: '/biz/wbcomparison/statistics/particulars', query: {
+              dtRange: queryParams.dtRange,
+              companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
+              groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
+              eqId: scope.row.eqId,
+              prodType: scope.row.prodType,
+              flag: 'err'}}">
+            <span>{{ scope.row.errCnt | numberToCurrency }}</span>
+          </router-link>
+        </template>
+      </el-table-column>
       <el-table-column prop="errRatio" label="错误率" align="center" min-width="120" fit>
         <template scope="scope">
-          <span>{{ toPercent(getBit(scope.row.errRatio, 6), 2) }}</span>
+          <router-link :to="{ path: '/biz/wbcomparison/statistics/particulars', query: {
+              dtRange: queryParams.dtRange,
+              companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
+              groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
+              eqId: scope.row.eqId,
+              prodType: scope.row.prodType,
+              flag: 'err'}}">
+            <span>{{ toPercent(getBit(scope.row.errRatio, 6), 2) }}</span>
+          </router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -216,7 +236,8 @@ export default {
         companyName: null,
         groupName: null,
         dtRange: [],
-        prodType: null
+        prodType: null,
+        flag: null,
       },
       // 需要合并项的列
       needMergeArr: [
@@ -252,7 +273,15 @@ export default {
 
   created() {
     // 日期区间回显
-    this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().valueOf()))]);
+    if (this.$route.query.dtRange === undefined || this.$route.query.dtRange === null || this.$route.query.dtRange === '') {
+      this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().valueOf()))]);
+    } else {
+      this.queryParams.dtRange = this.$route.query.dtRange
+      this.queryParams.companyName = this.$route.query.companyName
+      this.queryParams.groupName = this.$route.query.groupName
+      this.queryParams.flag = this.$route.query.flag
+    }
+
   },
 
   mounted() {
@@ -439,9 +468,9 @@ export default {
     /** 样式控制方法 */
     tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
       if ((columnIndex === 7 || columnIndex === 8) && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 18px; font-weight: bolder;'
+        return 'background:#FF3030; color: #FFFFFF; font-size: 18px; font-weight: bolder; text-decoration: underline;'
       } else {
-        return 'font-size: 18px;'
+        return 'font-size: 18px; font-weight: bolder;'
       }
     },
 
@@ -449,6 +478,7 @@ export default {
       let cellStyle1
       let cellStyle2
       let cellStyle3
+
       cellStyle1 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#436EEE'
       cellStyle2 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#FF3030'
       cellStyle3 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#00BFBF'
@@ -461,5 +491,34 @@ export default {
 </script>
 
 <style scoped>
+/*.table-content-font {
+  font-size: 20px;
+  color: #ff007b;
+}*/
 
+.table-link-font {
+  font-size: 18px;
+  font-weight: bolder;
+}
+
+/*a:link {
+  text-decoration: none;
+  color: brown;
+}*/
+
+a:visited {
+  text-decoration: none;
+  color: brown;
+}
+
+a:hover {
+  font-size: 22px;
+  text-decoration: none;
+  color: #00afff;
+}
+
+a:active {
+  text-decoration: none;
+  color: black;
+}
 </style>
