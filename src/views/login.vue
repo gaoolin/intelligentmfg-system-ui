@@ -55,8 +55,8 @@
       </el-form-item>
     </el-form>
     <div class="el-login-profile">
-      <div>今日访问量：-</div>
-      <div>历史访问量：-</div>
+<!--      <div>今日访问量：-</div>
+      <div>历史访问量：-</div>-->
       <div>系统问题联系人：钉钉-高志林</div>
     </div>
     <!--  底部  -->
