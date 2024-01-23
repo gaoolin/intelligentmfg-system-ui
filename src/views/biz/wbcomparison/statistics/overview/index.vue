@@ -79,6 +79,7 @@
     <el-table
       v-loading="loading"
       :data="tableData"
+      border
       :span-method="arraySpanMethod"
       :cell-style="tableBodyCellStyle"
       :header-cell-style="tableHeaderCellStyle"

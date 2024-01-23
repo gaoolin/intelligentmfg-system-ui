@@ -71,10 +71,10 @@
       <el-table-column label="leadY" align="center" prop="leadY" />
       <el-table-column label="padX" align="center" prop="padX" />
       <el-table-column label="padY" align="center" prop="padY" />
-      <el-table-column label="lead点间距" align="center" prop="leadDiff" />
-      <el-table-column label="pad点间距" align="center" prop="padDiff" />
-      <el-table-column label="lead卡控值" align="center" prop="leadThreshold" />
-      <el-table-column label="pad卡控值" align="center" prop="padThreshold" />
+      <el-table-column label="lead间距" align="center" prop="leadDiff" />
+      <el-table-column label="pad间距" align="center" prop="padDiff" />
+      <el-table-column label="lead卡控" align="center" prop="leadThreshold" />
+      <el-table-column label="pad卡控" align="center" prop="padThreshold" />
       <el-table-column label="金线长" align="center" prop="wireLen" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -129,11 +129,11 @@
         <el-form-item label="padY" prop="padY">
           <el-input v-model="form.padY" placeholder="请输入padY" />
         </el-form-item>
-        <el-form-item label="lead点间距" prop="leadDiff">
-          <el-input v-model="form.leadDiff" placeholder="请输入lead点间距" />
+        <el-form-item label="lead间距" prop="leadDiff">
+          <el-input v-model="form.leadDiff" placeholder="请输入lead间距" />
         </el-form-item>
-        <el-form-item label="pad点间距" prop="padDiff">
-          <el-input v-model="form.padDiff" placeholder="请输入pad点间距" />
+        <el-form-item label="pad间距" prop="padDiff">
+          <el-input v-model="form.padDiff" placeholder="请输入pad间距" />
         </el-form-item>
         <el-form-item label="lead点卡控" prop="leadThreshold">
           <el-input v-model="form.leadThreshold" placeholder="请输入lead点卡控" />

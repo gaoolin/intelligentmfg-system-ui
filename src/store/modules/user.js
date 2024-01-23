@@ -5,6 +5,7 @@ const user = {
   state: {
     token: getToken(),
     name: '',
+    niceName: '',  //第一步就是添加这个niceName（用户昵称）
     avatar: '',
     roles: [],
     permissions: []
@@ -25,7 +26,10 @@ const user = {
     },
     SET_PERMISSIONS: (state, permissions) => {
       state.permissions = permissions
-    }
+    },
+    SET_NICKNAME: (state, nickName) => {  //第二步就是添加设置用户昵称方法
+      state.nickName = nickName
+    },
   },
 
   actions: {
@@ -60,6 +64,7 @@ const user = {
           }
           commit('SET_NAME', user.userName)
           commit('SET_AVATAR', avatar)
+          commit('SET_NICKNAME', user.nickName) // 第三步就是在这设置用户昵称
           resolve(res)
         }).catch(error => {
           reject(error)

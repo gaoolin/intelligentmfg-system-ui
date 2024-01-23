@@ -54,6 +54,11 @@
         </div>
       </el-form-item>
     </el-form>
+    <div class="el-login-profile">
+      <div>今日访问量：钉钉-高志林</div>
+      <div>历史访问量：钉钉-高志林</div>
+      <div>系统问题联系人：钉钉-高志林</div>
+    </div>
     <!--  底部  -->
     <div class="el-login-footer">
       <span>Copyright © 2021-2024 智能制造部 </span>
@@ -296,6 +301,18 @@ export default {
     cursor: pointer;
     vertical-align: middle;
   }
+}
+.el-login-profile {
+  height: 60px;
+  line-height: 20px;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  text-align: left;
+  color: #fff;
+  font-family: Arial,sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
 }
 .el-login-footer {
   height: 40px;

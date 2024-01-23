@@ -48,7 +48,7 @@
       <el-form-item label="机型" prop="prodType">
         <el-input
           v-model="queryParams.prodType"
-          placeholder="请输入车间"
+          placeholder="请输入机型"
           clearable/>
       </el-form-item>
       <el-form-item>
@@ -276,7 +276,6 @@ export default {
             this.queryParams.params['beginDate'] = this.queryParams.dtRange[0]
             this.queryParams.params['endDate'] = this.queryParams.dtRange[1]
             listComparisonDetail(this.queryParams).then(response => {
-              console.log(response.rows)
               this.tableData = response.rows
               this.total = response.total;
               this.rowMergeArrs = this.rowMergeHandle(this.needMergeArr, response.rows)

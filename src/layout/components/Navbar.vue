@@ -17,10 +17,12 @@
 
       </template>
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar" class="user-avatar">
+      <el-dropdown class="right-menu-item hover-effect" trigger="click">
+        <div  style="font-size: 14px;">
+<!--          <img :src="avatar" class="user-avatar">-->
+            登入用户：{{ nickName }}
           <i class="el-icon-caret-bottom"></i>
+
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/user/profile">
@@ -50,6 +52,11 @@ import QTechBizManagementSystemGit from '@/components/QTechBizManagementSystem/G
 import QTechBizManagementSystemDoc from '@/components/QTechBizManagementSystem/Doc'
 
 export default {
+  data() {
+    return {
+      nickName : this.$store.state.user.nickName,
+    }
+  },
   components: {
     Breadcrumb,
     TopNav,

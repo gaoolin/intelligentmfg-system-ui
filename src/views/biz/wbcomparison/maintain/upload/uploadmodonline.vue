@@ -1,6 +1,8 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px" :rules="rules">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px"
+             :rules="rules"
+    >
       <el-form-item label="机型" prop="mcId">
         <el-input
           v-model="queryParams.mcId"
@@ -42,7 +44,7 @@
         >
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="Lead点卡控值" prop="leadThreshold" label-width="120px" required fixed>
+      <el-form-item label="Lead卡控值" prop="leadThreshold" label-width="120px" required fixed>
         <el-input
           v-model="queryParams.leadThreshold"
           placeholder="卡控值"
@@ -51,7 +53,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="Pad点卡控值" prop="padThreshold" label-width="120px" required fixed>
+      <el-form-item label="Pad卡控值" prop="padThreshold" label-width="120px" required fixed>
         <el-input
           v-model="queryParams.padThreshold"
           placeholder="卡控值"
@@ -109,14 +111,18 @@
       </el-table-column>
       <el-table-column prop="padY" label="PadY" align="center" min-width="70px">
       </el-table-column>
-      <el-table-column prop="leadDiff" label="lead点间距" align="center" min-width="50px">
+      <el-table-column prop="leadDiff" label="lead间距" align="center" min-width="50px">
       </el-table-column>
-      <el-table-column prop="padDiff" label="pad点间距" align="center" min-width="50px">
+      <el-table-column prop="padDiff" label="pad间距" align="center" min-width="50px">
       </el-table-column>
-      <el-table-column prop="leadThreshold" label="Lead卡控值" :key="queryParams.leadThreshold" align="center" min-width="50px">
+      <el-table-column prop="leadThreshold" label="lead卡控" :key="queryParams.leadThreshold" align="center"
+                       min-width="50px"
+      >
         {{ queryParams.leadThreshold }}
       </el-table-column>
-      <el-table-column prop="padThreshold" label="Pad卡控值" :key="queryParams.padThreshold" align="center" min-width="50px">
+      <el-table-column prop="padThreshold" label="pad卡控" :key="queryParams.padThreshold" align="center"
+                       min-width="50px"
+      >
         {{ queryParams.padThreshold }}
       </el-table-column>
       <el-table-column prop="wireLen" label="金线长" align="center" min-width="50px">
@@ -238,7 +244,7 @@ export default {
           }, {
             validator: this.checkDtRange, trigger: 'change'
           }]
-      },
+      }
     }
   },
 
@@ -282,22 +288,36 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
-        if (null != this.dtRange && '' !== this.dtRange) {
-          this.queryParams.beginTime = this.dtRange[0]
-          this.queryParams.endTime = this.dtRange[1]
+        if (null != this.queryParams.dtRange && '' !== this.queryParams.dtRange) {
+          this.queryParams.beginTime = this.queryParams.dtRange[0]
+          this.queryParams.endTime = this.queryParams.dtRange[1]
+
+          addOnline(this.queryParams).then(response => {
+            this.hadSubmit = true
+            this.submitText = '已 提 交 模 版'
+            if (response.data.flag === '1') {
+              this.loading = false
+              this.$modal.alertSuccess(response.data.result)
+              this.$router.push('/biz/wbcomparison/maintain/info')
+            } else if (response.data.flag === '0') {
+              this.loading = false
+              this.$modal.alertError(response.data.result)
+              this.hadSubmit = false
+              this.submitText = '提 交 模 版'
+            } else {
+              this.loading = false
+              this.$modal.alertError('未知错误，标准模版提交失败！')
+              this.hadSubmit = false
+              this.submitText = '提 交 模 版'
+            }
+          })
+        } else {
+          this.loading = false
+          this.$modal.alertError('请选择时间范围！')
+          this.hadSubmit = false
+          this.submitText = '提 交 模 版'
+
         }
-        addOnline(this.queryParams).then(response => {
-          this.hadSubmit = true
-          this.submitText = '已 提 交 模 版'
-          if (response.code === 200) {
-            this.$modal.alertSuccess('标准模版已提交！')
-            this.$router.push('/biz/wbcomparison/info')
-          } else {
-            this.$modal.alertError('标准模版提交失败！')
-            this.hadSubmit = false
-            this.submitText = '提 交 模 版'
-          }
-        })
       })
     },
     // 取消按钮
@@ -338,7 +358,6 @@ export default {
       for (let i = 0; i < selection.length; i++) {
         this.delLineNo.add(selection[i].lineNo)
       }
-      console.log(this.delLineNo)
 
       let delLineNoTmp = ''
       let j = 0
@@ -414,7 +433,7 @@ export default {
       diffDate = Math.abs(myDate_1 - myDate_2) // 取相差毫秒数的绝对值
       totalSeconds = Math.floor(diffDate / (1000 * 60)) // 向下取整
       return totalSeconds // 相差的分钟
-    },
+    }
   },
 
   watch: {

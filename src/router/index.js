@@ -6,6 +6,8 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
+import BizQcpDetail from '../views/biz/qcp/detail/index.vue'
+
 /**
  * Note: 路由配置项
  *
@@ -164,28 +166,41 @@ export const dynamicRoutes = [
     ]
   },
   {
-    path: '/biz/wbcomparison',
+    path: '/biz/wbcomparison/statistics/percentage',
     component: Layout,
     hidden: true,
     children: [
       {
-        path: 'statistics/percentage',
+        path: 'index',
         component: () => import('@/views/biz/wbcomparison/statistics/percentage/index'),
         name: 'percentage',
-        meta: { title: '阶1', activeMenu: '/biz/wbcomparison/statistics' }
+        meta: { title: '阶1', activeMenu: '/biz/wbcomparison/statistics/percentage' }
       }
     ]
   },
   {
-    path: '/biz/wbcomparison',
+    path: '/biz/wbcomparison/statistics/particulars',
     component: Layout,
     hidden: true,
     children: [
       {
-        path: 'statistics/particulars',
+        path: 'index',
         component: () => import('@/views/biz/wbcomparison/statistics/particulars/index'),
         name: 'particulars',
-        meta: { title: '阶2', activeMenu: '/biz/wbcomparison/statistics' }
+        meta: { title: '阶2', activeMenu: '/biz/wbcomparison/statistics/particulars' }
+      }
+    ]
+  },
+  {
+    path: '/biz/qcp/detail/index',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/biz/qcp/detail/index'),
+        name: 'particulars',
+        meta: { title: 'qcp明细', activeMenu: '/biz/qcp/detail' }
       }
     ]
   },
