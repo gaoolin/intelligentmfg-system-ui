@@ -139,8 +139,6 @@ export default {
   },
 
   created() {
-    console.log(this.$route.query)
-
     if (this.beforeRouteEnter) {
     } else {
       if (this.$route.query.companyName !== undefined && this.$route.query.companyName !== null && this.$route.query.companyName !== '') {

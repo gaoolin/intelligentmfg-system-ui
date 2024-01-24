@@ -25,3 +25,12 @@ export function getGroupNames(query) {
     params: query
   })
 }
+
+// 查询离线设备
+export function listOfflineEqs(query) {
+  return request({
+    url: '/eqn/status/offlineEqs',
+    method: 'get',
+    params: query
+  })
+}

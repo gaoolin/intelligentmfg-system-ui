@@ -99,7 +99,7 @@
             companyName: scope.row.companyName,
             groupName: scope.row.groupName,
             deviceType: scope.row.deviceType,
-            status: 0
+            label: 0
           }}">
             <span>{{ scope.row.offlineEqs !== 0 ? scope.row.offlineEqs : '' }}</span>
           </router-link>
@@ -111,7 +111,6 @@
             companyName: scope.row.companyName,
             groupName: scope.row.groupName,
             deviceType: scope.row.deviceType,
-
           }}">
             <span>{{ scope.row.qcpParamsIsNull !== 0 ? scope.row.qcpParamsIsNull : '' }}</span>
           </router-link>
@@ -123,7 +122,8 @@
             companyName: scope.row.companyName,
             groupName: scope.row.groupName,
             deviceType: scope.row.deviceType,
-            remoteControlOff: 0
+            status: 0,
+            label: 1
           }}">
             <span>{{ scope.row.remoteControlOff !== 0 ? scope.row.remoteControlOff : '' }}</span>
           </router-link>

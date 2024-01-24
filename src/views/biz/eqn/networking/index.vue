@@ -1,5 +1,10 @@
 <template>
 <div class="app-container">
+  <div style="text-align:center;">
+    <h1 style="margin-top: 0; padding-top: 0;" v-if="queryParams.label === '0'">未联网设备信息</h1>
+    <h1 style="margin-top: 0; padding-top: 0;" v-else-if="queryParams.label === '1'">未开启远程设备信息</h1>
+  </div>
+
   <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px" :rulues="rules">
     <el-form-item label="厂区" prop="companyName">
       <el-select
@@ -77,15 +82,15 @@
       >
       </el-input>
     </el-form-item>
-    <el-form-item label="联网状态" prop="status">
+    <el-form-item label="远程开关" prop="status">
       <el-select
         v-model="queryParams.status"
-        placeholder="请输入联网状态"
+        placeholder="请输入远程状态"
         clearable
         @change="handleQuery"
       >
         <el-option
-          v-for="dict in dict.type.eq_networking_status"
+          v-for="dict in dict.type.remote_control_status"
           :key="dict.value"
           :label="dict.label"
           :value="dict.value"
@@ -144,10 +149,10 @@
     <el-table-column prop="eqId" label="设备编号" align="center" min-width="160" fit></el-table-column>
     <el-table-column prop="mcId" label="机台号" align="center" min-width="160" fit></el-table-column>
     <el-table-column prop="simId" label="盒子号" align="center" min-width="160" fit></el-table-column>
-    <el-table-column prop="remoteControlCode" label="远程状态码" align="center" min-width="120" fit></el-table-column>
-    <el-table-column prop="status" label="联网状态" align="center" min-width="120" show-overflow-tooltip>
+    <el-table-column prop="remoteControlCode" label="远程状态码" align="center" min-width="120" v-if="queryParams.label !== '0'" fit></el-table-column>
+    <el-table-column prop="status" label="远程开关" align="center" min-width="120" v-if="queryParams.label !== '0'" show-overflow-tooltip>
       <template slot-scope="scope">
-        <dict-tag :options="dict.type.eq_networking_status" :value="scope.row.status"/>
+        <dict-tag :options="dict.type.remote_control_status" :value="scope.row.status"/>
       </template>
     </el-table-column>
   </el-table>
@@ -157,16 +162,16 @@
     :total="total"
     :page.sync="queryParams.pageNum"
     :limit.sync="queryParams.pageSize"
-    @pagination="getList"
+    @pagination="load"
   />
 </div>
 </template>
 
 <script>
-import { getFactoryNames, getGroupNames, listEqStatus } from '@/api/biz/eqn/networking'
+import { getFactoryNames, getGroupNames, listEqStatus, listOfflineEqs } from '@/api/biz/eqn/networking'
 
 export default {
-  dicts: ['eq_networking_status'],
+  dicts: ['remote_control_status'],
   name: 'index',
   data() {
     return {
@@ -240,6 +245,7 @@ export default {
         simId: null,
         status: null,
         interval: '3小时',
+        label: null,
       },
       rules: {},
     }
@@ -247,27 +253,43 @@ export default {
 
   created() {
     // 日期区间回显
-    console.log(this.$route.query.companyName)
-    if (this.$route.query.companyName !== undefined && this.$route.query.companyName !== null && this.$route.query.companyName !== '') {
+    console.log(this.$route.query.status)
+    if (this.$route.query.label !== undefined) {
       this.queryParams.companyName = this.$route.query.companyName
       this.queryParams.groupName = this.$route.query.groupName
-      this.queryParams.eqId = this.$route.query.eqId
+      this.queryParams.deviceType = this.$route.query.deviceType
+      this.queryParams.label = this.$route.query.label
+      if (this.$route.query.status === '0') {
+        this.queryParams.status = this.$route.query.status
+      }
+      console.log(this.queryParams.label)
     }
   },
 
   mounted() {
-    this.getList();
-    // overview.methods.getFactoryNames()
-    this.getFactoryNames();
+    this.load()
   },
 
   methods: {
+    load() {
+      if (this.queryParams.label === '0') {
+        this.listOfflineEqs()
+        this.getFactoryNames();
+        console.log("===")
+      } else {
+        this.getList()
+        // overview.methods.getFactoryNames()
+        this.getFactoryNames();
+        console.log("++++")
+      }
+    },
+
     getList() {
       this.$refs['queryForm'].validate(valid => {
         if (valid) {
           this.loading = true
           listEqStatus(this.queryParams).then(response => {
-            console.log(response)
+            console.log(this.queryParams)
             this.tableData = response.rows
             this.total = response.total
             this.loading = false;
@@ -275,10 +297,20 @@ export default {
         }
       })
     },
+
+    listOfflineEqs() {
+      this.loading = true
+      listOfflineEqs(this.queryParams).then( response => {
+        console.log(this.queryParams)
+        this.tableData = response.rows
+        this.total = response.total
+        this.loading = false
+      })
+    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
-      this.getList();
+      this.load();
     },
     /** 重置按钮操作 */
     restQuery() {
@@ -286,6 +318,7 @@ export default {
       this.handleQuery();
     },
     getFactoryNames() {
+      this.factoryOptions = []
       getFactoryNames().then(response => {
         for (const i in response.data) {
           let o = {}
