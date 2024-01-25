@@ -1,8 +1,8 @@
 <template>
 <div class="app-container">
   <div style="text-align:center;">
-    <h1 style="margin-top: 0; padding-top: 0;" v-if="queryParams.label === '0'">未联网设备信息</h1>
-    <h1 style="margin-top: 0; padding-top: 0;" v-else-if="queryParams.label === '1'">未开启远程设备信息</h1>
+    <h1 style="margin-top: 0; padding-top: 0; font-weight: bolder" v-if="queryParams.label === '1'">未联网机台明细</h1>
+    <h1 style="margin-top: 0; padding-top: 0; font-weight: bolder" v-else-if="queryParams.label === '2'">未开启远程机台明细</h1>
   </div>
 
   <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px" :rulues="rules">
@@ -82,7 +82,7 @@
       >
       </el-input>
     </el-form-item>
-    <el-form-item label="远程开关" prop="status">
+    <el-form-item label="远程开关" prop="status" v-if="queryParams.label !== '1'">
       <el-select
         v-model="queryParams.status"
         placeholder="请输入远程状态"
@@ -97,11 +97,11 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item label="采集时段" prop="interval">
+    <el-form-item label="采集时长" prop="interval">
       <el-select
         v-model="queryParams.interval"
         filterable
-        placeholder="请输入采集时段"
+        placeholder="请输入采集时长"
         clearable
         @change="handleQuery"
       >
@@ -131,7 +131,7 @@
       >导出</el-button>
     </el-col>
     <el-col :span="12">
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-tool-bar-u-d-f :showSearch.sync="showSearch" @queryTable="getList" :back="back"></right-tool-bar-u-d-f>
     </el-col>
   </el-row>
 
@@ -149,10 +149,10 @@
     <el-table-column prop="eqId" label="设备编号" align="center" min-width="160" fit></el-table-column>
     <el-table-column prop="mcId" label="机台号" align="center" min-width="160" fit></el-table-column>
     <el-table-column prop="simId" label="盒子号" align="center" min-width="160" fit></el-table-column>
-    <el-table-column prop="remoteControlCode" label="远程状态码" align="center" min-width="120" v-if="queryParams.label !== '0'" fit></el-table-column>
-    <el-table-column prop="status" label="远程开关" align="center" min-width="120" v-if="queryParams.label !== '0'" show-overflow-tooltip>
+    <el-table-column prop="remoteControlCode" label="远程状态码" align="center" min-width="120" v-if="queryParams.label !== '1'" fit></el-table-column>
+    <el-table-column prop="status" label="远程开关" align="center" min-width="120" v-if="queryParams.label !== '1'" show-overflow-tooltip>
       <template slot-scope="scope">
-        <dict-tag :options="dict.type.remote_control_status" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.remote_control_status" :value="scope.row.status"/>
       </template>
     </el-table-column>
   </el-table>
@@ -169,14 +169,20 @@
 
 <script>
 import { getFactoryNames, getGroupNames, listEqStatus, listOfflineEqs } from '@/api/biz/eqn/networking'
+import RightToolBarUDF from '@/views/biz/RightToolBarGoBack'
 
 export default {
+  components: { RightToolBarUDF },
   dicts: ['remote_control_status'],
   name: 'index',
+  prop: {
+    component: RightToolBarUDF
+  },
   data() {
     return {
       // 显示搜索条件
       showSearch: true,
+      back: false,
       // 总条数
       total: 0,
       loading: true,
@@ -252,17 +258,15 @@ export default {
   },
 
   created() {
-    // 日期区间回显
-    console.log(this.$route.query.status)
     if (this.$route.query.label !== undefined) {
       this.queryParams.companyName = this.$route.query.companyName
       this.queryParams.groupName = this.$route.query.groupName
       this.queryParams.deviceType = this.$route.query.deviceType
       this.queryParams.label = this.$route.query.label
-      if (this.$route.query.status === '0') {
+      this.back = true
+      if (this.$route.query.status === '1') {
         this.queryParams.status = this.$route.query.status
       }
-      console.log(this.queryParams.label)
     }
   },
 
@@ -272,15 +276,13 @@ export default {
 
   methods: {
     load() {
-      if (this.queryParams.label === '0') {
+      if (this.queryParams.label === '1') {
         this.listOfflineEqs()
         this.getFactoryNames();
-        console.log("===")
       } else {
         this.getList()
         // overview.methods.getFactoryNames()
         this.getFactoryNames();
-        console.log("++++")
       }
     },
 
@@ -289,7 +291,6 @@ export default {
         if (valid) {
           this.loading = true
           listEqStatus(this.queryParams).then(response => {
-            console.log(this.queryParams)
             this.tableData = response.rows
             this.total = response.total
             this.loading = false;
@@ -301,7 +302,6 @@ export default {
     listOfflineEqs() {
       this.loading = true
       listOfflineEqs(this.queryParams).then( response => {
-        console.log(this.queryParams)
         this.tableData = response.rows
         this.total = response.total
         this.loading = false
@@ -344,9 +344,9 @@ export default {
 
     /** 导出 */
     handleExport() {
-      this.download('wbcomparison/particulars/export', {
+      this.download('eqn/status/export', {
         ...this.queryParams
-      }, `打线图机台比对明细_${new Date().getTime()}.xlsx`)
+      }, `设备联网情况明细_${new Date().getTime()}.xlsx`)
     },
     /** 重置按钮操作 */
     resetQuery() {

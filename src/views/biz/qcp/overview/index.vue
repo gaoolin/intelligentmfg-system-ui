@@ -62,17 +62,10 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="12">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-        >导出
-        </el-button>
+        更新时间：<span style="font-weight: bolder; color: red">{{ updateDt }}</span>
       </el-col>
       <el-col :span="12">
-        <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+        <right-tool-bar-download :showSearch.sync="showSearch" @queryTable="getList" @handleExport="handleExport"></right-tool-bar-download>
       </el-col>
     </el-row>
 
@@ -99,7 +92,7 @@
             companyName: scope.row.companyName,
             groupName: scope.row.groupName,
             deviceType: scope.row.deviceType,
-            label: 0
+            label: 1
           }}">
             <span>{{ scope.row.offlineEqs !== 0 ? scope.row.offlineEqs : '' }}</span>
           </router-link>
@@ -111,6 +104,7 @@
             companyName: scope.row.companyName,
             groupName: scope.row.groupName,
             deviceType: scope.row.deviceType,
+            label: 1
           }}">
             <span>{{ scope.row.qcpParamsIsNull !== 0 ? scope.row.qcpParamsIsNull : '' }}</span>
           </router-link>
@@ -122,8 +116,8 @@
             companyName: scope.row.companyName,
             groupName: scope.row.groupName,
             deviceType: scope.row.deviceType,
-            status: 0,
-            label: 1
+            status: 1,
+            label: 2
           }}">
             <span>{{ scope.row.remoteControlOff !== 0 ? scope.row.remoteControlOff : '' }}</span>
           </router-link>
@@ -134,10 +128,15 @@
 </template>
 
 <script>
-import { listQcpParams } from '@/api/biz/qcp/parameters'
+import { listQcpOverview, getDataMaxTime } from '@/api/biz/qcp/parameters'
+import RightToolBarDownload from '@/views/biz/RightToolBarDownload'
 
 export default {
   name: 'index',
+  components: { RightToolBarDownload },
+  props: {
+    component: RightToolBarDownload
+  },
 
   data() {
     return {
@@ -154,14 +153,12 @@ export default {
       companyFilterTmp: [],
       groupNameFilterTmp: [],
       deviceTypeFilterTmp: [],
-      /*      uniqueCompanyName: [],
-            uniqueGroupName: [],
-            uniqueDeviceType: [],*/
       // 厂选择器
       factoryOptions: [],
       // 区选择器
       workshopOptions: [],
       deviceTypeOptions: [],
+      updateDt: "-",
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -204,7 +201,7 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      listQcpParams(this.queryParams).then(response => {
+      listQcpOverview(this.queryParams).then(response => {
         this.tableData = response.rows
         this.filterTableData = this.tableData
         for (const re of this.filterTableData) {
@@ -227,9 +224,9 @@ export default {
     },
 
     getDataMaxTime() {
-      // this.request.get('/mescTParameterResult/gettime').then(res => {
-      //   this.currentTime = res.extend.data
-      // })
+      getDataMaxTime().then(response => {
+        this.updateDt = response.data
+      })
     },
 
     async selectionFilter(val) {
@@ -292,9 +289,9 @@ export default {
 
     /** 导出 */
     handleExport() {
-      this.download('wbcomparison/particulars/export', {
+      this.download('qcp/params/export', {
         ...this.queryParams
-      }, `qcp参数模版概览_${new Date().getTime()}.xlsx`)
+      }, `qcp参数概览_${new Date().getTime()}.xlsx`)
     },
     /** 重置按钮操作 */
     resetQuery() {
@@ -305,13 +302,8 @@ export default {
     /** 样式控制方法 */
     tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
 
-      if (columnIndex > 4 && columnIndex < 7) {
-        return 'padding: 0; font-size: 16px; text-align: center; font-weight: bolder; background: oldlace;'
-      } else if (columnIndex === 7) {
-        return 'padding: 0; font-size: 16px; text-align: center; font-weight: bolder; background: #f0f9eb;'
-      } else {
-        return 'padding: 0; font-size: 16px; text-align: center; font-weight: bolder; '
-      }
+      return 'padding: 0; font-size: 16px; text-align: center; font-weight: bolder; '
+
     },
 
     tableHeaderCellStyle({ row, column, rowIndex, columnIndex }) {

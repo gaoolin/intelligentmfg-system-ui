@@ -1,5 +1,9 @@
 <template>
 <div class="app-container">
+  <div style="text-align:center;">
+    <h1 style="margin-top: 0; padding-top: 0; font-weight: bolder" v-if="queryParams.label === '0'">qcp参数为空机台明细</h1>
+  </div>
+
   <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68xp" :rules="rules">
     <el-form-item label="厂区" prop="companyName">
       <el-select
@@ -10,9 +14,10 @@
       >
         <el-option
           v-for="item in factoryOptions"
-          :key="item"
-          :label="item"
-          :value="item"
+          :key="item.key"
+          :label="item.label"
+          :value="item.label"
+          :disabled="item.disabled"
         >
         </el-option>
       </el-select>
@@ -22,6 +27,7 @@
         v-model="queryParams.groupName"
         placeholder="请输入车间"
         clearable
+        @focus="getGroupNames"
         @change="handleQuery"
       >
         <el-option
@@ -56,7 +62,7 @@
   </el-form>
 
   <el-row :gutter="10" class="mb8">
-    <el-col :span="12">
+    <el-col :span="16">
       <el-button
         type="warning"
         plain
@@ -66,8 +72,8 @@
       >导出
       </el-button>
     </el-col>
-    <el-col :span="12">
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+    <el-col :span="8">
+      <right-tool-bar-u-d-f :showSearch.sync="showSearch" @queryTable="getList" :back="back"></right-tool-bar-u-d-f>
     </el-col>
   </el-row>
 
@@ -99,20 +105,25 @@
 </template>
 
 <script>
-import { listQcpParamsIsNull } from '@/api/biz/qcp/parameters'
+import { listQcpParams } from '@/api/biz/qcp/parameters'
+
+import { getFactoryNames, getGroupNames } from '@/api/biz/eqn/networking'
+
+import RightToolBarUDF from '@/views/biz/RightToolBarGoBack'
 
 export default {
   name: 'index',
-
+  components: { RightToolBarUDF },
   data() {
     return {
       loading: true,
       showSearch: true,
+      back: false,
       total: 0,
       tableData: [],
       factoryOptions: [],
       workshopOptions: [],
-      deviceTypeOptions: [],
+      deviceTypeOptions: ['DB', 'WB', 'HM', 'AA'],
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -141,25 +152,54 @@ export default {
   created() {
     if (this.beforeRouteEnter) {
     } else {
-      if (this.$route.query.companyName !== undefined && this.$route.query.companyName !== null && this.$route.query.companyName !== '') {
+      if (this.$route.query.label === '1') {
         this.queryParams.companyName = this.$route.query.companyName
         this.queryParams.groupName = this.$route.query.groupName
         this.queryParams.deviceType = this.$route.query.deviceType
+        this.queryParams.label = this.$route.query.label
+        this.back = true
       }
     }
   },
 
   mounted() {
     this.getList()
+    this.getFactoryNames()
   },
   methods: {
     getList() {
       this.loading = true
-      listQcpParamsIsNull(this.queryParams).then(response => {
+      listQcpParams(this.queryParams).then(response => {
         this.tableData = response.rows
         this.total = response.total
         this.rowMergeArrs = this.rowMergeHandle(this.needMergeArr, this.tableData)
         this.loading = false
+      })
+    },
+
+    getFactoryNames() {
+      this.factoryOptions = []
+      getFactoryNames().then(response => {
+        for (const i in response.data) {
+          let o = {}
+          const tmp = response.data[i]['companyName']
+          o.label = tmp
+          if (tmp === '汉浦厂区' || tmp === 'QT_India') {
+            o.disabled = true
+            this.factoryOptions.push(o)
+          } else {
+            this.factoryOptions.push(o)
+          }
+        }
+      })
+    },
+
+    getGroupNames() {
+      this.workshopOptions = []
+      getGroupNames(this.queryParams).then(response => {
+        for (const i in response.data) {
+          this.workshopOptions.push(response.data[i]['groupName'])
+        }
       })
     },
 
@@ -176,7 +216,7 @@ export default {
 
     /** 导出 */
     handleExport() {
-      this.download('wbcomparison/particulars/export', {
+      this.download('qcp/params/detail/export', {
         ...this.queryParams
       }, `qcp参数模版明细_${new Date().getTime()}.xlsx`)
     },
@@ -188,14 +228,7 @@ export default {
 
     /** 样式控制方法 */
     tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
-
-      if (columnIndex > 4 && columnIndex < 7) {
-        return 'padding: 0; font-size: 16px; text-align: center; font-weight: bolder; background: oldlace;'
-      } else if (columnIndex === 7) {
-        return 'padding: 0; font-size: 16px; text-align: center; font-weight: bolder; background: #f0f9eb;'
-      } else {
-        return 'padding: 0; font-size: 16px; text-align: center; font-weight: bolder; '
-      }
+      return 'padding: 0; font-size: 16px; text-align: center; font-weight: bolder; '
     },
 
     tableHeaderCellStyle({ row, column, rowIndex, columnIndex }) {

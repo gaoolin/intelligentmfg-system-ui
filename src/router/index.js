@@ -204,6 +204,19 @@ export const dynamicRoutes = [
       }
     ]
   },
+  {
+    path: '/biz/eqn/networking',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/biz/eqn/networking/index'),
+        name: 'particulars',
+        meta: { title: 'qcp明细', activeMenu: '/biz/qcp/networking', keepAlive: true }
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错
