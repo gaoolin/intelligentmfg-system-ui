@@ -72,16 +72,7 @@
         {{ submitText }}
       </el-button>
 
-      <el-button
-        type="warning"
-        plain
-        icon="el-icon-download"
-        size="mini"
-        @click="handleExport"
-      >导出
-      </el-button>
-
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-tool-bar-download :showSearch.sync="showSearch" @queryTable="getList" @handleExport="handleExport"></right-tool-bar-download>
     </el-row>
 
     <!-- ref="multipleTable"必须写，用于 toggleSelection方法通过vue调用dom的方法      -->
@@ -155,8 +146,11 @@
 <script>
 import { listUpload, addOnline } from '@/api/biz/wbcomparison/upload'
 
+import RightToolBarDownload from '@/views/biz/RightToolBarDownload'
+
 export default {
   name: 'UploadModOnline',
+  components: { RightToolBarDownload },
   data() {
     return {
       // 遮罩层

@@ -1,9 +1,9 @@
 <template>
   <div class="app-container center">
-    <h1 style="text-align:center">打线图比对数据概览</h1>
+    <h1 style="text-align:center; margin-top: 0; padding-top: 0; font-weight: bolder">打线图比对数据概览</h1>
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px"
              :rules="rules">
-      <el-form-item label="时段" prop="dtRange">
+      <el-form-item label="时段" prop="dtRange" label-width="50px">
         <el-date-picker
           v-model="queryParams.dtRange"
           style="width: 340px"
@@ -56,23 +56,12 @@
     </el-form>
     <!--  :span是每个元素所占此row比例，一行是24。:gutter是该row内元素之间的间隙，也就是col占6，gutter占6中的20px  -->
     <el-row :gutter="5" class="mb5" type="flex" align="middle">
-      <el-col :span="4" style="font-weight: bolder">
-        <div style="display:flex; position: relative; top:50%; transform: translateX(-0%);">
-          更新时间：<span style="color: red;">{{ updateTime === null ? '-' : updateTime }}</span>
-        </div>
+      <el-col :span="12" style="font-weight: bolder">
+        更新时间：<span style="color: red;">{{ updateTime === null ? '-' : updateTime }}</span>
       </el-col>
-      <el-col :span="16">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-        >导出
-        </el-button>
-      </el-col>
-      <el-col :span="4">
-        <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+
+      <el-col :span="12">
+        <right-tool-bar-download :showSearch.sync="showSearch" @queryTable="getList" @handleExport="handleExport"></right-tool-bar-download>
       </el-col>
     </el-row>
 
@@ -157,8 +146,13 @@
 <script>
 import { listOverview, getFactoryNames, getGroupNames, getUpdateTime } from '@/api/biz/wbcomparison/overview'
 
+import RightToolBarDownload from '@/views/biz/RightToolBarDownload'
+
 export default {
   name: 'index',
+  components: { RightToolBarDownload },
+  component: { RightToolBarDownload },
+
   data() {
     return {
       // 显示搜索条件

@@ -4,7 +4,7 @@
     <h1 style="margin-top: 0; padding-top: 0; font-weight: bolder" v-if="queryParams.label === '0'">qcp参数为空机台明细</h1>
   </div>
 
-  <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68xp" :rules="rules">
+  <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="72px" :rules="rules">
     <el-form-item label="厂区" prop="companyName">
       <el-select
         v-model="queryParams.companyName"
@@ -85,13 +85,13 @@
     :cell-style="tableBodyCellStyle"
     :header-cell-style="tableHeaderCellStyle"
   >
-    <el-table-column prop="companyName" label="厂区" align="center" min-width="120" fit></el-table-column>
-    <el-table-column prop="groupName" label="车间" align="center" min-width="120" fit></el-table-column>
-    <el-table-column prop="deviceType" label="设备类型" align="center" min-width="120" fit></el-table-column>
+    <el-table-column prop="companyName" label="厂区" align="center" min-width="100" fit></el-table-column>
+    <el-table-column prop="groupName" label="车间" align="center" min-width="100" fit></el-table-column>
+    <el-table-column prop="deviceType" label="设备类型" align="center" min-width="60" fit></el-table-column>
     <el-table-column prop="eqId" label="设备编码" align="center" min-width="120" fit></el-table-column>
-    <el-table-column prop="mcId" label="设备编码" align="center" min-width="120" fit></el-table-column>
-    <el-table-column prop="prodType" label="机型" align="center" min-width="120" fit></el-table-column>
-    <el-table-column prop="reason" label="描述" align="center" min-width="120" fit></el-table-column>
+    <el-table-column prop="mcId" label="机台号" align="center" min-width="110" fit></el-table-column>
+    <el-table-column prop="prodType" label="机型" align="center" min-width="80" fit></el-table-column>
+    <el-table-column prop="reason" label="描述" align="center" min-width="100" fit></el-table-column>
   </el-table>
 
   <pagination

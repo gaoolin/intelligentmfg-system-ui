@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px"
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="72px"
              :rules="rules"
     >
-      <el-form-item label="厂区" prop="companyName">
+      <el-form-item label="厂区" prop="companyName" label-width="40px">
         <el-select
           v-model="queryParams.companyName"
           placeholder="请输入厂区"
@@ -82,10 +82,10 @@
       :header-cell-style="tableHeaderCellStyle"
     >
       <el-table-column prop="companyName" label="厂区" align="center" min-width="120" fit></el-table-column>
-      <el-table-column prop="groupName" label="车间" align="center" min-width="160" fit></el-table-column>
-      <el-table-column prop="deviceType" label="设备类型" align="center" min-width="160" fit></el-table-column>
-      <el-table-column prop="ttlEqs" label="设备总数" align="center" min-width="160" fit></el-table-column>
-      <el-table-column prop="onlineEqs" label="已联网" align="center" min-width="160" fit></el-table-column>
+      <el-table-column prop="groupName" label="车间" align="center" min-width="120" fit></el-table-column>
+      <el-table-column prop="deviceType" label="设备类型" align="center" min-width="120" fit></el-table-column>
+      <el-table-column prop="ttlEqs" label="设备总数" align="center" min-width="120" fit></el-table-column>
+      <el-table-column prop="onlineEqs" label="已联网" align="center" min-width="120" fit></el-table-column>
       <el-table-column prop="offlineEqs" label="未联网" align="center" min-width="120" fit>
         <template scope="scope">
           <router-link :to="{path: '/biz/eqn/networking', query: {
@@ -98,7 +98,7 @@
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column prop="qcpParamsIsNull" label="无qcp参数模版" align="center" min-width="160" fit>
+      <el-table-column prop="qcpParamsIsNull" label="无qcp参数模版" align="center" min-width="120" fit>
         <template scope="scope">
           <router-link :to="{path: '/biz/qcp/detail', query: {
             companyName: scope.row.companyName,
@@ -134,9 +134,6 @@ import RightToolBarDownload from '@/views/biz/RightToolBarDownload'
 export default {
   name: 'index',
   components: { RightToolBarDownload },
-  props: {
-    component: RightToolBarDownload
-  },
 
   data() {
     return {

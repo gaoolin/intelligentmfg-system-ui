@@ -2,7 +2,7 @@
   <div class="top-right-btn" :style="style">
     <el-row>
       <el-tooltip class="item" effect="dark" content="导出" placement="top">
-        <el-button size="mini" type="warning" plain icon="el-icon-download" @click="handleExport()">导出</el-button>
+        <el-button size="mini" type="warning" plain icon="el-icon-download" @click="handleExport">导出</el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" :content="showSearch ? '隐藏搜索' : '显示搜索'" placement="top" v-if="search">
         <el-button size="mini" circle icon="el-icon-search" @click="toggleSearch()" />

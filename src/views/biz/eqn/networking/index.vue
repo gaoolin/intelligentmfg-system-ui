@@ -5,7 +5,7 @@
     <h1 style="margin-top: 0; padding-top: 0; font-weight: bolder" v-else-if="queryParams.label === '2'">未开启远程机台明细</h1>
   </div>
 
-  <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px" :rulues="rules">
+  <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="72px" :rulues="rules">
     <el-form-item label="厂区" prop="companyName">
       <el-select
         v-model="queryParams.companyName"
@@ -131,7 +131,7 @@
       >导出</el-button>
     </el-col>
     <el-col :span="12">
-      <right-tool-bar-u-d-f :showSearch.sync="showSearch" @queryTable="getList" :back="back"></right-tool-bar-u-d-f>
+      <right-tool-bar-go-back :showSearch.sync="showSearch" @queryTable="getList" :back="back"></right-tool-bar-go-back>
     </el-col>
   </el-row>
 
@@ -142,15 +142,15 @@
     :header-cell-style="tableHeaderCellStyle"
     style="width: 100%; color: #363636"
   >
-    <el-table-column prop="companyName" label="厂区" align="center" min-width="120" fit></el-table-column>
-    <el-table-column prop="deptName" label="站位" align="center" min-width="120" fit></el-table-column>
-    <el-table-column prop="groupName" label="车间" align="center" min-width="160" fit></el-table-column>
-    <el-table-column prop="deviceType" label="设备类型" align="center" min-width="160" fit></el-table-column>
+    <el-table-column prop="companyName" label="厂区" align="center" min-width="100" fit></el-table-column>
+    <el-table-column prop="deptName" label="站位" align="center" min-width="100" fit></el-table-column>
+    <el-table-column prop="groupName" label="车间" align="center" min-width="120" fit></el-table-column>
+    <el-table-column prop="deviceType" label="设备类型" align="center" min-width="80" fit></el-table-column>
     <el-table-column prop="eqId" label="设备编号" align="center" min-width="160" fit></el-table-column>
-    <el-table-column prop="mcId" label="机台号" align="center" min-width="160" fit></el-table-column>
+    <el-table-column prop="mcId" label="机台号" align="center" min-width="120" fit></el-table-column>
     <el-table-column prop="simId" label="盒子号" align="center" min-width="160" fit></el-table-column>
-    <el-table-column prop="remoteControlCode" label="远程状态码" align="center" min-width="120" v-if="queryParams.label !== '1'" fit></el-table-column>
-    <el-table-column prop="status" label="远程开关" align="center" min-width="120" v-if="queryParams.label !== '1'" show-overflow-tooltip>
+    <el-table-column prop="remoteControlCode" label="远程状态码" align="center" min-width="80" v-if="queryParams.label !== '1'" fit></el-table-column>
+    <el-table-column prop="status" label="远程开关" align="center" min-width="80" v-if="queryParams.label !== '1'" show-overflow-tooltip>
       <template slot-scope="scope">
           <dict-tag :options="dict.type.remote_control_status" :value="scope.row.status"/>
       </template>
@@ -169,15 +169,13 @@
 
 <script>
 import { getFactoryNames, getGroupNames, listEqStatus, listOfflineEqs } from '@/api/biz/eqn/networking'
-import RightToolBarUDF from '@/views/biz/RightToolBarGoBack'
+import RightToolBarGoBack from '@/views/biz/RightToolBarGoBack'
 
 export default {
-  components: { RightToolBarUDF },
+  components: { RightToolBarGoBack },
   dicts: ['remote_control_status'],
   name: 'index',
-  prop: {
-    component: RightToolBarUDF
-  },
+
   data() {
     return {
       // 显示搜索条件
