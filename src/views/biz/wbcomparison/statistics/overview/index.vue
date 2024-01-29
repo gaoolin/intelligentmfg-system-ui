@@ -74,23 +74,39 @@
       :header-cell-style="tableHeaderCellStyle"
       :row-style="{height: '25px'}"
       style="width: 100%; color: #363636">
-      <el-table-column prop="companyName" label="厂区" align="center" min-width="120" fit>
+      <el-table-column prop="companyName" label="厂区" align="center" min-width="100" fit>
       </el-table-column>
-      <el-table-column prop="groupName" label="车间" align="center" min-width="160" fit>
+      <el-table-column prop="groupName" label="车间" align="center" min-width="120" fit>
       </el-table-column>
-      <!--      <el-table-column prop="ttlEqs" label="设备总数" align="center" width="150">
-            </el-table-column>
-            <el-table-column prop="onlineEqs" label="联网机台数" align="center" width="150">
-            </el-table-column>
-            <el-table-column prop="offlineEqs" label="未联网机台数" align="center" width="150">
-            </el-table-column>-->
-      <el-table-column prop="computeCnt" label="比对次数" align="center" min-width="120">
+      <el-table-column prop="ttlEqs" label="设备总数" align="center" min-width="60" >
+        <template scope="scope">
+          <span v-if="scope.row.ttlEqs > 0">{{ scope.row.ttlEqs | numberToCurrency }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="onlineEqs" label="联网机台数" align="center" min-width="60" >
+        <template scope="scope">
+          <span v-if="scope.row.onlineEqs > 0">{{ scope.row.onlineEqs | numberToCurrency }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="offlineEqs" label="未联网机台数" align="center" min-width="60" >
+        <template scope="scope">
+          <router-link :to="{path: '/biz/eqn/networking', query: {
+            companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
+            groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
+            deviceType: 'WB',
+            label: 1
+          }}">
+            <span v-if="scope.row.offlineEqs > 0">{{ scope.row.offlineEqs | numberToCurrency }}</span>
+          </router-link>
+        </template>
+      </el-table-column>
+      <el-table-column prop="computeCnt" label="比对次数" align="center" min-width="80">
         <!-- 注意：router-link中链接如果是'/'开始就是从根路由开始，如果开始不带'/'，则从当前路由开始。 -->
         <template scope="scope">
           <span v-if="scope.row.computeCnt > 0">{{ scope.row.computeCnt | numberToCurrency }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="okCnt" label="正确次数" align="center" min-width="120">
+      <el-table-column prop="okCnt" label="正确次数" align="center" min-width="80">
         <template scope="scope">
           <span v-if="scope.row.okCnt > 0">{{ scope.row.okCnt | numberToCurrency }}</span>
         </template>
@@ -122,11 +138,7 @@
             <span v-if="(scope.row.lackCnt + scope.row.overCnt) > 0">{{ scope.row.lackCnt + scope.row.overCnt | numberToCurrency }}</span>
           </template>
         </el-table-column>
-<!--        <el-table-column prop="overCnt" label="多线" align="center" fit>
-          <template scope="scope">
-            <span v-if="scope.row.overCnt > 0">{{ scope.row.overCnt | numberToCurrency }}</span>
-          </template>
-        </el-table-column>-->
+
         <el-table-column prop="errRatio" label="错误率" align="center" fit>
           <template scope="scope">
             <router-link :to="{ path: '/biz/wbcomparison/statistics/percentage', query: {
@@ -145,13 +157,13 @@
 
 <script>
 import { listOverview, getFactoryNames, getGroupNames, getUpdateTime } from '@/api/biz/wbcomparison/overview'
+import { listEqInfo } from '@/api/biz/eqn/networking'
 
 import RightToolBarDownload from '@/views/biz/RightToolBarDownload'
 
 export default {
   name: 'index',
   components: { RightToolBarDownload },
-  component: { RightToolBarDownload },
 
   data() {
     return {
@@ -166,6 +178,7 @@ export default {
             const end = new Date()
             const start = new Date()
             start.setTime(start.setHours(0, 0, 0).valueOf())
+            end.setTime(end.setHours(23, 59, 59).valueOf())
             picker.$emit('pick', [start, end])
           }
         }, {
@@ -254,7 +267,8 @@ export default {
       queryParams: {
         companyName: null,
         groupName: null,
-        dtRange: []
+        dtRange: [],
+        deviceType: 'WB',
       },
       // 需要合并项的列
       needMergeArr: [
@@ -291,7 +305,7 @@ export default {
 
   created() {
     // 日期区间回显
-    this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().valueOf()))])
+    this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().setHours(23, 59, 59).valueOf()))])
   },
   mounted() {
     this.getList()
@@ -306,12 +320,41 @@ export default {
           if (null != this.queryParams.dtRange && '' !== this.queryParams.dtRange) {
             this.queryParams.params['beginDate'] = this.queryParams.dtRange[0]
             this.queryParams.params['endDate'] = this.queryParams.dtRange[1]
-            listOverview(this.queryParams).then(response => {
-              this.tableData = response.rows
-              this.rowMergeArrs = this.rowMergeHandle(this.needMergeArr, response.rows)
+
+            let ds1 = new Promise((resolve, reject) => {
+              listOverview(this.queryParams).then(res => {
+                resolve(res.rows)
+              }).catch(err => {
+                reject(err)
+              })
+            })
+            // 请求 2
+            let ds2 = new Promise((resolve, reject) => {
+              listEqInfo(this.queryParams).then(res => {
+                resolve(res.rows)
+              }).catch(err => {
+                reject(err)
+              })
+            })
+            // 发起第三请求
+            Promise.all([ds1, ds2]).then(res => {
+              // console.log(res) // 返回的数组，就是前两个请求返回的数据
+              res[1].forEach(d2 => {
+                res[0].forEach(d1 => {
+                  if (d1.companyName === d2.companyName && d1.groupName === d2.groupName) {
+                    d1.ttlEqs = d2.ttlEqs
+                    d1.offlineEqs = d2.offlineEqs
+                    d1.onlineEqs = d1.ttlEqs - d1.offlineEqs
+                  }
+                })
+              })
+              this.tableData = res[0]
+              this.rowMergeArrs = this.rowMergeHandle(this.needMergeArr, this.tableData)
               this.loading = false
+              console.log(res[0])
             })
             this.getUpdateTime()
+
           }
         }
       })
@@ -408,11 +451,13 @@ export default {
         return 'background:#DDDDDD; color: #00008B; font-size: 21px; font-weight: bolder;'
       } else if (row.groupName === '小计') {
         return 'background:#DDDDDD; font-size: 20px; font-weight: bolder;'
-      } else if (columnIndex === 4 && row[column.property] > 0) {
+      } else if (columnIndex === 4  && row[column.property] > 0) {
+        return 'background:#FFBB00; color: #FFFFFF; font-size: 19px; font-weight: bolder; text-decoration: underline;'
+      } else if (columnIndex === 7 && row[column.property] > 0) {
         return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder; text-decoration: underline;'
-      } else if (columnIndex === 3 && row[column.property] > 0) {
+      } else if (columnIndex === 6 && row[column.property] > 0) {
         return 'background:#228B22; color: #FFFFFF; font-size: 19px; font-weight: bolder;'
-      } else if (columnIndex === 8 && row[column.property] > 0) {
+      } else if (columnIndex === 11 && row[column.property] > 0) {
         return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder; text-decoration: underline;'
       } else {
         return 'font-size: 20px; font-weight: bolder;'
@@ -428,10 +473,10 @@ export default {
       cellStyle2 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#FF3030'
       cellStyle3 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#00BFBF'
 
-      if (columnIndex >= 0 && columnIndex < 4 && rowIndex === 0) {
+      if (columnIndex >= 0 && columnIndex < 7 && rowIndex === 0) {
         return cellStyle1
       }
-      if (columnIndex >= 0 && columnIndex <= 5 && rowIndex === 1) {
+      if (columnIndex >= 0 && columnIndex < 5 && rowIndex === 1) {
         return cellStyle1
       }
       if (rowIndex === 0) {
@@ -504,16 +549,17 @@ export default {
     },
 
     /** 计算日期间隔天数 */
-    getDiffDay(date_1, date_2) {
+    getDiffDay(dtStr1, dtStr2) {
       // 计算两个日期之间的差值
       let totalDays, diffDate
-      let myDate_1 = Date.parse(date_1)
-      let myDate_2 = Date.parse(date_2)
+      let dt1 = Date.parse(dtStr1)
+      let dt2 = Date.parse(dtStr2)
       // 将两个日期都转换为毫秒格式，然后做差
-      diffDate = Math.abs(myDate_1 - myDate_2) // 取相差毫秒数的绝对值
+      diffDate = Math.abs(dt1 - dt2) // 取相差毫秒数的绝对值
       totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
       return totalDays // 相差的天数
-    }
+    },
+
   }
 }
 </script>
@@ -537,13 +583,13 @@ a:link {
 a:visited {
   /*下划线*/
   /*text-decoration: none;*/
-  color: brown;
+  /*color: brown;*/
 }
 
 a:hover {
   font-size: 25px;
   /*text-decoration: none;*/
-  color: #00afff;
+  /*color: #00afff;*/
 }
 
 a:active {

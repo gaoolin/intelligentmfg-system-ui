@@ -34,3 +34,12 @@ export function listOfflineEqs(query) {
     params: query
   })
 }
+
+// 查询设备在线、离线、总数信息
+export function listEqInfo(query) {
+  return request({
+    url: '/eqn/status/agg',
+    method: 'get',
+    params: query
+  })
+}

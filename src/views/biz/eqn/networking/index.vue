@@ -237,7 +237,7 @@ export default {
       // 区选择器
       workshopOptions: [],
       deviceTypeOptions: ['DB', 'WB', 'HM', 'AA'],
-      intervalOptions: ['5分钟', '15分钟', '30分钟', '1小时', '3小时', '6小时', '12小时', '1天', '2天'],
+      intervalOptions: ['5分钟', '15分钟', '30分钟', '1小时', '3小时'],
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -305,16 +305,19 @@ export default {
         this.loading = false
       })
     },
+
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
       this.load();
     },
+
     /** 重置按钮操作 */
     restQuery() {
       this.resetForm("queryForm");
       this.handleQuery();
     },
+
     getFactoryNames() {
       this.factoryOptions = []
       getFactoryNames().then(response => {
@@ -331,6 +334,7 @@ export default {
         }
       })
     },
+
     getGroupNames() {
       this.workshopOptions = []
       getGroupNames(this.queryParams).then(response => {
@@ -346,11 +350,13 @@ export default {
         ...this.queryParams
       }, `设备联网情况明细_${new Date().getTime()}.xlsx`)
     },
+
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
       this.handleQuery();
     },
+
     /** 四舍五入 保留N位小数 */
     getBit(value, bit = 2) {
       if (value !== null && value !== '') {
@@ -361,15 +367,18 @@ export default {
         return null
       }
     },
+
     /** 小数转化为百分数 */
     toPercent(point, n) {
       let str = Number(point * 100).toFixed(n)
       str += '%'
       return str
     },
+
     isNUmber(num) {
       return /^[0-9]+.?[0-9]*$/.test(num)
     },
+
     /** 日期转字符串 */
     DateToStr(date) {
       const year = date.getFullYear()
@@ -423,9 +432,7 @@ export default {
 
       return cellStyle1
     },
-
   },
-
 }
 </script>
 
