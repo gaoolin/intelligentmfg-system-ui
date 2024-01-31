@@ -42,7 +42,6 @@ export default {
   methods: {
     updateIndexOverviewData() {
       getWbComparisonIndexOverview().then(response => {
-
         this.$set(this.panelData, 'modTtl', response.data.wbComparisonStdModelsTtlCnt)
         this.$set(this.panelData, 'modAvgLine', response.data.wbComparisonStdModelAvgCnt)
       })
@@ -152,7 +151,6 @@ export default {
     this.doIt()
   },
 }
-
 
 </script>
 

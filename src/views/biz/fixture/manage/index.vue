@@ -138,7 +138,7 @@
               type="text"
               @click="handleAddAndUpdate(2, scope.row)"
               v-hasPermi="['biz/fixture:manage:add']"
-            >新增共享机型</el-button>
+            >新增共用机型</el-button>
           </div>
           <div>
             <el-button
@@ -544,10 +544,10 @@ export default {
           this.prodTypeDisabled = false;
           this.othersDisabled = false;
           this.form.submitFlag = 1;
-        } else if (flag === 2) { // 添加共享机型
+        } else if (flag === 2) { // 添加共用机型
           this.reset();
           this.addOpen = true;
-          this.title = "添加共享机型";
+          this.title = "添加共用机型";
           this.materialIdDisabled = true;
           this.prodTypeDisabled = false;
           this.othersDisabled = true;

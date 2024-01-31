@@ -1,6 +1,6 @@
 <template>
   <div class="app-container center">
-    <h2 class="body">治具共享信息数据上传</h2>
+    <h2 class="body">治具共用信息数据上传</h2>
     <el-upload
       ref="upload"
       :limit="1"

@@ -5,7 +5,7 @@
 <script>
 import * as echarts from 'echarts';
 require('echarts/theme/macarons') // echarts theme
-import resize from '../../../dashboard/mixins/resize'
+import resize from '@/views/dashboard/mixins/resize'
 
 export default {
   name: 'FixtureTrendingBar',

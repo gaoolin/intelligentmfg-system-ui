@@ -21,7 +21,7 @@ export default {
     },
     height: {
       type: String,
-      default: '450px'
+      default: '250px'
     },
     autoResize: {
       type: Boolean,
@@ -56,40 +56,39 @@ export default {
           text: '治具共用信息',
           x: 'center',
           y: 'center',
-          top: '15',
+          top: '0',
           // 主标题样式
           textStyle: {
-            fontSize: '25',
+            fontSize: '18',
             color: 'black'
           },
         },
           {
-            subtext: 'Pogopin机型数\n \n' + this.fixturePanelData[0][2]["tips"],
-            left: '16.5%',
-            top: '43%',
-            textAlign: 'center',
+            subtext: 'Pogopin',
+            left: '14.5%',
+            bottom: '3%',
             subtextStyle: {
-              fontSize: '18',
+              fontSize: '14',
               color: 'black'
             }
           },
           {
-            subtext: 'AA机型数\n \n' + this.fixturePanelData[1][2]["tips"],
-            left: '49.8%',
-            top: '43%',
+            subtext: 'AA',
+            left: '50%',
+            bottom: '3%',
             textAlign: 'center',
             subtextStyle: {
-              fontSize: '18',
+              fontSize: '14',
               color: 'black'
             }
           },
           {
-            subtext: '锁附机型数\n \n' + this.fixturePanelData[2][2]["tips"],
-            left: '83.2%',
-            top: '43%',
+            subtext: '锁附',
+            left: '83%',
+            bottom: '3%',
             textAlign: 'center',
             subtextStyle: {
-              fontSize: '18',
+              fontSize: '14',
               color: 'black'
             }
           },
@@ -101,7 +100,7 @@ export default {
         legend: {
           left: 'right',
           top: '10',
-          data: ['共享治具', '未共享治具']
+          data: ['共用治具', '未共用治具']
         },
         labelLine: {
           length: 15,
@@ -111,7 +110,7 @@ export default {
         calculable: true,
         series: [
           {
-            name: 'Pogopin共享治具信息',
+            name: 'Pogopin共用治具信息',
             type: 'pie',
             radius: ['30%', '60%'],
             avoidLabelOverlap: false,
@@ -141,7 +140,7 @@ export default {
             bottom: 0
           },
           {
-            name: 'AA共享治具信息',
+            name: 'AA共用治具信息',
             type: 'pie',
             radius: ['30%', '60%'],
             avoidLabelOverlap: false,
@@ -161,7 +160,6 @@ export default {
                 }
               }
             },
-
             data:  this.fixturePanelData[1],
             animationEasing: 'cubicInOut',
             animationDuration: 2600,
@@ -171,7 +169,7 @@ export default {
             bottom: 0
           },
           {
-            name: '锁附共享治具信息',
+            name: '锁附共用治具信息',
             type: 'pie',
             radius: ['30%', '60%'],
             avoidLabelOverlap: false,
