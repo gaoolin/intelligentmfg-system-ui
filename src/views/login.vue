@@ -1,5 +1,11 @@
 <template>
   <div class="login">
+    <notice-bar :width="styleChange.width">
+      <span> 公告：本系统原有登入方式：IP+端口（http://10.170.6.40:30013/），将在近期停止使用，请大家通过丘钛导航入口或者域名登入系统。 </span>
+      <span> 原qcp参数监控系统：http://10.170.1.68/EqNetworking/，将在2024年2月6日关闭，</span>
+      <span> 请各位同事使用本系统对应模块查看相关数据。 </span>
+    </notice-bar>
+
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
       <h3 class="title">智能制造管理系统</h3>
       <el-form-item prop="username">
@@ -71,11 +77,16 @@ import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
 import { Message } from 'element-ui'
+import NoticeBar from '@/views/biz/NoticeBar'
 
 export default {
   name: "Login",
+  // import引入的组件需要注入到对象中才能使用
+  components: { NoticeBar },
+
   data() {
     return {
+      notice: '',
       codeUrl: "",
       loginForm: {
         username: "admin",
@@ -98,7 +109,12 @@ export default {
       captchaEnabled: false,
       // 注册开关
       register: false,
-      redirect: undefined
+      redirect: undefined,
+
+      styleChange: {
+        height: "",
+        width: ""
+      },
     };
   },
   watch: {
@@ -113,6 +129,15 @@ export default {
     this.getCode();
     this.getCookie();
   },
+
+  mounted() {
+    const that = this;
+    that.styleChange.height = window.innerHeight + "px"; // 屏幕高度
+    that.styleChange.width = window.innerWidth+'px'; // 屏幕宽度
+    console.log("高度", that.styleChange.height);
+    console.log("宽度",  that.styleChange.width);
+  },
+
   methods: {
     getCode() {
       getCodeImg().then(res => {
@@ -332,5 +357,15 @@ export default {
 .login-btn{
   background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
   font-size: 16px;
+}
+
+.notice-bar-container {
+  width: 100%;
+  height: 3%;
+  padding: 0 16px;
+  display: flex;
+  align-items: flex-start;
+  background-color: #fff;
+  border-radius: 3px;
 }
 </style>
