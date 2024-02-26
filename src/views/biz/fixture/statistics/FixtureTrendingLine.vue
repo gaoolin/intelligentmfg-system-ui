@@ -67,7 +67,7 @@ export default {
         },
         tooltip: {
           trigger: 'axis',
-          axisPointer: {
+          /*axisPointer: {
             type: 'cross',
             animation: false,
             label: {
@@ -79,7 +79,8 @@ export default {
               shadowOffsetY: 0,
               color: '#222'
             }
-          }
+          }*/
+          padding: [5, 10]
         },
         legend: {
           left: 'left',

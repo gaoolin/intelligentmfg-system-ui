@@ -46,7 +46,7 @@ export function delFixture(label) {
 // 远程获取治具类型
 export function fixtureCategoryList(query) {
   return request({
-    url: '/fixture/manage/category',
+    url: '/fixture/category',
     method: 'get',
     params: query
   })
@@ -55,7 +55,7 @@ export function fixtureCategoryList(query) {
 // 新增治具类型
 export function addFixtureCategory(data) {
   return request({
-    url: '/fixture/manage/category',
+    url: '/fixture/category',
     method: 'post',
     data: data
   })
@@ -64,7 +64,7 @@ export function addFixtureCategory(data) {
 // 修改治具类型
 export function updateFixtureCategory(data) {
   return request({
-    url: '/fixture/manage/category',
+    url: '/fixture/category',
     method: 'put',
     data: data
   })
@@ -73,7 +73,7 @@ export function updateFixtureCategory(data) {
 // 删除治具类型
 export function deleteFixtureCategory(id) {
   return request({
-    url: '/fixture/manage/category/' + id,
+    url: '/fixture/category/' + id,
     method: 'delete'
   })
 }
@@ -89,7 +89,7 @@ export function getDeptIds() {
 // 查询所有料号
 export function getFixtureMaterialIds(deptId) {
   return request({
-    url: '/fixture/manage/materialInfo/' + deptId,
+    url: '/fixture/materialInfo/' + deptId,
     method: 'get'
   })
 }
@@ -97,7 +97,7 @@ export function getFixtureMaterialIds(deptId) {
 // 查询料号是否存在
 export function materialIdRules(query) {
   return request({
-    url: '/fixture/manage/materialInfo/exist',
+    url: '/fixture/materialInfo/exist',
     method: 'get',
     params: query
   })
@@ -106,7 +106,7 @@ export function materialIdRules(query) {
 // 获取环形图数据
 export function getFixturePanelData() {
   return request({
-    url: '/fixture/statistics',
+    url: '/fixture/statistics/panel',
     method: 'get'
   })
 }

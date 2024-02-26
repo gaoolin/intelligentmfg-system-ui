@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listHistory(query) {
   return request({
-    url: '/biz/fixture/history/list',
+    url: '/fixture/history/list',
     method: 'get',
     params: query
   })
@@ -10,14 +10,14 @@ export function listHistory(query) {
 
 export function getHistory(id) {
   return request({
-    url: '/biz/fixture/history' + id,
+    url: '/fixture/history' + id,
     method: 'get'
   })
 }
 
 export function addHistory(data) {
   return request({
-    url: '/biz/fixture/history',
+    url: '/fixture/history',
     method: 'post',
     data: data
   })
@@ -25,7 +25,7 @@ export function addHistory(data) {
 
 export function updateHistory(data) {
   return request({
-    url: '/biz/fixture/history',
+    url: '/fixture/history',
     method: 'put',
     data: data
   })
@@ -33,7 +33,7 @@ export function updateHistory(data) {
 
 export function delHistory(id) {
   return request({
-    url: 'biz/fixture/history' + id,
+    url: '/fixture/history' + id,
     method: 'delete'
   })
 }

@@ -640,9 +640,9 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       if (this.isDeptIdAll()) {
-        this.download('biz/fixture/manage/export', {
+        this.download('/fixture/manage/export', {
           ...this.queryParams
-        }, `共治具_${new Date().getTime()}.xlsx`)
+        }, `治具信息_${new Date().getTime()}.xlsx`)
       }
       this.reset();
     },

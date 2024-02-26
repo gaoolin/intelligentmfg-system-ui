@@ -7,7 +7,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Pogopin机型总数
+            机型总数
           </div>
           <count-to :start-val="0" :end-val="pogopinCnt" :duration="1000" class="card-panel-num"/>
         </div>
@@ -21,7 +21,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            AA机型总数
+            机型总数
           </div>
           <count-to :start-val="0" :end-val="aaCnt" :duration="1000" class="card-panel-num"/>
         </div>
@@ -35,7 +35,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            锁附机型总数
+            机型总数
           </div>
           <count-to :start-val="0" :end-val="lockCnt" :duration="1000" class="card-panel-num"/>
         </div>
