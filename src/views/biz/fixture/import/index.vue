@@ -63,7 +63,7 @@ export default {
 
     /** 下载模板操作 */
     importTemplate() {
-      this.download('biz/fixture/manage/importTemplate', {}, `共治具导入模板.xlsx`)
+      this.download('/fixture/manage/importTemplate', {}, `共治具导入模板.xlsx`)
     },
     // 文件上传中处理
     handleFileUploadProgress(event, file, fileList) {
