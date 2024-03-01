@@ -44,7 +44,7 @@ export default {
         // 设置上传的请求头部
         headers: { Authorization: 'Bearer ' + getToken() },
         // 上传的地址
-        url: process.env.VUE_APP_BASE_API + '/biz/fixture/manage/upload',
+        url: process.env.VUE_APP_BASE_API + '/fixture/search/upload',
         // 上传的文件列表
         fileList: []
       }
@@ -63,7 +63,7 @@ export default {
 
     /** 下载模板操作 */
     importTemplate() {
-      this.download('/fixture/manage/importTemplate', {}, `共治具导入模板.xlsx`)
+      this.download('/fixture/search/importTemplate', {}, `共治具导入模板.xlsx`)
     },
     // 文件上传中处理
     handleFileUploadProgress(event, file, fileList) {

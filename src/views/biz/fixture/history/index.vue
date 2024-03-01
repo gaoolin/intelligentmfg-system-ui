@@ -194,7 +194,7 @@ export default {
       this.handleQuery();
     },
     handleExport() {
-      this.download('biz/fixture/mange/history/export', {
+      this.download('/fixture/history/export', {
         ...this.queryParams
       }, `pogopin_history_${new Date().getTime}.xlsx`)
     },

@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询治具列表
 export function listFixture(query) {
   return request({
-    url: '/fixture/manage/list',
+    url: '/fixture/search/list',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function listFixture(query) {
 // 查询治具详细
 export function getFixture(id) {
   return request({
-    url: '/fixture/manage/' + id,
+    url: '/fixture/search/' + id,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getFixture(id) {
 // 新增治具
 export function addFixture(data) {
   return request({
-    url: '/fixture/manage/',
+    url: '/fixture/search/',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addFixture(data) {
 // 修改治具
 export function updateFixture(data) {
   return request({
-    url: '/fixture/manage/',
+    url: '/fixture/search/',
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function updateFixture(data) {
 // 删除治具
 export function delFixture(label) {
   return request({
-    url: '/fixture/manage/' + label,
+    url: '/fixture/search/' + label,
     method: 'delete',
   })
 }
@@ -81,7 +81,7 @@ export function deleteFixtureCategory(id) {
 // 查询权限拥有的类别
 export function getDeptIds() {
   return request({
-    url: '/fixture/manage/deptIds',
+    url: '/fixture/search/deptIds',
     method: 'get'
   })
 }

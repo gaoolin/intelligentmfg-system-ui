@@ -58,7 +58,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAddAndUpdate(1, null)"
-          v-hasPermi="['biz/fixture:manage:add']"
+          v-hasPermi="['fixture:search:add']"
         >新增料号</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -68,7 +68,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['biz/fixture:manage:export']"
+          v-hasPermi="['fixture:search:export']"
         >导出</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -103,6 +103,7 @@
       cell-mouse-leave
       cell-class-name
       :cell-style="changeCellStyle"
+      :row-style="{height: '20px'}"
       border>
       <el-table-column label="料号" align="center" min-width="50" prop="materialId" fixed/>
       <el-table-column label="品名" align="center" min-width="60" prop="fixtureName" fixed show-overflow-tooltip />
@@ -130,22 +131,22 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" min-width="50" prop="remark" show-overflow-tooltip />
-      <el-table-column label="操作" align="center" min-width="35" class-name="small-padding fixed-width" style="font-size: 8px" >
+      <el-table-column label="操作" align="center" min-width="35" style="font-size: 8px">
         <template slot-scope="scope">
-          <div>
+          <div class="box-ops">
             <el-button
               size="mini"
               type="text"
               @click="handleAddAndUpdate(2, scope.row)"
-              v-hasPermi="['biz/fixture:manage:add']"
+              v-hasPermi="['fixture:search:add']"
             >新增共用机型</el-button>
           </div>
-          <div>
+          <div class="box-ops">
             <el-button
               size="mini"
               type="text"
               @click="handleAddAndUpdate(3, scope.row)"
-              v-hasPermi="['biz/fixture:manage:edit']"
+              v-hasPermi="['fixture:search:edit']"
             >修改</el-button>
             <el-popover
               style="margin-left: 5px"
@@ -640,7 +641,7 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       if (this.isDeptIdAll()) {
-        this.download('/fixture/manage/export', {
+        this.download('/fixture/search/export', {
           ...this.queryParams
         }, `治具信息_${new Date().getTime()}.xlsx`)
       }
@@ -865,13 +866,15 @@ export default {
 };
 </script>
 
-<style scoped>
-/*.el-table--medium*/
-/*.el-table__cell {*/
-/*  padding: 0px;*/
-/*  padding-top: 0px;*/
-/*  padding-right: 0px;*/
-/*  padding-bottom: 0px;*/
-/*  padding-left: 0px;*/
-/*}*/
+<style lang="scss" scoped>
+//修改行高
+::v-deep .el-table td{
+  padding:0px 0px;  //默认上下是padding12px
+}
+.box-ops {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
+
