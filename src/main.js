@@ -82,6 +82,7 @@ Vue.use(Element, {
 })
 
 Vue.config.productionTip = false
+Vue.config.devtools = true;
 
 new Vue({
   el: '#app',
