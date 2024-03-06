@@ -1,6 +1,6 @@
 <!-- 公告栏组件 -->
 <template>
-  <div class="notice-bar" ref="noticeBarRef"  v-if="true">
+  <div class="notice-bar" ref="noticeBarRef"  v-if="false">
 
     <div class="notice-bar-content" ref="contentRef" :style="contentStyle">
       <slot></slot>
