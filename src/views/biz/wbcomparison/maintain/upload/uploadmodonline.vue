@@ -146,7 +146,7 @@
 <script>
 import { listUpload, addOnline } from '@/api/biz/wbcomparison/upload'
 
-import RightToolBarDownload from '@/views/biz/RightToolBarDownload'
+import RightToolBarDownload from '@/views/biz/common/RightToolBarDownload'
 
 export default {
   name: 'UploadModOnline',

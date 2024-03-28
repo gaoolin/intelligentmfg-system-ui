@@ -119,9 +119,7 @@
         <el-table-column label="车间" align="center" prop="workshop"/>
         <el-table-column label="机型" align="center" prop="prodType"/>
         <el-table-column label="设备编号(EQ)" align="center" prop="deviceMId"/>
-        <el-table-column label="线径" align="center" prop="wireWidth">
-          <template slot-scope="scope">{{ getBit(scope.row.wireWidth, 1) }}</template>
-        </el-table-column>
+        <el-table-column label="线径" align="center" prop="wireWidth" />
         <el-table-column label="实际用量" align="center" prop="actualWireUsage">
           <template slot-scope="scope">{{ getBit(scope.row.actualWireUsage, 4) }}</template>
         </el-table-column>

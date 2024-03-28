@@ -80,9 +80,74 @@
       <el-table-column prop="companyName" label="厂区" align="center" min-width="120" fit></el-table-column>
       <el-table-column prop="groupName" label="车间" align="center" min-width="120" fit></el-table-column>
       <el-table-column prop="deviceType" label="设备类型" align="center" min-width="120" fit></el-table-column>
-      <el-table-column prop="ttlEqs" label="设备总数" align="center" min-width="120" fit></el-table-column>
-      <el-table-column prop="onlineEqs" label="已联网" align="center" min-width="120" fit></el-table-column>
-      <el-table-column prop="offlineEqs" label="未联网" align="center" min-width="120" fit>
+      <el-table-column prop="ttlEqs" align="center" min-width="120" fit>
+        <template slot-scope="scope" slot="header">
+          <span>设备总数</span>
+            <el-tooltip class="item" effect="dark" placement="top-start" content="设备总数 = [有qcp参数模版] + [无qcp参数模版] + [未联网]">
+              <i class="el-icon-question" style="color:#000000; margin-left:5px;'"> </i>
+            </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column >
+        <template slot-scope="scope" slot="header">
+          <span :style="tableHeaderCellStyle">已联网</span>
+          <el-tooltip class="item" effect="dark" placement="top-start" content="已联网设备数 = [有qcp参数模版] + [无qcp参数模版]">
+            <i class="el-icon-question" style="color:#000000; margin-left:5px;'"> </i>
+          </el-tooltip>
+        </template>
+        <el-table-column prop="onlineEqs" align="center" min-width="120" fit>
+          <template slot-scope="scope" slot="header">
+            <span :style="tableHeaderCellStyle">有qcp参数模版</span>
+            <el-tooltip class="item" effect="dark" placement="top-start" content="设备已联网且有qcp参数模版">
+              <i class="el-icon-question" style="color:#000000; margin-left:5px;'"> </i>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column prop="qcpParamsIsNull" label="无qcp参数模版" align="center" min-width="120" fit>
+          <template slot-scope="scope" slot="header">
+            <span>无qcp参数模版</span>
+            <el-tooltip class="item" effect="dark" placement="top-start" content="设备已联网无qcp参数模版">
+              <i class="el-icon-question" style="color:#000000; margin-left:5px;'"> </i>
+            </el-tooltip>
+          </template>
+          <template scope="scope">
+            <router-link :to="{path: '/biz/qcp/detail', query: {
+              companyName: scope.row.companyName,
+              groupName: scope.row.groupName,
+              deviceType: scope.row.deviceType,
+              label: 1
+            }}">
+              <span>{{ scope.row.qcpParamsIsNull !== 0 ? scope.row.qcpParamsIsNull : '' }}</span>
+            </router-link>
+          </template>
+        </el-table-column>
+        <el-table-column prop="remoteControlOff" align="center" min-width="120" show-overflow-tooltip>
+          <template slot-scope="scope" slot="header">
+            <span>未开启远程</span>
+            <el-tooltip class="item" effect="dark" placement="top-start" content="已联网设备中没有开启远程反控（控制）功能的设备">
+              <i class="el-icon-question" style="color:#000000; margin-left:5px;'"> </i>
+            </el-tooltip>
+          </template>
+          <template scope="scope">
+            <router-link :to="{path: '/biz/eqn/networking', query:{
+              companyName: scope.row.companyName,
+              groupName: scope.row.groupName,
+              deviceType: scope.row.deviceType,
+              status: 1,
+              label: 2
+            }}">
+              <span>{{ scope.row.remoteControlOff !== 0 ? scope.row.remoteControlOff : '' }}</span>
+            </router-link>
+          </template>
+        </el-table-column>
+      </el-table-column>
+      <el-table-column prop="offlineEqs" align="center" min-width="120" fit>
+        <template slot-scope="scope" slot="header">
+          <span>未联网</span>
+          <el-tooltip class="item" effect="dark" placement="top-start" content="设备没有联网，无远程反控（控制）功能">
+            <i class="el-icon-question" style="color:#000000; margin-left:5px;'"> </i>
+          </el-tooltip>
+        </template>
         <template scope="scope">
           <router-link :to="{path: '/biz/eqn/networking', query: {
             companyName: scope.row.companyName,
@@ -94,38 +159,13 @@
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column prop="qcpParamsIsNull" label="无qcp参数模版" align="center" min-width="120" fit>
-        <template scope="scope">
-          <router-link :to="{path: '/biz/qcp/detail', query: {
-            companyName: scope.row.companyName,
-            groupName: scope.row.groupName,
-            deviceType: scope.row.deviceType,
-            label: 1
-          }}">
-            <span>{{ scope.row.qcpParamsIsNull !== 0 ? scope.row.qcpParamsIsNull : '' }}</span>
-          </router-link>
-        </template>
-      </el-table-column>
-      <el-table-column prop="remoteControlOff" label="未开启远程" align="center" min-width="120" show-overflow-tooltip>
-        <template scope="scope">
-          <router-link :to="{path: '/biz/eqn/networking', query:{
-            companyName: scope.row.companyName,
-            groupName: scope.row.groupName,
-            deviceType: scope.row.deviceType,
-            status: 1,
-            label: 2
-          }}">
-            <span>{{ scope.row.remoteControlOff !== 0 ? scope.row.remoteControlOff : '' }}</span>
-          </router-link>
-        </template>
-      </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
 import { listQcpOverview, getDataMaxTime } from '@/api/biz/qcp/parameters'
-import RightToolBarDownload from '@/views/biz/RightToolBarDownload'
+import RightToolBarDownload from '@/views/biz/common/RightToolBarDownload'
 
 export default {
   name: 'index',
@@ -300,9 +340,16 @@ export default {
     },
 
     tableHeaderCellStyle({ row, column, rowIndex, columnIndex }) {
-      let cellStyle1
-      cellStyle1 = 'font-size: 1vw; font-weight: bolder; text-align: center; color: #fff; background: #3498db'
-      return cellStyle1
+      let cellStyle1 = 'font-size: 1vw; font-weight: bolder; text-align: center; color: #fff; background: #3498db'
+      let cellStyle2 = 'font-size: 0.8vw; font-weight: bold; text-align: center; color: #fff; background: #3498db'
+
+      if (columnIndex === 4 && rowIndex === 0) {
+        return cellStyle2
+      }
+      if ((columnIndex < 4 || columnIndex > 4) && rowIndex === 0) {
+        return cellStyle1
+      }
+      return cellStyle2
     },
 
     /** 表格合并行 */
@@ -441,8 +488,15 @@ a:active {
   font-weight: bolder;
 }
 
-::v-deep .el-table .el-table__header-wrapper .el-table__header tr {
-  color: #5f565e;
-  background-color: red;
+::v-deep .el-table .cell {
+  white-space: pre-line;
+  text-align: center;
 }
+::v-deep .el-table .el-table__header-wrapper th, .el-table .el-table__fixed-header-wrapper th {
+  background-color: #17B3A3;
+  padding: 0;
+  color: black;
+  height: 20px !important;
+}
+
 </style>

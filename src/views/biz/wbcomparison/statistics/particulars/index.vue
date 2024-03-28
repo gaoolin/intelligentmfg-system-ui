@@ -53,7 +53,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="restQuery">重置</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <el-row :gutter="10" class="mb8">
@@ -291,7 +291,7 @@ export default {
       this.getList();
     },
     /** 重置按钮操作 */
-    restQuery() {
+    resetQuery() {
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -379,11 +379,6 @@ export default {
       this.download('wbcomparison/particulars/export', {
         ...this.queryParams
       }, `打线图机台比对明细_${new Date().getTime()}.xlsx`)
-    },
-    /** 重置按钮操作 */
-    resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
     },
     /** 四舍五入 保留N位小数 */
     getBit(value, bit = 2) {

@@ -159,7 +159,7 @@
 import { listOverview, getFactoryNames, getGroupNames, getUpdateTime } from '@/api/biz/wbcomparison/overview'
 import { listEqInfo } from '@/api/biz/eqn/networking'
 
-import RightToolBarDownload from '@/views/biz/RightToolBarDownload'
+import RightToolBarDownload from '@/views/biz/common/RightToolBarDownload'
 
 export default {
   name: 'index',

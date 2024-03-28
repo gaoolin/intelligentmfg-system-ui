@@ -109,7 +109,7 @@ import { listQcpParams } from '@/api/biz/qcp/parameters'
 
 import { getFactoryNames, getGroupNames } from '@/api/biz/eqn/networking'
 
-import RightToolBarUDF from '@/views/biz/RightToolBarGoBack'
+import RightToolBarUDF from '@/views/biz/common/RightToolBarGoBack'
 
 export default {
   name: 'index',

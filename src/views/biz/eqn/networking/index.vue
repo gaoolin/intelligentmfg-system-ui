@@ -169,7 +169,7 @@
 
 <script>
 import { getFactoryNames, getGroupNames, listEqStatus, listOfflineEqs } from '@/api/biz/eqn/networking'
-import RightToolBarGoBack from '@/views/biz/RightToolBarGoBack'
+import RightToolBarGoBack from '@/views/biz/common/RightToolBarGoBack'
 
 export default {
   components: { RightToolBarGoBack },

@@ -9,10 +9,19 @@ export function listFixture(query) {
   })
 }
 
+// 新增治具共用信息
+export function addFixtureSharedInfo(data) {
+  return request({
+    url: '/fixture/search',
+    method: 'post',
+    data: data
+  })
+}
+
 // 查询治具详细
 export function getFixture(id) {
   return request({
-    url: '/fixture/search/' + id,
+    url: '/fixture/factors/pogopin/' + id,
     method: 'get'
   })
 }
@@ -20,7 +29,7 @@ export function getFixture(id) {
 // 新增治具
 export function addFixture(data) {
   return request({
-    url: '/fixture/search/',
+    url: '/fixture/factors/pogopin',
     method: 'post',
     data: data
   })
@@ -29,14 +38,14 @@ export function addFixture(data) {
 // 修改治具
 export function updateFixture(data) {
   return request({
-    url: '/fixture/search/',
+    url: '/fixture/factors/pogopin',
     method: 'put',
     data: data
   })
 }
 
-// 删除治具
-export function delFixture(label) {
+// 删除治具共用信息
+export function delFixtureSharedInfo(label) {
   return request({
     url: '/fixture/search/' + label,
     method: 'delete',
@@ -46,7 +55,15 @@ export function delFixture(label) {
 // 远程获取治具类型
 export function fixtureCategoryList(query) {
   return request({
-    url: '/fixture/category',
+    url: '/fixture/category/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function fixtureCategoryAll(query) {
+  return request({
+    url: '/fixture/category/all',
     method: 'get',
     params: query
   })
@@ -116,5 +133,23 @@ export function getFixtureTrendingLineData() {
   return request({
     url: '/fixture/statistics/line',
     method: 'get'
+  })
+}
+
+// 获取pogopin因子
+export function listFixtureFactorsPogopin(query) {
+  return request({
+    url: '/fixture/factors/pogopin/list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 删除治具因子
+export function delFixtureFactorsPogopin(id) {
+  return request({
+    url: '/fixture/factors/pogopin/' + id,
+    method: 'delete'
+
   })
 }
