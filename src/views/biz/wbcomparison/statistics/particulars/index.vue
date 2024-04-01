@@ -118,7 +118,7 @@ export default {
         shortcuts: [{
           text: '今天',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setHours(0, 0, 0).valueOf())
             picker.$emit('pick', [start, end])
@@ -162,7 +162,7 @@ export default {
         }, {
           text: '前一天至今',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -170,7 +170,7 @@ export default {
         }, {
           text: '前两天至今',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 2 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -178,7 +178,7 @@ export default {
         }, {
           text: '前三天至今',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 3 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -186,7 +186,7 @@ export default {
         }, {
           text: '近一周',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 7 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -194,7 +194,7 @@ export default {
         }, {
           text: '近一个月',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 30 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -211,7 +211,9 @@ export default {
         companyName: null,
         groupName: null,
         dtRange: [],
-        prodType: null
+        prodType: null,
+        flag: null,
+        code: null
       },
       // 需要合并项的列
       needMergeArr: [
@@ -248,7 +250,7 @@ export default {
   created() {
     // 日期区间回显
     if (this.$route.query.dtRange === undefined || this.$route.query.dtRange === null || this.$route.query.dtRange === '') {
-      this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().valueOf()))]);
+      this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().setHours(23, 59, 59).valueOf()))])
     } else {
       this.queryParams.dtRange = this.$route.query.dtRange
       this.queryParams.companyName = this.$route.query.companyName
@@ -256,6 +258,7 @@ export default {
       this.queryParams.eqId = this.$route.query.eqId
       this.queryParams.prodType = this.$route.query.prodType
       this.queryParams.flag = this.$route.query.flag
+      this.queryParams.code = this.$route.query.code
     }
 
   },
@@ -292,7 +295,11 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
+      if (this.$route.query.dtRange === undefined || this.$route.query.dtRange === null || this.$route.query.dtRange === '') {
+        this.resetForm("queryForm");
+      } else {
+        this.reset();
+      }
       this.handleQuery();
     },
     getFactoryNames() {
@@ -301,6 +308,19 @@ export default {
           this.factoryOptions.push(response.data[i]['companyName'])
         }
       })
+    },
+    /** 重置查询参数（resetForm是重置为初始值，此处重置为空值） */
+    reset() {
+      this.queryParams = {
+        pageNum: 1,
+          pageSize: 10,
+          companyName: null,
+          groupName: null,
+          dtRange: [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().setHours(23, 59, 59).valueOf()))],
+          prodType: null,
+          flag: null,
+          code: null
+      }
     },
     getGroupNames() {
       this.workshopOptions = []
@@ -439,9 +459,9 @@ export default {
     /** 样式控制方法 */
     tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 6 && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 18px; font-weight: bolder;'
+        return 'color: #FF3030; font-size: 18px; font-weight: bolder;'
       } else if ((columnIndex === 7 && row[column.property] !== 'qualified')) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 11px;'
+        return 'background: orangered; color: #FFFFFF; font-size: 11px;'
       } else {
         return 'font-size: 18px; font-weight: bolder;'
       }

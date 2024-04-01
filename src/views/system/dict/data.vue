@@ -243,6 +243,14 @@ export default {
         {
           value: "danger",
           label: "危险"
+        },
+        { // 自定义红色字体
+          value: "redFont",
+          label: "红字"
+        },
+        { // 自定义粉底
+          value: "customPink",
+          label: "粉底"
         }
       ],
       // 类型数据字典

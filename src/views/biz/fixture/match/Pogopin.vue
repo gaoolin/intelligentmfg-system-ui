@@ -88,9 +88,14 @@
           </el-col>
           <el-col :md="4" :sm="12">
             <el-form-item label="是否有固定PIN" prop="isFixedPin">
-              <el-input v-model="queryParams.isFixedPin" placeholder="是否有固定PIN" clearable
-                        @keyup.enter.native="handleQuery" @input="handleQuery"
-              />
+              <el-select v-model="queryParams.isFixedPin" placeholder="是否有固定PIN" clearable @change="handleQuery" >
+                <el-option
+                v-for="dict in dict.type.fixture_pogopin_fixed_pin"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :md="4" :sm="12">
@@ -160,9 +165,14 @@
           </el-col>
           <el-col :md="4" :sm="12">
             <el-form-item label="是否常规FPC" prop="isRegularFpc">
-              <el-input v-model="queryParams.isRegularFpc" placeholder="是否常规FPC" clearable
-                        @keyup.enter.native="handleQuery" @input="handleQuery"
-              />
+              <el-select v-model="queryParams.isRegularFpc" placeholder="是否常规FPC" clearable @change="handleQuery" >
+                <el-option
+                v-for="dict in dict.type.fixture_pogopin_is_regular_fpc"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
 
@@ -175,28 +185,50 @@
           </el-col>
           <el-col :md="4" :sm="12">
             <el-form-item label="模组摆放方向" prop="modulePlacement">
-              <el-input v-model="queryParams.modulePlacement" placeholder="模组摆放方向" clearable
-                        @keyup.enter.native="handleQuery" @input="handleQuery"
-              />
+              <el-select v-model="queryParams.modulePlacement" placeholder="模组摆放方向" clearable @change="handleQuery" >
+                <el-option
+                v-for="dict in dict.type.fixture_pogopin_module_placement"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :md="4" :sm="12">
             <el-form-item label="机台" prop="mcId">
-              <el-input v-model="queryParams.mcId" placeholder="机台" clearable @keyup.enter.native="handleQuery" @input="handleQuery"/>
+              <el-select v-model="queryParams.mcId" placeholder="机台" clearable @change="handleQuery" >
+                <el-option
+                  v-for="dict in dict.type.fixture_pogopin_mc_id"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :md="4" :sm="12">
             <el-form-item label="测试工装" prop="testFixtures">
-              <el-input v-model="queryParams.testFixtures" placeholder="测试工装" clearable
-                        @keyup.enter.native="handleQuery" @input="handleQuery"
-              />
+              <el-select v-model="queryParams.testFixtures" placeholder="测试工装" clearable @change="handleQuery" >
+                <el-option
+                  v-for="dict in dict.type.fixtrue_pogopin_test_fixture"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :md="4" :sm="12">
             <el-form-item label="产品类型" prop="prodLevel">
-              <el-input v-model="queryParams.prodLevel" placeholder="产品类型" clearable
-                        @keyup.enter.native="handleQuery" @input="handleQuery"
-              />
+              <el-select v-model="queryParams.prodLevel" placeholder="产品类型" clearable @change="handleQuery" >
+                <el-option
+                  v-for="dict in dict.type.fixture_pogopin_prod_level"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </div>
@@ -233,7 +265,7 @@
         icon="el-icon-download"
         size="mini"
         @click="handleExport"
-        v-hasPermi="['fixture:match:export']"
+        v-hasPermi="['fixture:factors:pogopin:export']"
       >导出
       </el-button>
     </el-col>
@@ -250,7 +282,6 @@
     cell-mouse-leave
     :header-cell-style="tableHeaderCellStyle"
     border
-    :row-style="{height: '0'}"
   >
     <el-table-column prop="materialId" label="料号" align="center" width="120" fixed />
     <el-table-column prop="fixtureName" label="品名" align="center" width="120" fixed show-overflow-tooltip />
@@ -285,7 +316,7 @@
     <el-table-column prop="pinSpacing" label="引脚PIN间距" align="center" width="120"/>
     <el-table-column prop="isFixedPin" label="是否有固定PIN" align="center" width="120" >
       <template slot-scope="scope">
-        <dict-tag :options="dict.type.fixture_pogopin_pin_exist" :value="scope.row.isFixedPin"></dict-tag>
+        <dict-tag :options="dict.type.fixture_pogopin_fixed_pin" :value="scope.row.isFixedPin"></dict-tag>
       </template>
     </el-table-column>
     <el-table-column prop="connectorSheetWidth" label="连接器钢片宽度" align="center" width="120" />
@@ -297,13 +328,33 @@
     <el-table-column prop="connectorSubstrateThickness" label="连接器基板厚度" align="center" width="120" />
     <el-table-column prop="leftRightOffsetHeightHensCenterToConnectorCenter" label="LENS中心到连接器中心高度左右偏移量" align="center" width="120" />
     <el-table-column prop="fovAngle" label="FOV角度" align="center" width="120" />
-    <el-table-column prop="isRegularFpc" label="是否常规FPC" align="center" width="120" />
+    <el-table-column prop="isRegularFpc" label="是否常规FPC" align="center" width="120" >
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.fixture_pogopin_is_regular_fpc" :value="scope.row.isRegularFpc"></dict-tag>
+      </template>
+    </el-table-column>
     <el-table-column prop="fpcMaximumWidth" label="FPC最大宽度" align="center" width="120" />
-    <el-table-column prop="modulePlacement" label="模组摆放方向" align="center" width="120" />
-    <el-table-column prop="mcId" label="机台" align="center" width="120" />
-    <el-table-column prop="testFixtures" label="测试工装" align="center" width="120" />
-    <el-table-column prop="prodLevel" label="产品类型" align="center" width="120" />
-    <el-table-column label="操作" align="center" width="100" fixed="right" >
+    <el-table-column prop="modulePlacement" label="模组摆放方向" align="center" width="120" >
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.fixture_pogopin_module_placement" :value="scope.row.modulePlacement"></dict-tag>
+      </template>
+    </el-table-column>
+    <el-table-column prop="mcId" label="机台" align="center" width="120" >
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.fixture_pogopin_mc_id" :value="scope.row.mcId"></dict-tag>
+      </template>
+    </el-table-column>
+    <el-table-column prop="testFixtures" label="测试工装" align="center" width="120" >
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.fixtrue_pogopin_test_fixture" :value="scope.row.testFixtures"></dict-tag>
+      </template>
+    </el-table-column>
+    <el-table-column prop="prodLevel" label="产品类型" align="center" width="120" >
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.fixture_pogopin_prod_level" :value="scope.row.prodLevel"></dict-tag>
+      </template>
+    </el-table-column>
+    <el-table-column label="操作" align="center" width="110" fixed="right" >
       <template slot-scope="scope">
         <div class="box-ops">
           <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 2)" v-hasPermi="['fixture:search:add']">新增共用机型</el-button>
@@ -385,7 +436,7 @@
       <el-form-item label="是否有固定PIN" prop="isFixedPin" v-if="formItemShow">
         <el-radio-group v-model="form.isFixedPin" placeholder="是否有固定PIN" clearable >
           <el-radio
-            v-for="dict in dict.type.fixture_pogopin_pin_exist"
+            v-for="dict in dict.type.fixture_pogopin_fixed_pin"
             :key="dict.value"
             :label="dict.value"
           >{{ dict.label }}
@@ -420,22 +471,57 @@
         <el-input v-model="form.fovAngle" placeholder="FOV角度" clearable />
       </el-form-item>
       <el-form-item label="是否常规FPC" prop="isRegularFpc" v-if="formItemShow">
-        <el-input v-model="form.isRegularFpc" placeholder="是否常规FPC" clearable />
+        <el-radio-group v-model="form.isRegularFpc" placeholder="是否常规FPC" clearable >
+          <el-radio
+            v-for="dict in dict.type.fixture_pogopin_is_regular_fpc"
+            :key="dict.value"
+            :label="dict.value"
+          >{{ dict.label }}
+          </el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="FPC最大宽度" prop="fpcMaximumWidth" v-if="formItemShow">
         <el-input v-model="form.fpcMaximumWidth" placeholder="FPC最大宽度" clearable />
       </el-form-item>
       <el-form-item label="模组摆放方向" prop="modulePlacement" v-if="formItemShow">
-        <el-input v-model="form.modulePlacement" placeholder="模组摆放方向" clearable />
+        <el-select v-model="form.modulePlacement" placeholder="模组摆放方向" clearable>
+          <el-option
+          v-for="dict in dict.type.fixture_pogopin_module_placement"
+          :key="dict.value"
+          :label="dict.label"
+          :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="机台" prop="mcId" v-if="formItemShow">
-        <el-input v-model="form.mcId" placeholder="机台" clearable />
+        <el-select v-model="form.mcId" placeholder="机台" clearable>
+          <el-option
+          v-for="dict in dict.type.fixture_pogopin_mc_id"
+          :key="dict.value"
+          :label="dict.label"
+          :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="测试工装" prop="testFixtures" v-if="formItemShow">
-        <el-input v-model="form.testFixtures" placeholder="测试工装" clearable />
+        <el-select v-model="form.testFixtures" placeholder="测试工装" clearable>
+          <el-option
+            v-for="dict in dict.type.fixtrue_pogopin_test_fixture"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="产品类型" prop="prodLevel" v-if="formItemShow">
-        <el-input v-model="form.prodLevel" placeholder="产品类型" clearable />
+        <el-select v-model="form.prodLevel" placeholder="产品类型" clearable>
+          <el-option
+            v-for="dict in dict.type.fixture_pogopin_prod_level"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input v-model="form.remark" placeholder="请输入备注" type="textarea"/>
@@ -504,7 +590,9 @@ import ModalUdf from '@/views/biz/common/ModalUdf'
 
 export default {
   name: 'Pogopin',
-  dicts: ['biz_fixture_category', 'fixture_buckle_status', 'biz_fixture_project', 'fixture_shared_status', 'fixture_pogopin_pin_exist'],
+  dicts: ['fixture_buckle_status', 'biz_fixture_project', 'fixture_shared_status',
+    'fixture_pogopin_fixed_pin', 'fixture_pogopin_is_regular_fpc', 'fixture_pogopin_module_placement', 'fixture_pogopin_mc_id',
+  'fixtrue_pogopin_test_fixture', 'fixture_pogopin_prod_level'],
 
   components: { ModalUdf },
   data() {
@@ -680,9 +768,9 @@ export default {
 
     /** 导出按钮操作 */
     handleExport() {
-      this.download('/fixture/search/export', {
+      this.download('/fixture/factors/pogopin/export', {
         ...this.queryParams
-      }, `治具信息_${new Date().getTime()}.xlsx`)
+      }, `pogopin治具因子_${new Date().getTime()}.xlsx`)
       this.reset()
     },
 
@@ -729,6 +817,9 @@ export default {
             if (row['isFixedPin'] != null && row['isFixedPin'] !== '') {
               response.data['isFixedPin'] = response.data['isFixedPin'].toString()
             }
+            if (row['isRegularFpc'] != null && row['isRegularFpc'] !== '') {
+              response.data['isRegularFpc'] = response.data['isRegularFpc'].toString()
+            }
             this.form = response.data
             this.addFixtureDialogVisible = true
             this.dialogReset = false
@@ -770,7 +861,12 @@ export default {
     handleDelete(row, flag) {
       if (flag === 1) {
         this.$modal.confirm('是否删除治具料号为 ' + row.materialId + '“的数据项？').then(response => {
-          return delFixtureFactorsPogopin(row.id).then(() => {
+          return delFixtureFactorsPogopin({
+            id: row.id,
+            materialId: row.materialId,
+            fixtureSharedStatus: row.fixtureSharedStatus,
+            deptId: 209
+          }).then(() => {
             this.$modal.msgSuccess('删除成功！')
             this.getList()
             this.reset()
@@ -799,10 +895,6 @@ export default {
             updateFixture(this.form).then(() => {
               this.$modal.msgSuccess('修改治具信息成功！')
               this.getList()
-
-              // this.addFixtureDialogVisible = false
-              // this.dialogReset = false
-              // this.reset()
             })
           }
         })
@@ -815,7 +907,7 @@ export default {
             this.getFixtureCategoryOptions()
           })
         }
-      } else if (this.form.submitFlag === 4) {
+      } else if (this.form.submitFlag === 4) { // 新增治具共用机型
         addFixtureSharedInfo(this.form).then(response => {
           this.$modal.msgSuccess("新增治具共用机型成功！")
           this.reset()
@@ -830,15 +922,20 @@ export default {
 
     /** 取消按钮 */
     cancel() {
-      /*if (this.addFixtureDialogVisible === true) {
-        this.addFixtureDialogVisible = false
-        this.dialogReset = false
-        if (this.form.submitFlag === 2) {
-          this.reset()
-        }
-      } else if (this.addFixtureCategoryDialogVisible === true) {
-        this.addFixtureCategoryDialogVisible = false
-      }*/
+
+      /**
+       * btnFlag: 按钮类型
+       *     1 => 新增料号按钮
+       *     2 => 新增共用机型按钮
+       *     3 => 修改治具信息按钮
+       *     4 => 用参按钮
+       *
+       * form.submitFlag: 提交类型
+       *     1 => 新增料号
+       *     2 => 修改治具信息
+       *     3 => 新增治具类型
+       *     4 => 新增治具共用机型
+       */
 
       this.addFixtureDialogVisible = false;
       this.addFixtureCategoryDialogVisible = false;
@@ -850,10 +947,11 @@ export default {
       this.formItemShow = true;
       this.prodTypeShow = false;
 
-      if ((this.form.submitFlag === 2 || this.form.submitFlag === 4) && this.btnFlag === 4) {
+      console.log(this.form.submitFlag)
+      console.log(this.btnFlag)
+      if (!(this.btnFlag === 1)) {
         this.reset()
       }
-      // this.reset();
       this.btnFlag = null
     },
 
@@ -978,7 +1076,6 @@ export default {
     getFixtureCategoryOptions() {
       this.categoryOptions = [];
       this.fixtureCategoryForm.fixtureCategory = null;
-      console.log("+++++++++++++", this.fixtureCategoryForm)
       fixtureCategoryAll(this.fixtureCategoryForm).then(response => {
         for (const i in response.data) {
           this.categoryOptions.push(response.data[i]['fixtureCategory'])}})
@@ -986,12 +1083,12 @@ export default {
 
     /** 关闭模态框 */
     closeChildDialog(flag, name) {
-      if (flag === 0 || flag === 1) {
+      if (flag === 0 || flag === 1) { // 取消
         this.cancel()
-      } else if (flag ===2) {
+      } else if (flag ===2) { // 确定
         this.submitForm()
         this.cancel()
-      } else if (flag === 3) {
+      } else if (flag === 3 && name === 'default') { // 重置
         this.reset()
       }
     },

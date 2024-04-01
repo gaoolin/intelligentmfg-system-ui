@@ -112,20 +112,9 @@
       </el-table-column>
       <el-table-column label="备注" align="center" min-width="50" prop="remark" show-overflow-tooltip />
       <el-table-column label="操作" align="center" min-width="35" style="font-size: 8px">
-
         <template slot-scope="scope">
-          <el-popover
-            style="margin-left: 5px"
-            placement="top"
-            width="160"
-            content="请选择要删除的内容">
-            <p>请选择要删除的内容！</p>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="handleDelete(scope.row, 1)">料号</el-button>
-              <el-button type="primary" size="mini" @click="handleDelete(scope.row, 2)">机型</el-button>
-            </div>
-            <el-button slot="reference" size="mini" type="danger"><el-icon class="el-icon-delete"></el-icon></el-button>
-          </el-popover>
+          <el-button size="mini" type="text" @click="handleEdit(scope.row)">修改</el-button>
+          <el-button type="text" size="mini" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -137,22 +126,56 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
+    <el-dialog :title="title" :visible.sync="dialogVisible" :width="'400px'">
+      <el-form ref="form" :model="form" :rules="rules" label-width="90px">
+        <el-form-item label="料号" prop="materialId">
+          <el-input v-model="form.materialId" autocomplete="off" :disabled="true" placeholder="请输入料号" />
+        </el-form-item>
+        <el-form-item label="品名" prop="fixtureName">
+          <el-input v-model="form.fixtureName" :disabled="true" placeholder="请输入品名" />
+        </el-form-item>
+        <el-form-item label="规格" prop="fixtureSpec">
+          <el-input v-model="form.fixtureSpec" :disabled="true" placeholder="请输入品名" />
+        </el-form-item>
+        <el-form-item label="机型" prop="prodType">
+          <el-input v-model="form.prodType" placeholder="请输入机型" />
+        </el-form-item>
+        <el-form-item label="治具类型" prop="fixtureCategory" >
+          <el-input v-model="form.fixtureCategory" placeholder="请输入治具类型" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="治具版本" prop="fixtureVersion">
+          <el-input v-model="form.fixtureVersion" placeholder="请输入治具版本" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="连接器朝向" prop="buckle">
+          <el-radio-group v-model="form.buckle" placeholder="请输入连接器朝向" :disabled="true">
+            <el-radio
+              v-for="dict in dict.type.fixture_buckle_status"
+              :key="dict.value"
+              :label="dict.value"
+            >{{ dict.label }}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import {
-  addFixture,
   delFixtureSharedInfo,
-  getFixture,
   listFixture,
-  updateFixture,
-  fixtureCategoryList,
-  addFixtureCategory,
-  updateFixtureCategory,
-  deleteFixtureCategory,
+  updateFixtureSharedInfo,
+  getFixtureSharedInfo,
   getDeptIds,
   getFixtureMaterialIds,
-  materialIdRules,
   fixtureCategoryAll
 } from '@/api/biz/fixture/fixture'
 
@@ -176,8 +199,7 @@ export default {
       // 弹出层标题
       title: "",
       // 是否显示弹出层
-      addOpen: false,
-      addCategoryOpen: false,
+      dialogVisible: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -278,12 +300,14 @@ export default {
         this.getFixtureCategoryOptions(); // 首页治具类型下拉框数据
       });
     },
+
     getAllowedData() {
       getDeptIds().then(response => {
         this.deptIds = response.data
         this.getDataScope();
       })
     },
+
     getDataScope() {
       this.dictProjectObject = [];
       this.getDicts("biz_fixture_project").then(response => {
@@ -314,11 +338,7 @@ export default {
 
     // 取消按钮
     cancel() {
-      if (this.addOpen === true) {
-        this.addOpen = false;
-      } else if (this.addCategoryOpen === true) {
-        this.addCategoryOpen = false;
-      }
+      this.dialogVisible = false;
       this.reset();
     },
     // 表单重置
@@ -345,6 +365,7 @@ export default {
       };
       this.resetForm("form");
     },
+
     /** 重置合并单元格信息 */
     resetSpan() {
       this.arr1 = [];
@@ -360,6 +381,7 @@ export default {
       this.position5 = 0;
       this.position6 = 0;
     },
+
     /** 搜索按钮操作 */
     handleQuery() {
       if (this.isDeptIdAll()) {
@@ -382,58 +404,43 @@ export default {
     submitForm() {
       // this.reset(); // 会丢失编辑信息
       if (this.isDeptIdAll()) {
-        if (this.form.submitFlag === 1) { //新增料号
           this.$refs["form"].validate(valid => {
             if (valid) {
-              addFixture(this.form).then(() => {
-                this.$modal.msgSuccess("新增成功");
-                this.addOpen = false;
-                this.getList();
-              });
-            }})
-        } else if (this.form.submitFlag === 2) { // 新增机型 修改治具信息
-          this.$refs["form"].validate(valid => {
-            if (valid) {
-              updateFixture(this.form).then(() => {
-                this.$modal.msgSuccess("修改成功");
-                this.addOpen = false;
-                this.getList();
-              });
-            }
-          })
+              updateFixtureSharedInfo(this.form).then(response => {
+                this.$modal.msgSuccess("治具信息修改成功！")
+                this.dialogVisible = false
+                this.getList()
+              })
+            }}
+          )
         }
-        if (this.form.submitFlag === 3) { //
-          if (this.form.fixtureCategory !== null || this.form.fixtureCategory !== '') {
-            addFixtureCategory(this.form).then(() => {
-              this.$modal.msgSuccess("新增治具类型成功");
-              this.addCategoryOpen = false;
-              this.getFixtureCategoryOptions();
-            })}}
-        else if (this.form.submitFlag === null) {this.addOpen = false; this.addCategoryOpen = false;}
-      }},
+      },
     /** 删除按钮操作 */
-    handleDelete(row, flag) {
+    handleDelete(row) {
       if (this.isDeptIdAll()) {
-        if (flag === 1) {
-          this.$modal.confirm("是否删除治具料号为 " + row.materialId + '“的数据项？').then(response => {
-            const label = '' + row.mId + '-' + row.pId + '-' + 0 + '-' + this.form.deptId;
-            return delFixtureSharedInfo(label).then(() => {
+          this.$modal.confirm("是否删除治具料号为 " + row.materialId + '“的数据项？').then(() => {
+            return delFixtureSharedInfo({
+              materialId: row.materialId,
+              prodType: row.prodType,
+              fixtureCategory: row.fixtureCategory,
+              deptId: this.queryParams.deptId
+            }).then(() => {
               this.$modal.msgSuccess("删除成功");
               this.getList();
               this.reset();
             }).catch(() => {});
           })
-        } else if (flag === 2) {
-          this.$modal.confirm('是否确认删除治具编号为"' + row.prodType + '"的数据项？').then(response => {
-            const label = '' + row.mId + '-' + row.pId + '-' + 1 + '-' + this.form.deptId;
-            return delFixtureSharedInfo(label).then(() => {
-              this.$modal.msgSuccess("删除成功");
-              this.getList();
-              this.reset();
-            }).catch(() => {});
-          })
-        }
       }
+    },
+    handleEdit(row) {
+      if (this.isDeptIdAll()) {
+        getFixtureSharedInfo(row.id).then(response => {
+          response.data['buckle'] = response.data['buckle'].toString()
+          this.form = response.data
+          this.dialogVisible = true
+          this.title = '修改治具信息'
+        })
+        }
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -532,114 +539,12 @@ export default {
           this.categoryOptions.push(response.data[i]['fixtureCategory'])}})
     },
 
-    getFixtureCategoryList() {
-      this.reset();
-      if (this.isDeptIdAll()) {
-        fixtureCategoryList(this.form).then(response => {
-          response.data.forEach(item => {
-            item["seen"] = false;
-            item["compile"] = "编辑";
-            item["isDelete"] = "删除";
-            item["cancel"] = false;
-          })
-          this.fixtureCategoryList = response.data
-        })}},
-    handleFixtureCategoryManage() {
-      this.reset();
-      if (this.isDeptIdAll()) {
-        this.addCategoryOpen = true;
-        this.title = "管理治具类型";
-        this.getFixtureCategoryList();
-      }
-    },
-    fixtureCategoryChange() {
-      this.form.submitFlag = 3;
-    },
-    //当你点击编辑，切换按钮文本为保存，这里的seen可以看html代码里面，每一列都有一个input输入框
-    //每一个输入框都有v-if控制显示，默认显示为false然后点击在改变其值就能显示输入框
-    handleFixtureCategoryEdit(row, $index) {
-      this.reset();
-      this.form.cId = row.cId;
-      this.form.fixtureCategory = row.fixtureCategory;
-      row.seen = !row.seen
-      if (row.seen) {
-        row.compile = '保存';
-        row.seen = true;
-        row.cancel = true;
-      } else {
-        row.compile = '编辑';
-        row.seen = false;
-        if (this.isDeptIdAll()) {
-          updateFixtureCategory(this.form).then(() => {
-            row.cancel = false;
-            this.getFixtureCategoryList();
-            this.getFixtureCategoryOptions();
-            this.$message.success("更新治具类型成功！")
-          });
-        }}},
-    handleFixtureCategoryRemove(row, $index) {
-      if (this.isDeptIdAll()) {
-        this.$modal.confirm('是否确认删除治具类型为"' + row.fixtureCategory + '"的数据项？').then(function() {
-          return deleteFixtureCategory(row.cId);
-        }).then(() => {
-          this.getFixtureCategoryList();
-          this.getFixtureCategoryOptions();
-          this.$modal.msgSuccess("删除治具类型成功");
-        }).catch(() => {
-        });
-        this.reset();
-      }
-    },
-    tabCancel(row, $index) {
-      row.compile = "编辑";
-      row.seen = false;
-      row.cancel = false;
-    },
-
     /** 新增料号对话框 */
-
     getFixtureMaterialIds() {
       if (this.isDeptIdAll()) {
         getFixtureMaterialIds(this.form.deptId).then(response => {
           this.restaurants = response.rows;
         });
-      }
-    },
-
-    /** 验证料号是否存在 */
-    materialIdRules(rule, value, callback) {
-      //首先验证是否含有汉字
-      if (value) {
-        if (/[\u4E00-\u9FA5]/g.test(value)) {
-          callback(new Error('内容不能包含汉字!'));
-        }
-      }
-      let params = {
-        materialId: this.form.materialId,
-      };
-      if (this.isDeptIdAll()) {
-        materialIdRules(params).then(response => {
-          if(response.data === 'ok'){
-            callback();
-          }else{
-            callback(new Error('料号已存在，请重新输入!'));
-            // this.form.materialId = ""
-          }
-        })
-      }
-    },
-    fixtureCategoryRules(rule, value, callback) {
-      if (value === '') {
-        callback(new Error("请输入治具类型！"))
-      } else {
-        callback();
-      }
-    },
-    prodTypeRules(rule, value, callback) {
-      if (value === '') {
-        callback(new Error("请输入机型！"))
-      } else {
-        callback();
       }
     },
 

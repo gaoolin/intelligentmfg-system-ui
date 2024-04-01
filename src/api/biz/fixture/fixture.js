@@ -44,11 +44,28 @@ export function updateFixture(data) {
   })
 }
 
-// 删除治具共用信息
-export function delFixtureSharedInfo(label) {
+// 根据id获取治具共享信息
+export function getFixtureSharedInfo(id) {
   return request({
-    url: '/fixture/search/' + label,
+    url: '/fixture/search/' + id,
+    method: 'get'
+  })
+}
+
+// 修改治具共享信息
+export function updateFixtureSharedInfo(data) {
+  return request({
+    url: '/fixture/search',
+    method: 'put',
+    data: data
+  })
+}
+// 删除治具共用信息
+export function delFixtureSharedInfo(data) {
+  return request({
+    url: '/fixture/search',
     method: 'delete',
+    data: data
   })
 }
 
@@ -146,10 +163,10 @@ export function listFixtureFactorsPogopin(query) {
 }
 
 // 删除治具因子
-export function delFixtureFactorsPogopin(id) {
+export function delFixtureFactorsPogopin(data) {
   return request({
-    url: '/fixture/factors/pogopin/' + id,
-    method: 'delete'
-
+    url: '/fixture/factors/pogopin',
+    method: 'delete',
+    data: data
   })
 }

@@ -85,7 +85,19 @@
       <el-table-column prop="mcId" label="机台号" align="center" min-width="160" fit></el-table-column>
       <el-table-column prop="prodType" label="机种" align="center" min-width="160" fit></el-table-column>
       <el-table-column prop="computeCnt" label="比对次数" align="center" min-width="120" fit></el-table-column>
-      <el-table-column prop="okCnt" label="正确次数" align="center" min-width="120" fit></el-table-column>
+      <el-table-column prop="okCnt" label="正确次数" align="center" min-width="120" fit>
+        <template slot-scope="scope">
+          <router-link :to="{ path: '/biz/wbcomparison/statistics/particulars', query: {
+            dtRange: queryParams.dtRange,
+            companyName: scope.row.companyName,
+            groupName: scope.row.groupName,
+            eqId: scope.row.eqId,
+            prodType: scope.row.prodType,
+            flag: 'ok'} }">
+            <span>{{ scope.row.okCnt | numberToCurrency }}</span>
+          </router-link>
+        </template>
+      </el-table-column>
       <el-table-column prop="errCnt" label="错误次数" align="center" min-width="120" fit>
         <template scope="scope">
           <router-link :to="{ path: '/biz/wbcomparison/statistics/particulars', query: {
@@ -95,21 +107,13 @@
               eqId: scope.row.eqId,
               prodType: scope.row.prodType,
               flag: 'err'}}">
-            <span>{{ scope.row.errCnt | numberToCurrency }}</span>
+            <span>{{ scope.row.errCnt > 0 ? (scope.row.errCnt | numberToCurrency) : '-' }}</span>
           </router-link>
         </template>
       </el-table-column>
       <el-table-column prop="errRatio" label="错误率" align="center" min-width="120" fit>
         <template scope="scope">
-          <router-link :to="{ path: '/biz/wbcomparison/statistics/particulars', query: {
-              dtRange: queryParams.dtRange,
-              companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
-              groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
-              eqId: scope.row.eqId,
-              prodType: scope.row.prodType,
-              flag: 'err'}}">
             <span>{{ toPercent(getBit(scope.row.errRatio, 6), 2) }}</span>
-          </router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -143,7 +147,7 @@ export default {
         shortcuts: [{
           text: '今天',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setHours(0, 0, 0).valueOf())
             picker.$emit('pick', [start, end])
@@ -187,7 +191,7 @@ export default {
         }, {
           text: '前一天至今',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -195,7 +199,7 @@ export default {
         }, {
           text: '前两天至今',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 2 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -203,7 +207,7 @@ export default {
         }, {
           text: '前三天至今',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 3 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -211,7 +215,7 @@ export default {
         }, {
           text: '近一周',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 7 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -219,7 +223,7 @@ export default {
         }, {
           text: '近一个月',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 30 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -274,7 +278,8 @@ export default {
   created() {
     // 日期区间回显
     if (this.$route.query.dtRange === undefined || this.$route.query.dtRange === null || this.$route.query.dtRange === '') {
-      this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().valueOf()))]);
+      // this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().valueOf()))]);
+      this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().setHours(23, 59, 59).valueOf()))])
     } else {
       this.queryParams.dtRange = this.$route.query.dtRange
       this.queryParams.companyName = this.$route.query.companyName
@@ -316,9 +321,26 @@ export default {
     },
     /** 重置按钮操作 */
     restQuery() {
-      this.resetForm("queryForm");
+      if (this.$route.query.dtRange === undefined || this.$route.query.dtRange === null || this.$route.query.dtRange === '') {
+        this.resetForm("queryForm");
+      } else {
+        this.reset();
+      }
       this.handleQuery();
     },
+    /** 重置查询参数（resetForm是重置为初始值，此处重置为空值） */
+    reset() {
+      this.queryParams = {
+        pageNum: 1,
+        pageSize: 10,
+        companyName: null,
+        groupName: null,
+        dtRange: [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().setHours(23, 59, 59).valueOf()))],
+        prodType: null,
+        flag: null,
+      }
+    },
+
     getFactoryNames() {
       getFactoryNames().then(response => {
         for (const i in response.data) {
@@ -467,8 +489,12 @@ export default {
 
     /** 样式控制方法 */
     tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
-      if ((columnIndex === 7 || columnIndex === 8) && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 18px; font-weight: bolder; text-decoration: underline;'
+      if (columnIndex === 8 && row[column.property] > 0) {
+        return 'background: orangered; color: #FFFFFF; font-size: 18px; font-weight: bolder;'
+      } else if (columnIndex === 7 && row[column.property] > 0) {
+        return 'color: #FF3030; font-size: 18px; font-weight: bolder; text-decoration: underline;'
+      } else if (columnIndex === 6 && row[column.property] > 0) {
+        return 'font-size: 18px; font-weight: bolder; text-decoration: underline;'
       } else {
         return 'font-size: 18px; font-weight: bolder;'
       }
@@ -506,11 +532,13 @@ export default {
   color: brown;
 }*/
 
-a:visited {
-  text-decoration: none;
-  color: brown;
+/*a:visited {*/
+/*  text-decoration: none;*/
+/*  color: gray;*/
+/*}*/
+.div{
+  color: orangered;
 }
-
 a:hover {
   font-size: 22px;
   text-decoration: none;

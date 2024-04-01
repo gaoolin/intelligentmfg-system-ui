@@ -4,9 +4,9 @@
     <slot></slot>
     <div slot="footer" class="dialog-footer">
       <!--   native对应的是本页面方法，否则会被认为父组件的方法而报错   -->
-      <el-button type="warning" @click.native="closeDialog(3, name, resetBtn)" v-if="resetBtn">{{ '重 置'}}</el-button>
-      <el-button @click.native="closeDialog(0, name, cancelName)">{{ cancelName }}</el-button>
-      <el-button type="primary" @click.native="closeDialog(2, name, confirmName)">{{ confirmName }}</el-button>
+      <el-button type="warning" @click.native="closeDialog(3, name)" v-if="resetBtn">{{ '重 置'}}</el-button>
+      <el-button @click.native="closeDialog(0, name)">{{ cancelName }}</el-button>
+      <el-button type="primary" @click.native="closeDialog(2, name)">{{ confirmName }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -31,7 +31,7 @@ export default {
     },
     name: {
       type: String,
-      default: 'a'
+      default: 'default'
     },
     isCloseOnClick: {
       type: Boolean,

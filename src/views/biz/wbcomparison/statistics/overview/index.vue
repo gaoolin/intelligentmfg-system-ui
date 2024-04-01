@@ -108,46 +108,67 @@
       </el-table-column>
       <el-table-column prop="okCnt" label="正确次数" align="center" min-width="80">
         <template scope="scope">
-          <span v-if="scope.row.okCnt > 0">{{ scope.row.okCnt | numberToCurrency }}</span>
+          <router-link :to="{ path: '/biz/wbcomparison/statistics/percentage', query: {
+            dtRange: queryParams.dtRange,
+            companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
+            groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
+            flag: 'ok'} }">
+            <span v-if="scope.row.okCnt > 0">{{ scope.row.okCnt | numberToCurrency }}</span>
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column label="异常信息" align="center">
-        <el-table-column prop="errCnt" label="错误次数" align="center" min-width="120">
+        <el-table-column prop="errCnt" label="错误次数" align="center">
           <template scope="scope">
             <router-link :to="{ path: '/biz/wbcomparison/statistics/percentage', query: {
               dtRange: queryParams.dtRange,
               companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
               groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
               flag: 'err' }}" >
-              <span>{{ scope.row.errCnt | numberToCurrency }}</span>
+              <span v-if="scope.row.errCnt > 0">{{ scope.row.errCnt | numberToCurrency }}</span>
             </router-link>
           </template>
         </el-table-column>
         <el-table-column prop="offsetCnt" label="金线偏移" align="center" fit>
           <template scope="scope">
-            <span v-if="scope.row.offsetCnt > 0">{{ scope.row.offsetCnt | numberToCurrency }}</span>
+            <router-link :to="{ path: '/biz/wbcomparison/statistics/particulars', query: {
+            dtRange: queryParams.dtRange,
+            companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
+            groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
+            code: 1} }">
+              <span v-if="scope.row.offsetCnt > 0">{{ scope.row.offsetCnt | numberToCurrency }}</span>
+            </router-link>
           </template>
         </el-table-column>
         <el-table-column prop="npCnt" label="无线图模版" align="center" fit>
           <template scope="scope">
-            <span v-if="scope.row.npCnt > 0">{{ scope.row.npCnt | numberToCurrency }}</span>
+            <router-link :to="{ path: '/biz/wbcomparison/statistics/particulars', query: {
+            dtRange: queryParams.dtRange,
+            companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
+            groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
+            code: 3} }">
+              <span v-if="scope.row.npCnt > 0">{{ scope.row.npCnt | numberToCurrency }}</span>
+            </router-link>
           </template>
         </el-table-column>
         <el-table-column label="少线/多线" align="center" fit>
           <template scope="scope">
             <span v-if="(scope.row.lackCnt + scope.row.overCnt) > 0">{{ scope.row.lackCnt + scope.row.overCnt | numberToCurrency }}</span>
           </template>
+          <template scope="scope">
+            <router-link :to="{ path: '/biz/wbcomparison/statistics/particulars', query: {
+            dtRange: queryParams.dtRange,
+            companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
+            groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
+            code: 5} }">
+              <span v-if="(scope.row.lackCnt + scope.row.overCnt) > 0">{{ scope.row.lackCnt + scope.row.overCnt | numberToCurrency }}</span>
+            </router-link>
+          </template>
         </el-table-column>
 
         <el-table-column prop="errRatio" label="错误率" align="center" fit>
           <template scope="scope">
-            <router-link :to="{ path: '/biz/wbcomparison/statistics/percentage', query: {
-              dtRange: queryParams.dtRange,
-              companyName: scope.row.companyName === '总计' ? '' : scope.row.companyName,
-              groupName: scope.row.groupName === '小计' ? '' : scope.row.groupName,
-              flag: 'err' }}" >
-              <span>{{ toPercent(getBit(scope.row.errRatio, 6), 2) }}</span>
-            </router-link>
+              <span>{{ scope.row.errRatio > 0 ? toPercent(getBit(scope.row.errRatio, 6), 2) : '-' }}</span>
           </template>
         </el-table-column>
       </el-table-column>
@@ -220,7 +241,7 @@ export default {
         }, {
           text: '前一天至今',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -228,7 +249,7 @@ export default {
         }, {
           text: '前两天至今',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 2 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -236,7 +257,7 @@ export default {
         }, {
           text: '前三天至今',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 3 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -244,7 +265,7 @@ export default {
         }, {
           text: '近一周',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 7 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -252,7 +273,7 @@ export default {
         }, {
           text: '近一个月',
           onClick(picker) {
-            const end = new Date()
+            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
             const start = new Date()
             start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 30 * 1440 * 60 * 1000))
             picker.$emit('pick', [start, end])
@@ -307,10 +328,12 @@ export default {
     // 日期区间回显
     this.$set(this.queryParams, 'dtRange', [this.DateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.DateToStr(new Date(new Date().setHours(23, 59, 59).valueOf()))])
   },
+
   mounted() {
     this.getList()
     this.getFactoryNames()
   },
+
   methods: {
     getList() {
       this.$refs['queryForm'].validate(valid => {
@@ -354,7 +377,6 @@ export default {
               console.log(res[0])
             })
             this.getUpdateTime()
-
           }
         }
       })
@@ -367,6 +389,7 @@ export default {
         }
       })
     },
+
     getGroupNames() {
       this.workshopOptions = []
       getGroupNames(this.queryParams).then(response => {
@@ -375,6 +398,7 @@ export default {
         }
       })
     },
+
     getUpdateTime() {
       getUpdateTime().then(response => {
         this.updateTime = response.data
@@ -448,17 +472,19 @@ export default {
     /** 样式控制方法 */
     tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
       if (row.companyName === '总计') {
-        return 'background:#DDDDDD; color: #00008B; font-size: 21px; font-weight: bolder;'
+        return 'background: #DDDDDD; color: #00008B; font-size: 21px; font-weight: bolder;'
       } else if (row.groupName === '小计') {
-        return 'background:#DDDDDD; font-size: 20px; font-weight: bolder;'
-      } else if (columnIndex === 4  && row[column.property] > 0) {
-        return 'background:#FFBB00; color: #FFFFFF; font-size: 19px; font-weight: bolder; text-decoration: underline;'
-      } else if (columnIndex === 7 && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder; text-decoration: underline;'
+        return 'background: #DDDDDD; font-size: 20px; font-weight: bolder;'
       } else if (columnIndex === 6 && row[column.property] > 0) {
-        return 'background:#228B22; color: #FFFFFF; font-size: 19px; font-weight: bolder;'
+        return 'background:#228B22; color: #FFFFFF; font-size: 19px; font-weight: bolder; text-decoration: underline;'
+      } else if (columnIndex === 4  && row[column.property] > 0) {
+        return 'background: #FFBB00; color: #FFFFFF; font-size: 19px; font-weight: bolder; text-decoration: underline;'
+      } else if (columnIndex === 7 && row[column.property] > 0) {
+        return 'background: orangered; color: #FFFFFF; font-size: 19px; font-weight: bolder; text-decoration: underline;'
+      } else if ((columnIndex > 7 && columnIndex < 11) && row[column.property] > 0) {
+        return 'font-size: 19px; font-weight: bolder; text-decoration: underline;'
       } else if (columnIndex === 11 && row[column.property] > 0) {
-        return 'background:#FF3030; color: #FFFFFF; font-size: 19px; font-weight: bolder; text-decoration: underline;'
+        return 'color: red; font-size: 19px; font-weight: bolder;'
       } else {
         return 'font-size: 20px; font-weight: bolder;'
       }
@@ -469,9 +495,9 @@ export default {
       let cellStyle2
       let cellStyle3
 
-      cellStyle1 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#436EEE'
-      cellStyle2 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#FF3030'
-      cellStyle3 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#00BFBF'
+      cellStyle1 = 'font-size: 21px; font-weight: bolder; color: #fff; background: #436EEE'
+      cellStyle2 = 'font-size: 21px; font-weight: bolder; color: #fff; background: orangered'
+      cellStyle3 = 'font-size: 21px; font-weight: bolder; color: #fff; background: #00BFBF'
 
       if (columnIndex >= 0 && columnIndex < 7 && rowIndex === 0) {
         return cellStyle1
@@ -518,6 +544,7 @@ export default {
       str += '%'
       return str
     },
+
     isNUmber(num) {
       return /^[0-9]+.?[0-9]*$/.test(num)
     },
