@@ -26,7 +26,7 @@
       </el-upload>
       <br/>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitUpload"> 上 传 服 务 器</el-button>
+        <el-button type="primary" @click="submitUpload" v-hasPermi="['fixture:search:upload']"> 上 传 服 务 器</el-button>
       </div>
     </div>
 
@@ -56,7 +56,7 @@
       </el-upload>
       <br/>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitUploadFactorsPogopin"> 上 传 服 务 器</el-button>
+        <el-button type="primary" @click="submitUploadFactorsPogopin" v-hasPermi="['fixture:factors:pogopin:upload']"> 上 传 服 务 器</el-button>
       </div>
     </div>
   </div>
