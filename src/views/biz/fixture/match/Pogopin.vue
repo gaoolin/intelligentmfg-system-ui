@@ -244,7 +244,7 @@
         icon="el-icon-plus"
         size="mini"
         @click="handleAddAndUpdateFixture(null, 1)"
-        v-hasPermi="['fixture:match:add']"
+        v-hasPermi="['fixture:factors:pogopin:edit']"
       >新增料号
       </el-button>
     </el-col>
@@ -254,6 +254,7 @@
         plain
         size="mini"
         @click="handleFixtureCategoryManage"
+        v-hasPermi="['fixture:factors:pogopin:edit']"
       >
         <span>管理治具类型</span>
       </el-button>
@@ -357,12 +358,12 @@
     <el-table-column label="操作" align="center" width="110" fixed="right" >
       <template slot-scope="scope">
         <div class="box-ops">
-          <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 2)" v-hasPermi="['fixture:search:add']">新增共用机型</el-button>
+          <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 2)" v-hasPermi="['fixture:factors:pogopin:edit']">新增共用机型</el-button>
         </div>
         <div class="box-ops">
-          <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 3)" v-hasPermi="['fixture:match:edit']">编辑</el-button>
+          <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 3)" v-hasPermi="['fixture:factors:pogopin:edit']">编辑</el-button>
           <el-button size="mini" type="text" class="btn-ops" @click="handleDelete(scope.row, 1)">删除</el-button>
-          <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 4)" v-hasPermi="['fixture:match:edit']">用参</el-button>
+          <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 4)" v-hasPermi="['fixture:factors:pogopin:edit']">用参</el-button>
         </div>
       </template>
     </el-table-column>
