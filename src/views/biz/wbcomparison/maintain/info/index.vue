@@ -100,7 +100,7 @@
       <el-table-column label="最后更新人" align="center" prop="updateBy" />
       <el-table-column label="最后更新时间" min-width="150" align="center" prop="updateTime" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="checkRole(['comparison:ops'])">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -166,6 +166,7 @@
 
 <script>
 import { listComparison, getComparison, delComparison, addComparison, updateComparison } from "@/api/biz/wbcomparison/info";
+import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 
 export default {
   name: "Comparison",
@@ -211,6 +212,8 @@ export default {
     this.getList();
   },
   methods: {
+    checkPermi,
+    checkRole,
     /** 查询智慧打线图列表 */
     getList() {
       this.loading = true;

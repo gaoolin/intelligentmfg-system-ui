@@ -77,7 +77,7 @@
       <el-table-column label="pad卡控" align="center" prop="padThreshold" />
       <el-table-column label="金线长" align="center" prop="wireLen" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="checkRole(['comparison:ops'])">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -158,6 +158,7 @@
 
 <script>
 import { listDetail, getDetail, delDetail, addDetail, updateDetail } from "@/api/biz/wbcomparison/detail";
+import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 
 export default {
   name: "Detail",
@@ -198,6 +199,8 @@ export default {
     this.getList();
   },
   methods: {
+    checkPermi,
+    checkRole,
     /** 查询标准模版明细列表 */
     getList() {
       this.loading = true;

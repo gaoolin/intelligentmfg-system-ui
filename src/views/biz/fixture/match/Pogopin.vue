@@ -4,7 +4,7 @@
     <el-row :gutter="20">
       <el-col :md="6" :sm="12">
         <el-form-item label="料号" prop="materialId">
-          <el-input v-model="queryParams.materialId" placeholder="查询单个料号的因子值" clearable />
+          <el-input v-model="queryParams.materialId" placeholder="查询单个料号的参数" clearable />
         </el-form-item>
       </el-col>
       <el-col :md="6" :sm="12">
@@ -32,7 +32,6 @@
   <el-form ref="queryForm" :model="queryParams" :inline="true" v-show="showSearch" label-width="120px"
            label-position="left">
     <el-row :gutter="20">
-      <!--          <el-divider><i class="el-icon-mobile-phone"></i></el-divider>-->
       <el-col :md="4" :sm="12">
         <el-form-item label="连接器型号" prop="connectorModel">
           <el-input v-model="queryParams.connectorModel" placeholder="连接器型号" clearable
@@ -42,7 +41,7 @@
       </el-col>
       <el-col :md="4" :sm="12">
         <el-form-item label="治具类型" prop="fixtureCategory">
-          <el-input v-model="queryParams.fixtureCategory" placeholder="产品类别" clearable
+            <el-input v-model="queryParams.fixtureCategory" placeholder="治具类型" clearable
                     @keyup.enter.native="handleQuery" @input="handleQuery"
           />
         </el-form-item>
@@ -355,7 +354,8 @@
         <dict-tag :options="dict.type.fixture_pogopin_prod_level" :value="scope.row.prodLevel"></dict-tag>
       </template>
     </el-table-column>
-    <el-table-column label="操作" align="center" width="110" fixed="right" >
+    <el-table-column prop="remark" label="备注" align="center" width="130" />
+    <el-table-column label="操作" align="center" width="110" fixed="right" v-hasPermi="['fixture:factors:pogopin:edit']" >
       <template slot-scope="scope">
         <div class="box-ops">
           <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 2)" v-hasPermi="['fixture:factors:pogopin:edit']">新增共用机型</el-button>
@@ -379,7 +379,7 @@
 
   <!--   添加治具对话框   -->
   <modal-udf :title="title" :dialogShow="addFixtureDialogVisible" :width="'30%'" :isCloseOnClick="false" :resetBtn="dialogReset" @closeChildDialog="closeChildDialog" v-dialogDrag v-dialogDragWidth v-dialogDragHeight >
-    <el-form ref="fixtureForm" :model="form" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesAddShared : rulesFlag === 3 ? rulesUpdate : rules" label-width="110px" >
+    <el-form ref="fixtureFactorsPogopinForm" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesUpdate : rulesFlag === 3 ? rules : rules" label-width="110px" >
       <el-form-item label="料号" prop="materialId">
         <el-input v-model="form.materialId" type="text" autocomplete="off" :disabled="materialIdDisabled" placeholder="请输入料号" />
       </el-form-item>
@@ -530,7 +530,7 @@
     </el-form>
   </modal-udf>
   <!-- 添加治具类型对话框 -->
-  <modal-udf :title="title" :dialogShow="addFixtureCategoryDialogVisible" :name="'fixtureCategoryDialog'" width="800px" append-to-body :close-on-click-modal='false' @closeChildDialog="closeChildDialog" v-dialogDrag v-dialogDragWidth>
+  <modal-udf :title="title" :dialogShow="addFixtureCategoryDialogVisible" :name="'fixtureCategoryPogopinDialog'" width="800px" append-to-body :close-on-click-modal='false' @closeChildDialog="closeChildDialog" v-dialogDrag v-dialogDragWidth>
     <el-tabs v-model="activeName" type="border-card" @tab-click="fixtureCategoryForm.fixtureCategory=null">
       <el-tab-pane label="新增治具类型" name="first">
         <el-form ref="fixtureCategoryForm" :model="fixtureCategoryForm" label-width="155px">
@@ -575,12 +575,12 @@
 <script>
 import {
   fixtureCategoryList,
-  addFixture,
+  addFixtureFactorsPogopin,
   addFixtureCategory,
-  updateFixture,
+  updateFixtureFactorsPogopin,
   deleteFixtureCategory,
   updateFixtureCategory,
-  getFixture,
+  getFixtureFactorsPogopin,
   fixtureCategoryAll,
   delFixtureFactorsPogopin,
   listFixtureFactorsPogopin,
@@ -763,7 +763,7 @@ export default {
     resetFixture() {
       //重置form表单
       // this.$refs['fixtureForm'].resetFields();
-      this.resetForm('fixtureForm')
+      this.resetForm('fixtureFactorsPogopinForm')
       // this.resetForm('form')
     },
 
@@ -807,7 +807,7 @@ export default {
         this.form.submitFlag = 4;
       } else if (flag === 3) { // 修改治具
         this.btnFlag = 3
-        getFixture(row.id).then(response => {
+        getFixtureFactorsPogopin(row.id).then(response => {
           this.reset()
           this.rulesFlag = 2
           if (response.data != null) {
@@ -833,7 +833,7 @@ export default {
         })
       } else if (flag === 4) { // 用参
         this.btnFlag = 4
-        getFixture(row.id).then(response => {
+        getFixtureFactorsPogopin(row.id).then(response => {
           this.reset()
           this.rulesFlag = 0
           if (response.data != null) {
@@ -879,9 +879,9 @@ export default {
     /** 提交按钮 */
     submitForm() {
       if (this.form.submitFlag === 1) { // 新增料号
-        this.$refs['fixtureForm'].validate(valid => {
+        this.$refs['fixtureFactorsPogopinForm'].validate(valid => {
           if (valid) {
-            addFixture(this.form).then(() => {
+            addFixtureFactorsPogopin(this.form).then(() => {
               this.$modal.msgSuccess('新增料号成功！')
               this.addFixtureDialogVisible = false
               this.dialogReset = false
@@ -891,9 +891,9 @@ export default {
           }
         })
       } else if (this.form.submitFlag === 2) { // 修改治具信息
-        this.$refs['fixtureForm'].validate(valid => {
+        this.$refs['fixtureFactorsPogopinForm'].validate(valid => {
           if (valid) {
-            updateFixture(this.form).then(() => {
+            updateFixtureFactorsPogopin(this.form).then(() => {
               this.$modal.msgSuccess('修改治具信息成功！')
               this.getList()
             })
@@ -948,8 +948,6 @@ export default {
       this.formItemShow = true;
       this.prodTypeShow = false;
 
-      console.log(this.form.submitFlag)
-      console.log(this.btnFlag)
       if (!(this.btnFlag === 1)) {
         this.reset()
       }
@@ -1088,7 +1086,11 @@ export default {
         this.cancel()
       } else if (flag ===2) { // 确定
         this.submitForm()
-        this.cancel()
+        this.$refs['fixtureFactorsPogopinForm'].validate(valid => {
+          if (valid) {
+            this.cancel()
+          }
+        })
       } else if (flag === 3 && name === 'default') { // 重置
         this.reset()
       }
@@ -1115,6 +1117,7 @@ export default {
       }
       let params = {
         materialId: this.form.materialId,
+        deptId: 209
       };
         materialIdRules(params).then(response => {
           if(response.data === 'ok'){
@@ -1124,7 +1127,6 @@ export default {
             // this.form.materialId = ""
           }
         })
-
     },
     fixtureCategoryRules(rule, value, callback) {
       if (value === '') {

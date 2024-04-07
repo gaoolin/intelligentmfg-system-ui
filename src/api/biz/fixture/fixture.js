@@ -19,7 +19,7 @@ export function addFixtureSharedInfo(data) {
 }
 
 // 查询治具详细
-export function getFixture(id) {
+export function getFixtureFactorsPogopin(id) {
   return request({
     url: '/fixture/factors/pogopin/' + id,
     method: 'get'
@@ -27,7 +27,7 @@ export function getFixture(id) {
 }
 
 // 新增治具
-export function addFixture(data) {
+export function addFixtureFactorsPogopin(data) {
   return request({
     url: '/fixture/factors/pogopin',
     method: 'post',
@@ -36,7 +36,7 @@ export function addFixture(data) {
 }
 
 // 修改治具
-export function updateFixture(data) {
+export function updateFixtureFactorsPogopin(data) {
   return request({
     url: '/fixture/factors/pogopin',
     method: 'put',
@@ -44,6 +44,47 @@ export function updateFixture(data) {
   })
 }
 
+// 删除治具因子
+export function delFixtureFactorsPogopin(data) {
+  return request({
+    url: '/fixture/factors/pogopin',
+    method: 'delete',
+    data: data
+  })
+}
+
+// AA
+export function getFixtureFactorsAa(id) {
+  return request({
+    url: '/fixture/factors/aa/' + id,
+    method: 'get'
+  })
+}
+
+export function addFixtureFactorsAa(data) {
+  return request({
+    url: '/fixture/factors/aa',
+    method: 'post',
+    data: data
+  })
+}
+
+export function updateFixtureFactorsAa(data) {
+  return request({
+    url: '/fixture/factors/aa',
+    method: 'put',
+    data: data
+  })
+}
+
+
+export function delFixtureFactorsAa(data) {
+  return request({
+    url: '/fixture/factors/aa',
+    method: 'delete',
+    data: data
+  })
+}
 // 根据id获取治具共享信息
 export function getFixtureSharedInfo(id) {
   return request({
@@ -162,11 +203,13 @@ export function listFixtureFactorsPogopin(query) {
   })
 }
 
-// 删除治具因子
-export function delFixtureFactorsPogopin(data) {
+// 获取AA因子
+export function listFixtureFactorsAa(query) {
   return request({
-    url: '/fixture/factors/pogopin',
-    method: 'delete',
-    data: data
+    url: '/fixture/factors/aa/list',
+    method: 'get',
+    params: query
   })
 }
+
+

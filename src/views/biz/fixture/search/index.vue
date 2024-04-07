@@ -270,16 +270,6 @@ export default {
     };
   },
 
-  created() {
-    if (this.$route.query.materialId === undefined || this.$route.query.materialId === null || this.$route.query.materialId === '') {
-      this.queryParams.materialId = null
-      this.queryParams.deptId = null
-    } else {
-      this.queryParams.materialId = this.$route.query.materialId
-      this.queryParams.deptId = this.$route.query.deptId
-    }
-  },
-
   methods: {
     /** 查询治具列表 */
     getList() {
@@ -319,7 +309,9 @@ export default {
             this.dictProjectObject.push(o);
           }
         })
-        if (this.dictProjectObject[0] !== undefined) {
+        if (this.queryParams.deptId !== null) {
+          this.getList();
+        } else if (this.dictProjectObject[0] !== undefined) {
           this.queryParams.deptId = this.dictProjectObject[0].dictValue
           this.getList();
         }
@@ -562,6 +554,17 @@ export default {
   mounted() {
     this.getAllowedData();
   },
+  created() {
+    if (this.$route.query.materialId === undefined || this.$route.query.materialId === null || this.$route.query.materialId === '') {
+      this.queryParams.materialId = null
+      this.queryParams.deptId = null
+      console.log('未选择料号')
+    } else {
+      this.queryParams.materialId = this.$route.query.materialId
+      this.queryParams.deptId = this.$route.query.deptId
+      console.log('已选择料号')
+    }
+  }
 };
 </script>
 

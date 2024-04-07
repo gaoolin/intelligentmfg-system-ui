@@ -150,15 +150,13 @@ export default {
   },
 
   created() {
-    if (this.beforeRouteEnter) {
-    } else {
-      if (this.$route.query.label === '1') {
-        this.queryParams.companyName = this.$route.query.companyName
-        this.queryParams.groupName = this.$route.query.groupName
-        this.queryParams.deviceType = this.$route.query.deviceType
-        this.queryParams.label = this.$route.query.label
-        this.back = true
-      }
+    // if (this.beforeRouteEnter) {
+    if (this.$route.query.label === '1') {
+      this.queryParams.companyName = this.$route.query.companyName
+      this.queryParams.groupName = this.$route.query.groupName
+      this.queryParams.deviceType = this.$route.query.deviceType
+      this.queryParams.label = this.$route.query.label
+      this.back = true
     }
   },
 
@@ -166,6 +164,7 @@ export default {
     this.getList()
     this.getFactoryNames()
   },
+
   methods: {
     getList() {
       this.loading = true
@@ -210,8 +209,24 @@ export default {
     },
     /** 重置按钮操作 */
     restQuery() {
-      this.resetForm('queryForm')
+      if (this.$route.query.label === '1') {
+        this.reset()
+      } else {
+        this.resetForm('queryForm')
+      }
       this.handleQuery()
+    },
+
+    reset() {
+      this.queryParams = {
+        pageNum: 1,
+          pageSize: 10,
+          companyName: '',
+          groupName: '',
+          deviceType: '',
+          eqId: null,
+          mcId: null,
+      }
     },
 
     /** 导出 */
@@ -301,8 +316,6 @@ export default {
       return result
     }
   },
-
-
 }
 </script>
 

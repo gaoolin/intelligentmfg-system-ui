@@ -116,7 +116,7 @@
     </el-form-item>
     <el-form-item>
       <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-      <el-button icon="el-icon-refresh" size="mini" @click="restQuery">重置</el-button>
+      <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
     </el-form-item>
   </el-form>
 
@@ -312,10 +312,20 @@ export default {
       this.load();
     },
 
-    /** 重置按钮操作 */
-    restQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
+    reset() {
+      this.queryParams = {
+        pageNum: 1,
+          pageSize: 10,
+          companyName: null,
+          groupName: null,
+          deviceType: null,
+          eqId: null,
+          mcId: null,
+          simId: null,
+          status: null,
+          interval: '3小时',
+          label: null,
+      }
     },
 
     getFactoryNames() {
@@ -353,7 +363,12 @@ export default {
 
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
+      if (this.$route.query.label !== undefined) {
+        this.reset()
+        this.back = false
+      } else {
+        this.resetForm("queryForm");
+      }
       this.handleQuery();
     },
 
