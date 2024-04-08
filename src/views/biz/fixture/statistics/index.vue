@@ -18,14 +18,14 @@ import FixtureTrendingBar from './FixtureTrendingBar'
 import { getFixturePanelData, getFixtureTrendingLineData } from '@/api/biz/fixture/fixture'
 import FixtureTrendingLine from './FixtureTrendingLine'
 import FixtureBlockGroup from './FixtureBlockGroup'
-import PanelGroup from '../../../dashboard/PanelGroup'
+import PanelGroup from '@/views/dashboard/PanelGroup'
 
 export default {
   name: 'index',
   components: { PanelGroup, FixturePanel, FixtureTrendingBar, FixtureTrendingLine, FixtureBlockGroup },
   data() {
     return {
-      fixturePanelData: [],
+      fixturePanelData: {},
       fixtureTrendingBarData: {},
       fixtureTrendingLineData: {
         data0: [],
@@ -51,8 +51,7 @@ export default {
             o2.value = response.data[i].sharedFixtureCnt;
             o1.name = '未共用治具';
             o1.value  = response.data[i].unSharedFixtureCnt;
-            let tmp1 = [o1, o2]
-            this.fixturePanelData.push(tmp1)
+            this.fixturePanelData['pogopin'] = [o1, o2];
           } else if (response.data[i].deptId === 210) {
             o1 = {}
             o2 = {}
@@ -61,8 +60,7 @@ export default {
             o2.value = response.data[i].sharedFixtureCnt;
             o1.name = '未共用治具';
             o1.value  = response.data[i].unSharedFixtureCnt;
-            let tmp2 = [o1, o2]
-            this.fixturePanelData.push(tmp2)
+            this.fixturePanelData['aa'] = [o1, o2];
           } else if (response.data[i].deptId === 211) {
             o1 = {}
             o2 = {}
@@ -70,11 +68,11 @@ export default {
             o2.name = '共用治具';
             o2.value = response.data[i].sharedFixtureCnt;
             o1.name = '未共用治具';
-            o1.value  = response.data[i].unSharedFixtureCnt
-            let tmp3 = [o1, o2]
-            this.fixturePanelData.push(tmp3)
+            o1.value  = response.data[i].unSharedFixtureCnt;
+            this.fixturePanelData['lock'] = [o1, o2]
           }
         }
+        console.log(this.fixturePanelData)
         this.flag = true;
       })
     },

@@ -5,7 +5,7 @@
 <script>
 import * as echarts from 'echarts';
 require('echarts/theme/macarons') // echarts theme
-import resize from '../../../dashboard/mixins/resize'
+import resize from '@/views/dashboard/mixins/resize'
 
 export default {
   name: 'FixturePanel',
@@ -131,7 +131,7 @@ export default {
               }
             },
 
-            data: this.fixturePanelData[0],
+            data: this.fixturePanelData['pogopin'],
             animationEasing: 'cubicInOut',
             animationDuration: 2600,
             left: 0,
@@ -160,7 +160,7 @@ export default {
                 }
               }
             },
-            data:  this.fixturePanelData[1],
+            data:  this.fixturePanelData['aa'],
             animationEasing: 'cubicInOut',
             animationDuration: 2600,
             left: '33.3333%',
@@ -190,7 +190,7 @@ export default {
               }
             },
 
-            data:  this.fixturePanelData[2],
+            data:  this.fixturePanelData['lock'],
             animationEasing: 'cubicInOut',
             animationDuration: 2600,
             left: '66.6667%',
