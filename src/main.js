@@ -41,7 +41,7 @@ import DictData from '@/components/DictData'
 // 数值用千分位表示
 import { numberToCurrencyNo } from '@/utils/numberToCurrency'
 // 配置全局过滤器，实现数字千分位格式
-Vue.filter('numberToCurrency', numberToCurrencyNo)
+  Vue.filter('numberToCurrency', numberToCurrencyNo)
 
 
 // 全局方法挂载

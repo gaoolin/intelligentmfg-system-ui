@@ -33,17 +33,17 @@
 
     <el-row :gutter="20" class="mb8">
       <div class="upload-div">
-        <div class="div" v-hasPermi="['fixture:factors:pogopin:upload']">
+        <div class="div" v-hasPermi="['fixture:params:pogopin:upload']">
           <h2 class="body">PogoPin治具因子数据上传</h2>
           <el-upload
-            ref="uploadFactorsPogopin"
+            ref="uploadparamsPogopin"
             :limit="1"
             accept=".xlsx, .xls"
-            :headers="uploadFactorsPogopin.headers"
-            :action="uploadFactorsPogopin.url"
-            :disabled="uploadFactorsPogopin.isUploading"
-            :on-progress="handleFileUploadProgressFactorsPogopin"
-            :on-success="handleFileSuccessFactorsPogopin"
+            :headers="uploadparamsPogopin.headers"
+            :action="uploadparamsPogopin.url"
+            :disabled="uploadparamsPogopin.isUploading"
+            :on-progress="handleFileUploadProgressparamsPogopin"
+            :on-success="handleFileSuccessparamsPogopin"
             :auto-upload="false"
             drag
           >
@@ -52,29 +52,29 @@
             <div class="el-upload__tip text-center" slot="tip">
               <span>仅允许导入xls、xlsx格式文件。</span>
               <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
-                       @click="importTemplateFactorsPogopin"
+                       @click="importTemplateparamsPogopin"
               >下载模板
               </el-link>
             </div>
           </el-upload>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitUploadFactorsPogopin" >
+            <el-button type="primary" @click="submitUploadparamsPogopin" >
               上 传 服 务 器
             </el-button>
           </div>
         </div>
 
-        <div class="div" v-hasPermi="['fixture:factors:aa:upload']">
+        <div class="div" v-hasPermi="['fixture:params:aa:upload']">
           <h2 class="body">AA治具因子数据上传</h2>
           <el-upload
-            ref="uploadFactorsAa"
+            ref="uploadparamsAa"
             :limit="1"
             accept=".xlsx, .xls"
-            :headers="uploadFactorsAa.headers"
-            :action="uploadFactorsAa.url"
-            :disabled="uploadFactorsAa.isUploading"
-            :on-progress="handleFileUploadProgressFactorsAa"
-            :on-success="handleFileSuccessFactorsAa"
+            :headers="uploadparamsAa.headers"
+            :action="uploadparamsAa.url"
+            :disabled="uploadparamsAa.isUploading"
+            :on-progress="handleFileUploadProgressparamsAa"
+            :on-success="handleFileSuccessparamsAa"
             :auto-upload="false"
             drag
           >
@@ -83,29 +83,29 @@
             <div class="el-upload__tip text-center" slot="tip">
               <span>仅允许导入xls、xlsx格式文件。</span>
               <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
-                       @click="importTemplateFactorsAa"
+                       @click="importTemplateparamsAa"
               >下载模板
               </el-link>
             </div>
           </el-upload>
           <div slot="footer" class="dialog-footer" >
-            <el-button type="primary" @click="submitUploadFactorsAa"> 上 传
+            <el-button type="primary" @click="submitUploadparamsAa"> 上 传
               服 务 器
             </el-button>
           </div>
         </div>
 
-        <div class="div" v-hasPermi="['fixture:factors:suofu:upload']">
+        <div class="div" v-hasPermi="['fixture:params:suofu:upload']">
           <h2 class="body">锁附治具因子数据上传</h2>
           <el-upload
-            ref="uploadFactorsSuoFu"
+            ref="uploadparamsSuoFu"
             :limit="1"
             accept=".xlsx, .xls"
-            :headers="uploadFactorsSuoFu.headers"
-            :action="uploadFactorsSuoFu.url"
-            :disabled="uploadFactorsSuoFu.isUploading"
-            :on-progress="handleFileUploadProgressFactorsSuoFu"
-            :on-success="handleFileSuccessFactorsSuoFu"
+            :headers="uploadparamsSuoFu.headers"
+            :action="uploadparamsSuoFu.url"
+            :disabled="uploadparamsSuoFu.isUploading"
+            :on-progress="handleFileUploadProgressparamsSuoFu"
+            :on-success="handleFileSuccessparamsSuoFu"
             :auto-upload="false"
             drag
           >
@@ -114,13 +114,13 @@
             <div class="el-upload__tip text-center" slot="tip">
               <span>仅允许导入xls、xlsx格式文件。</span>
               <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
-                       @click="importTemplateFactorsSuoFu"
+                       @click="importTemplateparamsSuoFu"
               >下载模板
               </el-link>
             </div>
           </el-upload>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitUploadFactorsSuoFu">
+            <el-button type="primary" @click="submitUploadparamsSuoFu">
               上 传 服 务 器
             </el-button>
           </div>
@@ -148,22 +148,22 @@ export default {
         // 上传的文件列表
         fileList: []
       },
-      uploadFactorsPogopin: {
+      uploadparamsPogopin: {
         isUploading: false,
         headers: { Authorization: 'Bearer ' + getToken() },
-        url: process.env.VUE_APP_BASE_API + '/fixture/factors/pogopin/upload',
+        url: process.env.VUE_APP_BASE_API + '/fixture/params/pogopin/upload',
         fileList: []
       },
-      uploadFactorsAa: {
+      uploadparamsAa: {
         isUploading: false,
         headers: { Authorization: 'Bearer ' + getToken() },
-        url: process.env.VUE_APP_BASE_API + '/fixture/factors/aa/upload',
+        url: process.env.VUE_APP_BASE_API + '/fixture/params/aa/upload',
         fileList: []
       },
-      uploadFactorsSuoFu: {
+      uploadparamsSuoFu: {
         isUploading: false,
         headers: { Authorization: 'Bearer ' + getToken() },
-        url: process.env.VUE_APP_BASE_API + '/fixture/factors/suofu/upload',
+        url: process.env.VUE_APP_BASE_API + '/fixture/params/lock/upload',
         fileList: []
       }
     }
@@ -177,14 +177,14 @@ export default {
     submitUpload() {
       this.$refs.upload.submit()
     },
-    submitUploadFactorsPogopin() {
-      this.$refs.uploadFactorsPogopin.submit()
+    submitUploadparamsPogopin() {
+      this.$refs.uploadparamsPogopin.submit()
     },
-    submitUploadFactorsAa() {
-      this.$refs.uploadFactorsAa.submit()
+    submitUploadparamsAa() {
+      this.$refs.uploadparamsAa.submit()
     },
-    submitUploadFactorsSuoFu() {
-      this.$refs.uploadFactorsSuoFu.submit()
+    submitUploadparamsSuoFu() {
+      this.$refs.uploadparamsSuoFu.submit()
     },
 
     /** 提交按钮 */
@@ -194,27 +194,27 @@ export default {
       this.download('/fixture/search/importTemplate', {}, `共治具导入模板.xlsx`)
     },
     /** 下载模板操作 */
-    importTemplateFactorsPogopin() {
-      this.download('/fixture/factors/pogopin/importTemplate', {}, `Pogopin因子导入模板.xlsx`)
+    importTemplateparamsPogopin() {
+      this.download('/fixture/params/pogopin/importTemplate', {}, `Pogopin因子导入模板.xlsx`)
     },
-    importTemplateFactorsAa() {
-      this.download('/fixture/factors/aa/importTemplate', {}, `AA因子导入模板.xlsx`)
+    importTemplateparamsAa() {
+      this.download('/fixture/params/aa/importTemplate', {}, `AA因子导入模板.xlsx`)
     },
-    importTemplateFactorsSuoFu() {
-      this.download('/fixture/factors/suofu/importTemplate', {}, `锁附因子导入模板.xlsx`)
+    importTemplateparamsSuoFu() {
+      this.download('/fixture/params/lock/importTemplate', {}, `锁附因子导入模板.xlsx`)
     },
     // 文件上传中处理
     handleFileUploadProgress(event, file, fileList) {
       this.upload.isUploading = true
     },
-    handleFileUploadProgressFactorsPogopin(event, file, fileList) {
-      this.uploadFactorsPogopin.isUploading = true
+    handleFileUploadProgressparamsPogopin(event, file, fileList) {
+      this.uploadparamsPogopin.isUploading = true
     },
-    handleFileUploadProgressFactorsAa(event, file, fileList) {
-      this.uploadFactorsAa.isUploading = true
+    handleFileUploadProgressparamsAa(event, file, fileList) {
+      this.uploadparamsAa.isUploading = true
     },
-    handleFileUploadProgressFactorsSuoFu(event, file, fileList) {
-      this.uploadFactorsSuoFu.isUploading = true
+    handleFileUploadProgressparamsSuoFu(event, file, fileList) {
+      this.uploadparamsSuoFu.isUploading = true
     },
 
     // 文件上传成功处理
@@ -223,19 +223,19 @@ export default {
       this.$refs.upload.clearFiles()
       this.$alert('<div style=\'overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;\'>' + response.msg + '</div>', '导入结果', { dangerouslyUseHTMLString: true })
     },
-    handleFileSuccessFactorsPogopin(response, file, fileList) {
-      this.uploadFactorsPogopin.isUploading = false
-      this.$refs.uploadFactorsPogopin.clearFiles()
+    handleFileSuccessparamsPogopin(response, file, fileList) {
+      this.uploadparamsPogopin.isUploading = false
+      this.$refs.uploadparamsPogopin.clearFiles()
       this.$alert('<div style=\'overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;\'>' + response.msg + '</div>', '导入结果', { dangerouslyUseHTMLString: true })
     },
-    handleFileSuccessFactorsAa(response, file, fileList) {
-      this.uploadFactorsAa.isUploading = false
-      this.$refs.uploadFactorsAa.clearFiles()
+    handleFileSuccessparamsAa(response, file, fileList) {
+      this.uploadparamsAa.isUploading = false
+      this.$refs.uploadparamsAa.clearFiles()
       this.$alert('<div style=\'overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;\'>' + response.msg + '</div>', '导入结果', { dangerouslyUseHTMLString: true })
     },
-    handleFileSuccessFactorsSuoFu(response, file, fileList) {
-      this.uploadFactorsSuoFu.isUploading = false
-      this.$refs.uploadFactorsSuoFu.clearFiles()
+    handleFileSuccessparamsSuoFu(response, file, fileList) {
+      this.uploadparamsSuoFu.isUploading = false
+      this.$refs.uploadparamsSuoFu.clearFiles()
       this.$alert('<div style=\'overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;\'>' + response.msg + '</div>', '导入结果', { dangerouslyUseHTMLString: true })
     },
 
