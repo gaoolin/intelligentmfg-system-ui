@@ -77,7 +77,7 @@
       <el-table-column label="pad卡控" align="center" prop="padThreshold" />
       <el-table-column label="金线长" align="center" prop="wireLen" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="checkRole(['comparison:ops'])">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="checkRole(['comparison:admin'])">
         <template slot-scope="scope">
           <el-button
             size="mini"

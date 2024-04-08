@@ -100,7 +100,7 @@
       <el-table-column label="最后更新人" align="center" prop="updateBy" />
       <el-table-column label="最后更新时间" min-width="150" align="center" prop="updateTime" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="checkRole(['comparison:ops'])">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="checkRole(['comparison:admin'])">
         <template slot-scope="scope">
           <el-button
             size="mini"

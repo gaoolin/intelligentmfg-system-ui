@@ -19,68 +19,68 @@ export function addFixtureSharedInfo(data) {
 }
 
 // 查询治具详细
-export function getFixtureFactorsPogopin(id) {
+export function getFixtureparamsPogopin(id) {
   return request({
-    url: '/fixture/factors/pogopin/' + id,
+    url: '/fixture/params/pogopin/' + id,
     method: 'get'
   })
 }
 
 // 新增治具
-export function addFixtureFactorsPogopin(data) {
+export function addFixtureparamsPogopin(data) {
   return request({
-    url: '/fixture/factors/pogopin',
+    url: '/fixture/params/pogopin',
     method: 'post',
     data: data
   })
 }
 
 // 修改治具
-export function updateFixtureFactorsPogopin(data) {
+export function updateFixtureparamsPogopin(data) {
   return request({
-    url: '/fixture/factors/pogopin',
+    url: '/fixture/params/pogopin',
     method: 'put',
     data: data
   })
 }
 
 // 删除治具因子
-export function delFixtureFactorsPogopin(data) {
+export function delFixtureparamsPogopin(data) {
   return request({
-    url: '/fixture/factors/pogopin',
+    url: '/fixture/params/pogopin',
     method: 'delete',
     data: data
   })
 }
 
 // AA
-export function getFixtureFactorsAa(id) {
+export function getFixtureparamsAa(id) {
   return request({
-    url: '/fixture/factors/aa/' + id,
+    url: '/fixture/params/aa/' + id,
     method: 'get'
   })
 }
 
-export function addFixtureFactorsAa(data) {
+export function addFixtureparamsAa(data) {
   return request({
-    url: '/fixture/factors/aa',
+    url: '/fixture/params/aa',
     method: 'post',
     data: data
   })
 }
 
-export function updateFixtureFactorsAa(data) {
+export function updateFixtureparamsAa(data) {
   return request({
-    url: '/fixture/factors/aa',
+    url: '/fixture/params/aa',
     method: 'put',
     data: data
   })
 }
 
 
-export function delFixtureFactorsAa(data) {
+export function delFixtureparamsAa(data) {
   return request({
-    url: '/fixture/factors/aa',
+    url: '/fixture/params/aa',
     method: 'delete',
     data: data
   })
@@ -195,18 +195,18 @@ export function getFixtureTrendingLineData() {
 }
 
 // 获取pogopin因子
-export function listFixtureFactorsPogopin(query) {
+export function listFixtureparamsPogopin(query) {
   return request({
-    url: '/fixture/factors/pogopin/list',
+    url: '/fixture/params/pogopin/list',
     method: 'get',
     params: query
   })
 }
 
 // 获取AA因子
-export function listFixtureFactorsAa(query) {
+export function listFixtureparamsAa(query) {
   return request({
-    url: '/fixture/factors/aa/list',
+    url: '/fixture/params/aa/list',
     method: 'get',
     params: query
   })

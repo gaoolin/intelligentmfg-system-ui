@@ -57,7 +57,6 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['fixture:search:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -111,7 +110,7 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" min-width="50" prop="remark" show-overflow-tooltip />
-      <el-table-column label="操作" align="center" min-width="35" style="font-size: 8px">
+      <el-table-column label="操作" align="center" min-width="35" style="font-size: 8px" v-if="checkRole(['fixture:a', 'fixture:b'])">
         <template slot-scope="scope">
           <el-button size="mini" type="text" @click="handleEdit(scope.row)">修改</el-button>
           <el-button type="text" size="mini" @click="handleDelete(scope.row)">删除</el-button>
@@ -178,6 +177,7 @@ import {
   getFixtureMaterialIds,
   fixtureCategoryAll
 } from '@/api/biz/fixture/fixture'
+import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 
 export default {
   name: 'fixture',
@@ -271,6 +271,8 @@ export default {
   },
 
   methods: {
+    checkPermi,
+    checkRole,
     /** 查询治具列表 */
     getList() {
       this.loading = true;
@@ -439,7 +441,7 @@ export default {
       if (this.isDeptIdAll()) {
         this.download('/fixture/search/export', {
           ...this.queryParams
-        }, `治具信息_${new Date().getTime()}.xlsx`)
+        }, `共治具信息_${new Date().getTime()}.xlsx`)
       }
       this.reset();
     },

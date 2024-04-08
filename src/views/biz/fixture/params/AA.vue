@@ -237,7 +237,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAddAndUpdateFixture(null, 1)"
-          v-hasPermi="['fixture:factors:aa:ops']"
+          v-hasPermi="['fixture:params:aa:ops']"
         >新增料号
         </el-button>
       </el-col>
@@ -247,7 +247,7 @@
           plain
           size="mini"
           @click="handleFixtureCategoryManage"
-          v-hasPermi="['fixture:factors:aa:ops']"
+          v-hasPermi="['fixture:params:aa:ops']"
         >
           <span>管理治具类型</span>
         </el-button>
@@ -259,7 +259,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['fixture:factors:aa:ops']"
+          v-hasPermi="['fixture:params:aa:ops']"
         >导出
         </el-button>
       </el-col>
@@ -356,7 +356,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="remark" label="备注" align="center" width="130" />
-      <el-table-column label="操作" align="center" width="130" fixed="right" v-if="checkRole(['fixture:factors:aa:ops'])"  >
+      <el-table-column label="操作" align="center" width="130" fixed="right"  >
         <template slot-scope="scope">
           <div class="box-ops">
             <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 2)" >新增共用机型</el-button>
@@ -377,7 +377,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList" />
 
-    <modal-udf :title="title" :name="'fixtureFactorsAaDialog'" :dialogShow="addFixtureDialogVisible" :width="'30%'" :isCloseOnClick="false" :resetBtn="dialogReset" @closeChildDialog="closeChildDialog" v-dialogDrag v-dialogDragWidth v-dialogDragHeight >
+    <modal-udf :title="title" :name="'fixtureparamsAaDialog'" :dialogShow="addFixtureDialogVisible" :width="'30%'" :isCloseOnClick="false" :resetBtn="dialogReset" @closeChildDialog="closeChildDialog" v-dialogDrag v-dialogDragWidth v-dialogDragHeight >
       <el-form ref="fixtureForm" :model="form" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesUpdate : rulesFlag === 3 ? rules : rules" label-width="130px" >
         <el-form-item label="料号" prop="materialId">
           <el-input v-model="form.materialId" type="text" autocomplete="off" :disabled="materialIdDisabled" placeholder="请输入料号" />
@@ -584,21 +584,21 @@
 
 <script>
 import {
-  listFixtureFactorsAa,
+  listFixtureparamsAa,
   fixtureCategoryAll,
 } from '@/api/biz/fixture/fixture'
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 
 import ModalUdf from '@/views/biz/common/ModalUdf'
 import {
-  addFixtureFactorsAa,
+  addFixtureparamsAa,
   addFixtureCategory,
   addFixtureSharedInfo,
   deleteFixtureCategory,
-  delFixtureFactorsAa,
+  delFixtureparamsAa,
   fixtureCategoryList,
-  getFixtureFactorsAa,
-  updateFixtureFactorsAa,
+  getFixtureparamsAa,
+  updateFixtureparamsAa,
   updateFixtureCategory,
   materialIdRules
 } from '@/api/biz/fixture/fixture'
@@ -750,7 +750,7 @@ export default {
     checkRole,
     getList() {
       this.loading = true;
-      listFixtureFactorsAa(this.queryParams).then(response => {
+      listFixtureparamsAa(this.queryParams).then(response => {
         this.tableData = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -776,7 +776,7 @@ export default {
 
     /** 导出按钮操作 */
     handleExport() {
-      this.download('/fixture/factors/aa/export', {
+      this.download('/fixture/params/aa/export', {
         ...this.queryParams
       }, `AA治具因子_${new Date().getTime()}.xlsx`)
       this.reset()
@@ -816,7 +816,7 @@ export default {
         this.btnFlag = 3
         this.reset() // 重置表单、表单验证
         this.rulesFlag = 2
-        getFixtureFactorsAa(row.id).then(response => {
+        getFixtureparamsAa(row.id).then(response => {
           if (response.data != null) {
             // int 类型转换成 string，以便通过字典呈现
             if (row['buckle'] != null && row['buckle'] !== '') {
@@ -863,7 +863,7 @@ export default {
         this.btnFlag = 4
         this.reset() // 重置表单、表单验证
         this.rulesFlag = 0
-        getFixtureFactorsAa(row.id).then(response => {
+        getFixtureparamsAa(row.id).then(response => {
           this.reset()
           if (response.data != null) {
             // int 类型转换成 string，以便通过字典呈现
@@ -904,12 +904,11 @@ export default {
         })
       }
     },
-
     /** 删除按钮操作 */
     handleDelete(row, flag) {
       if (flag === 1) {
         this.$modal.confirm('是否删除治具料号为 ' + row.materialId + '“的数据项？').then(response => {
-          return delFixtureFactorsAa({
+          return delFixtureparamsAa({
             id: row.id,
             materialId: row.materialId,
             fixtureSharedStatus: row.fixtureSharedStatus,
@@ -928,7 +927,7 @@ export default {
       if (this.form.submitFlag === 1) { // 新增料号
         this.$refs['fixtureForm'].validate(valid => {
           if (valid) {
-            addFixtureFactorsAa(this.form).then(() => {
+            addFixtureparamsAa(this.form).then(() => {
               this.$modal.msgSuccess('新增料号成功！')
               this.addFixtureDialogVisible = false
               this.dialogReset = false
@@ -940,7 +939,7 @@ export default {
       } else if (this.form.submitFlag === 2) { // 修改治具信息
         this.$refs['fixtureForm'].validate(valid => {
           if (valid) {
-            updateFixtureFactorsAa(this.form).then(() => {
+            updateFixtureparamsAa(this.form).then(() => {
               this.$modal.msgSuccess('修改治具信息成功！')
               this.getList()
             })
@@ -1140,7 +1139,7 @@ export default {
             this.cancel()
           }
         })
-      } else if (flag === 3 && name === 'fixtureFactorsAaDialog') { // 重置
+      } else if (flag === 3 && name === 'fixtureparamsAaDialog') { // 重置
         this.reset()
       }
     },
