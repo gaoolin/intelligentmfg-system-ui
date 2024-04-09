@@ -142,8 +142,8 @@
               </el-form-item>
             </el-col>
             <el-col :md="4" :sm="12">
-              <el-form-item label="模组头部长度" prop="moduleHeadHeight">
-                <el-input v-model="queryParams.moduleHeadHeight" placeholder="模组头部长度" clearable
+              <el-form-item label="模组头部长度" prop="moduleHeadLength">
+                <el-input v-model="queryParams.moduleHeadLength" placeholder="模组头部长度" clearable
                           @keyup.enter.native="handleQuery" @input="handleQuery"
                 />
               </el-form-item>
@@ -217,7 +217,7 @@
               <el-form-item label="产品类型" prop="prodLevel">
                 <el-select v-model="queryParams.prodLevel" placeholder="产品类型" clearable @change="handleQuery" >
                   <el-option
-                    v-for="dict in dict.type.fixture_aa_prod_level"
+                    v-for="dict in dict.type.fixture_prod_level"
                     :key="dict.value"
                     :label="dict.label"
                     :value="dict.value" />
@@ -334,7 +334,7 @@
       <el-table-column prop="sensorModel" label="Sensor型号" align="center" width="130" />
       <el-table-column prop="effectivePixels" label="有效像素" align="center" width="130" />
       <el-table-column prop="moduleHeadWidth" label="模组头部宽度" align="center" width="130" />
-      <el-table-column prop="moduleHeadHeight" label="模组头部长度" align="center" width="130" />
+      <el-table-column prop="moduleHeadLength" label="模组头部长度" align="center" width="130" />
       <el-table-column prop="reinforcementBoardWidth" label="补强板宽度" align="center" width="130" />
       <el-table-column prop="reinforcementPlateLength" label="补强板长度" align="center" width="130" />
       <el-table-column prop="fpcWidth" label="FPC宽度" align="center" width="130" />
@@ -352,7 +352,7 @@
       </el-table-column>
       <el-table-column prop="prodLevel" label="产品类型" align="center" width="130">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.fixture_aa_prod_level" :value="scope.row.prodLevel"></dict-tag>
+          <dict-tag :options="dict.type.fixture_prod_level" :value="scope.row.prodLevel"></dict-tag>
         </template>
       </el-table-column>
       <el-table-column prop="remark" label="备注" align="center" width="130" />
@@ -486,8 +486,8 @@
         <el-form-item label="模组头部宽度" prop="moduleHeadWidth" v-if="formItemShow">
           <el-input v-model="form.moduleHeadWidth" placeholder="模组头部宽度" clearable />
         </el-form-item>
-        <el-form-item label="模组头部长度" prop="moduleHeadHeight" v-if="formItemShow">
-          <el-input v-model="form.moduleHeadHeight" placeholder="模组头部长度" clearable />
+        <el-form-item label="模组头部长度" prop="moduleHeadLength" v-if="formItemShow">
+          <el-input v-model="form.moduleHeadLength" placeholder="模组头部长度" clearable />
         </el-form-item>
         <el-form-item label="补强板宽度" prop="reinforcementBoardWidth" v-if="formItemShow">
           <el-input v-model="form.reinforcementBoardWidth" placeholder="补强板宽度" clearable />
@@ -527,7 +527,7 @@
         <el-form-item label="产品类型" prop="prodLevel" v-if="formItemShow">
           <el-select v-model="form.prodLevel" placeholder="产品类型" clearable>
             <el-option
-              v-for="dict in dict.type.fixture_aa_prod_level"
+              v-for="dict in dict.type.fixture_prod_level"
               :key="dict.value"
               :label="dict.label"
               :value="dict.value"
@@ -606,7 +606,7 @@ import {
 export default {
   name: 'AA',
   dicts: ['biz_fixture_project', 'fixture_shared_status', 'fixture_aa_module_placement', 'fixture_aa_mc_id',
-    'fixture_aa_prod_level', 'fixture_aa_process_requirements', 'fixture_aa_buckle_status', 'fixture_aa_clamping_direction',
+    'fixture_prod_level', 'fixture_aa_process_requirements', 'fixture_aa_buckle_status', 'fixture_aa_clamping_direction',
   'fixture_aa_motor_pin_direction', 'fixture_aa_distance'],
   components: { ModalUdf },
 
@@ -646,7 +646,7 @@ export default {
         sensorModel: null,
         effectivePixels: null,
         moduleHeadWidth: null,
-        moduleHeadHeight: null,
+        moduleHeadLength: null,
         reinforcementBoardWidth: null,
         reinforcementPlateLength: null,
         fpcWidth: null,
@@ -698,7 +698,7 @@ export default {
         sensorModel: null,
         effectivePixels: null,
         moduleHeadWidth: null,
-        moduleHeadHeight: null,
+        moduleHeadLength: null,
         reinforcementBoardWidth: null,
         reinforcementPlateLength: null,
         fpcWidth: null,
@@ -1061,7 +1061,7 @@ export default {
         sensorModel: null,
         effectivePixels: null,
         moduleHeadWidth: null,
-        moduleHeadHeight: null,
+        moduleHeadLength: null,
         reinforcementBoardWidth: null,
         reinforcementPlateLength: null,
         fpcWidth: null,

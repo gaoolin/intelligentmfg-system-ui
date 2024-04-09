@@ -131,7 +131,6 @@
 <script>
 import { listComparisonRatio } from '@/api/biz/wbcomparison/percentage'
 import { getFactoryNames, getGroupNames } from '@/api/biz/wbcomparison/overview'
-// import overview from "../overview/index";
 
 export default {
   name: 'index',
