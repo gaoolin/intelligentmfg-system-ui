@@ -92,9 +92,11 @@
         <template slot-scope="scope">{{scope.row.fixtureCategory}}</template>
       </el-table-column>
       <el-table-column label="治具版本" align="center" min-width="35" prop="fixtureVersion" fixed />
-      <el-table-column label="连接器朝向" align="center" min-width="35" prop="buckle" fixed>
+      <el-table-column label="连接器朝向" align="center" prop="buckle" fixed>
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.fixture_buckle_status" :value="scope.row.buckle" />
+          <dict-tag v-if="queryParams.deptId === '209'" :options="dict.type.fixture_buckle_status" :value="scope.row.buckle" />
+          <dict-tag v-else-if="queryParams.deptId === '210'" :options="dict.type.fixture_aa_buckle_status" :value="scope.row.buckle" />
+          <dict-tag v-else-if="queryParams.deptId === '211'" :options="dict.type.fixture_lock_buckle_status" :value="scope.row.buckle" />
         </template>
       </el-table-column>
       <el-table-column label="创建人" align="center" min-width="35" prop="createBy" />
@@ -181,7 +183,7 @@ import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函�
 
 export default {
   name: 'fixture',
-  dicts: ['biz_fixture_category', 'fixture_buckle_status', 'biz_fixture_project'],
+  dicts: ['biz_fixture_category', 'fixture_buckle_status', 'fixture_aa_buckle_status', 'fixture_lock_buckle_status', 'biz_fixture_project'],
 
   data() {
     return {
