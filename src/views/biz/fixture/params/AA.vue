@@ -377,7 +377,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList" />
 
-    <modal-udf :title="title" :name="'fixtureparamsAaDialog'" :dialogShow="addFixtureDialogVisible" :width="'30%'" :isCloseOnClick="false" :resetBtn="dialogReset" @closeChildDialog="closeChildDialog" v-dialogDrag v-dialogDragWidth v-dialogDragHeight >
+    <modal-udf :title="title" :name="'fixtureParamsAaDialog'" :dialogShow="addFixtureDialogVisible" :width="'30%'" :isCloseOnClick="false" :resetBtn="dialogReset" @closeChildDialog="closeChildDialog" v-dialogDrag v-dialogDragWidth v-dialogDragHeight >
       <el-form ref="fixtureForm" :model="form" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesUpdate : rulesFlag === 3 ? rules : rules" label-width="130px" >
         <el-form-item label="料号" prop="materialId">
           <el-input v-model="form.materialId" type="text" autocomplete="off" :disabled="materialIdDisabled" placeholder="请输入料号" />
@@ -1139,7 +1139,7 @@ export default {
             this.cancel()
           }
         })
-      } else if (flag === 3 && name === 'fixtureparamsAaDialog') { // 重置
+      } else if (flag === 3 && name === 'fixtureParamsAaDialog') { // 重置
         this.reset()
       }
     },

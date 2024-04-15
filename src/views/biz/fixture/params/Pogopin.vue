@@ -379,9 +379,9 @@
 
   <!--   添加治具对话框   -->
   <modal-udf :title="title" :dialogShow="addFixtureDialogVisible" :width="'30%'" :isCloseOnClick="false" :resetBtn="dialogReset" @closeChildDialog="closeChildDialog" v-dialogDrag v-dialogDragWidth v-dialogDragHeight >
-    <el-form ref="fixtureparamsPogopinForm" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesUpdate : rulesFlag === 3 ? rules : rules" label-width="110px" >
+    <el-form ref="fixtureParamsPogopinForm" :model="form" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesUpdate : rulesFlag === 3 ? rules : rules" label-width="110px" >
       <el-form-item label="料号" prop="materialId">
-        <el-input v-model="form.materialId" type="text" autocomplete="off" :disabled="materialIdDisabled" placeholder="请输入料号" />
+        <el-input v-model="form.materialId" :disabled="materialIdDisabled" placeholder="请输入料号" />
       </el-form-item>
       <el-form-item label="品名" prop="fixtureName">
         <el-input v-model="form.fixtureName" :disabled="materialInfoDisabled" placeholder="请输入品名" />
@@ -700,12 +700,11 @@ export default {
       },
       rules: {
         materialId: [
-          { required: true, message: '请输入需要新增的料号', trigger: 'blur' },
+          { required: true,  message: '请输入需要新增的料号', trigger: 'blur' },
           { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'blur' },
-          { validator: this.materialIdRules, trigger: 'blur' }],
+          { validator: this.materialIdRules, trigger: 'blur'}],
         fixtureCategory: [
-          { required: true, message: '请输入治具类型', trigger: 'change' },
-          { validator: this.fixtureCategoryRules, trigger: 'change' }],
+          { required: true, type: 'string', message: '请输入治具类型', trigger: 'change' }],
         prodType: [
           { required: true, message: '请输入机种名称', trigger: 'blur' },
           { validator: this.prodTypeRules, trigger: 'blur' }
@@ -719,8 +718,7 @@ export default {
       },
       rulesUpdate: {
         fixtureCategory: [
-          { required: true, message: '请输入治具类型', trigger: 'change' },
-          { validator: this.fixtureCategoryRules, trigger: 'change' }],
+          { required: true, type: 'string', message: '请输入治具类型', trigger: 'change' },],
         prodType: [
           { required: true, message: '请输入机种名称', trigger: 'blur' },
           { validator: this.prodTypeRules, trigger: 'blur' }
@@ -763,7 +761,7 @@ export default {
     resetFixture() {
       //重置form表单
       // this.$refs['fixtureForm'].resetFields();
-      this.resetForm('fixtureparamsPogopinForm')
+      this.resetForm('fixtureParamsPogopinForm')
       // this.resetForm('form')
     },
 
@@ -879,7 +877,7 @@ export default {
     /** 提交按钮 */
     submitForm() {
       if (this.form.submitFlag === 1) { // 新增料号
-        this.$refs['fixtureparamsPogopinForm'].validate(valid => {
+        this.$refs['fixtureParamsPogopinForm'].validate(valid => {
           if (valid) {
             addFixtureparamsPogopin(this.form).then(() => {
               this.$modal.msgSuccess('新增料号成功！')
@@ -891,7 +889,7 @@ export default {
           }
         })
       } else if (this.form.submitFlag === 2) { // 修改治具信息
-        this.$refs['fixtureparamsPogopinForm'].validate(valid => {
+        this.$refs['fixtureParamsPogopinForm'].validate(valid => {
           if (valid) {
             updateFixtureparamsPogopin(this.form).then(() => {
               this.$modal.msgSuccess('修改治具信息成功！')
@@ -1086,12 +1084,13 @@ export default {
         this.cancel()
       } else if (flag ===2) { // 确定
         this.submitForm()
-        this.$refs['fixtureparamsPogopinForm'].validate(valid => {
+        this.$refs['fixtureParamsPogopinForm'].validate(valid => {
           if (valid) {
             this.cancel()
           }
         })
       } else if (flag === 3 && name === 'default') { // 重置
+        this.resetFixture()
         this.reset()
       }
     },
@@ -1136,10 +1135,11 @@ export default {
       }
     },
     prodTypeRules(rule, value, callback) {
-      if (value === '') {
-        callback(new Error("请输入机型！"))
-      } else {
-        callback();
+      //首先验证是否含有汉字
+      if (value) {
+        if (/[\u4E00-\u9FA5]/g.test(value)) {
+          callback(new Error('内容不能包含汉字!'));
+        }
       }
     },
 
