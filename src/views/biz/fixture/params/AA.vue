@@ -325,7 +325,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="lensModel" label="Lens型号" align="center" width="130" />
-      <el-table-column prop="dFovAngle" label="D-FOV角度" align="center" width="130" />
+      <el-table-column prop="dfovAngle" label="D-FOV角度" align="center" width="130" />
       <el-table-column prop="aaDistance" label="AA距离" align="center" width="130">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.fixture_aa_distance" :value="scope.row.aaDistance"></dict-tag>
@@ -751,9 +751,11 @@ export default {
     getList() {
       this.loading = true;
       listFixtureparamsAa(this.queryParams).then(response => {
+        console.log(response)
         this.tableData = response.rows;
         this.total = response.total;
         this.loading = false;
+        console.log(this.tableData)
         this.getFixtureCategoryOptions()
       })
     },
@@ -1200,6 +1202,25 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss" scoped>
+.box-ops {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3px;
+}
 
+//修改行高
+::v-deep .el-table td {
+  padding:0px 0px;  //默认上下是padding12px
+}
+::v-deep .el-table .el-table__cell {
+  height: 5px;
+}
+
+// 修改按钮内边距
+.btn-ops {
+  padding: 2px;
+  margin: 0;
+}
 </style>
