@@ -751,11 +751,9 @@ export default {
     getList() {
       this.loading = true;
       listFixtureparamsAa(this.queryParams).then(response => {
-        console.log(response)
         this.tableData = response.rows;
         this.total = response.total;
         this.loading = false;
-        console.log(this.tableData)
         this.getFixtureCategoryOptions()
       })
     },
