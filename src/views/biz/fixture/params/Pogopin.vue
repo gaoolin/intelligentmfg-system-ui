@@ -575,15 +575,15 @@
 <script>
 import {
   fixtureCategoryList,
-  addFixtureparamsPogopin,
+  addFixtureParamsPogopin,
   addFixtureCategory,
-  updateFixtureparamsPogopin,
+  updateFixtureParamsPogopin,
   deleteFixtureCategory,
   updateFixtureCategory,
-  getFixtureparamsPogopin,
+  getFixtureParamsPogopin,
   fixtureCategoryAll,
-  delFixtureparamsPogopin,
-  listFixtureparamsPogopin,
+  delFixtureParamsPogopin,
+  listFixtureParamsPogopin,
   addFixtureSharedInfo,
   materialIdRules
 } from '@/api/biz/fixture/fixture'
@@ -738,7 +738,7 @@ export default {
     /** 获取pogopin治具因子 */
     getList() {
       this.loading = true
-      listFixtureparamsPogopin(this.queryParams).then(response => {
+      listFixtureParamsPogopin(this.queryParams).then(response => {
         this.tableData = response.rows
         this.total = response.total
         this.loading = false
@@ -805,7 +805,7 @@ export default {
         this.form.submitFlag = 4;
       } else if (flag === 3) { // 修改治具
         this.btnFlag = 3
-        getFixtureparamsPogopin(row.id).then(response => {
+        getFixtureParamsPogopin(row.id).then(response => {
           this.reset()
           this.rulesFlag = 2
           if (response.data != null) {
@@ -819,6 +819,18 @@ export default {
             if (row['isRegularFpc'] != null && row['isRegularFpc'] !== '') {
               response.data['isRegularFpc'] = response.data['isRegularFpc'].toString()
             }
+            if (row['modulePlacement'] != null && row['modulePlacement'] !== '') {
+              response.data['modulePlacement'] = response.data['modulePlacement'].toString()
+            }
+            if (row['mcId'] != null && row['mcId'] !== '') {
+              response.data['mcId'] = response.data['mcId'].toString()
+            }
+            if (row['testFixtures'] != null && row['testFixtures'] !== '') {
+              response.data['testFixtures'] = response.data['testFixtures'].toString()
+            }
+            if (row['prodLevel'] != null && row['prodLevel'] !== '') {
+              response.data['prodLevel'] = response.data['prodLevel'].toString()
+            }
             this.form = response.data
             this.addFixtureDialogVisible = true
             this.dialogReset = false
@@ -831,7 +843,7 @@ export default {
         })
       } else if (flag === 4) { // 用参
         this.btnFlag = 4
-        getFixtureparamsPogopin(row.id).then(response => {
+        getFixtureParamsPogopin(row.id).then(response => {
           this.reset()
           this.rulesFlag = 0
           if (response.data != null) {
@@ -860,7 +872,7 @@ export default {
     handleDelete(row, flag) {
       if (flag === 1) {
         this.$modal.confirm('是否删除治具料号为 ' + row.materialId + '“的数据项？').then(response => {
-          return delFixtureparamsPogopin({
+          return delFixtureParamsPogopin({
             id: row.id,
             materialId: row.materialId,
             fixtureSharedStatus: row.fixtureSharedStatus,
@@ -879,7 +891,7 @@ export default {
       if (this.form.submitFlag === 1) { // 新增料号
         this.$refs['fixtureParamsPogopinForm'].validate(valid => {
           if (valid) {
-            addFixtureparamsPogopin(this.form).then(() => {
+            addFixtureParamsPogopin(this.form).then(() => {
               this.$modal.msgSuccess('新增料号成功！')
               this.addFixtureDialogVisible = false
               this.dialogReset = false
@@ -891,7 +903,7 @@ export default {
       } else if (this.form.submitFlag === 2) { // 修改治具信息
         this.$refs['fixtureParamsPogopinForm'].validate(valid => {
           if (valid) {
-            updateFixtureparamsPogopin(this.form).then(() => {
+            updateFixtureParamsPogopin(this.form).then(() => {
               this.$modal.msgSuccess('修改治具信息成功！')
               this.getList()
             })
@@ -1078,22 +1090,22 @@ export default {
           this.categoryOptions.push(response.data[i]['fixtureCategory'])}})
     },
 
-    /** 关闭模态框 */
-    closeChildDialog(flag, name) {
-      if (flag === 0 || flag === 1) { // 取消
-        this.cancel()
-      } else if (flag ===2) { // 确定
-        this.submitForm()
-        this.$refs['fixtureParamsPogopinForm'].validate(valid => {
-          if (valid) {
-            this.cancel()
-          }
-        })
-      } else if (flag === 3 && name === 'default') { // 重置
-        this.resetFixture()
-        this.reset()
-      }
-    },
+      /** 关闭模态框 */
+      closeChildDialog(flag, name) {
+        if (flag === 0 || flag === 1) { // 取消
+          this.cancel()
+        } else if (flag ===2) { // 确定
+          this.submitForm()
+          this.$refs['fixtureParamsPogopinForm'].validate(valid => {
+            if (valid) {
+              this.cancel()
+            }
+          })
+        } else if (flag === 3 && name === 'default') { // 重置
+          this.resetFixture()
+          this.reset()
+        }
+      },
 
     /** 点击文字，改变状态 */
     toggleAdvanced() {

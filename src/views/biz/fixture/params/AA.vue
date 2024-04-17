@@ -584,21 +584,21 @@
 
 <script>
 import {
-  listFixtureparamsAa,
+  listFixtureParamsAa,
   fixtureCategoryAll,
 } from '@/api/biz/fixture/fixture'
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 
 import ModalUdf from '@/views/biz/common/ModalUdf'
 import {
-  addFixtureparamsAa,
+  addFixtureParamsAa,
   addFixtureCategory,
   addFixtureSharedInfo,
   deleteFixtureCategory,
-  delFixtureparamsAa,
+  delFixtureParamsAa,
   fixtureCategoryList,
-  getFixtureparamsAa,
-  updateFixtureparamsAa,
+  getFixtureParamsAa,
+  updateFixtureParamsAa,
   updateFixtureCategory,
   materialIdRules
 } from '@/api/biz/fixture/fixture'
@@ -750,7 +750,7 @@ export default {
     checkRole,
     getList() {
       this.loading = true;
-      listFixtureparamsAa(this.queryParams).then(response => {
+      listFixtureParamsAa(this.queryParams).then(response => {
         this.tableData = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -816,7 +816,7 @@ export default {
         this.btnFlag = 3
         this.reset() // 重置表单、表单验证
         this.rulesFlag = 2
-        getFixtureparamsAa(row.id).then(response => {
+        getFixtureParamsAa(row.id).then(response => {
           if (response.data != null) {
             // int 类型转换成 string，以便通过字典呈现
             if (row['buckle'] != null && row['buckle'] !== '') {
@@ -863,7 +863,7 @@ export default {
         this.btnFlag = 4
         this.reset() // 重置表单、表单验证
         this.rulesFlag = 0
-        getFixtureparamsAa(row.id).then(response => {
+        getFixtureParamsAa(row.id).then(response => {
           this.reset()
           if (response.data != null) {
             // int 类型转换成 string，以便通过字典呈现
@@ -908,7 +908,7 @@ export default {
     handleDelete(row, flag) {
       if (flag === 1) {
         this.$modal.confirm('是否删除治具料号为 ' + row.materialId + '“的数据项？').then(response => {
-          return delFixtureparamsAa({
+          return delFixtureParamsAa({
             id: row.id,
             materialId: row.materialId,
             fixtureSharedStatus: row.fixtureSharedStatus,
@@ -927,7 +927,7 @@ export default {
       if (this.form.submitFlag === 1) { // 新增料号
         this.$refs['fixtureForm'].validate(valid => {
           if (valid) {
-            addFixtureparamsAa(this.form).then(() => {
+            addFixtureParamsAa(this.form).then(() => {
               this.$modal.msgSuccess('新增料号成功！')
               this.addFixtureDialogVisible = false
               this.dialogReset = false
@@ -939,7 +939,7 @@ export default {
       } else if (this.form.submitFlag === 2) { // 修改治具信息
         this.$refs['fixtureForm'].validate(valid => {
           if (valid) {
-            updateFixtureparamsAa(this.form).then(() => {
+            updateFixtureParamsAa(this.form).then(() => {
               this.$modal.msgSuccess('修改治具信息成功！')
               this.getList()
             })

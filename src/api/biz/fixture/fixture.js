@@ -19,7 +19,7 @@ export function addFixtureSharedInfo(data) {
 }
 
 // 查询治具详细
-export function getFixtureparamsPogopin(id) {
+export function getFixtureParamsPogopin(id) {
   return request({
     url: '/fixture/params/pogopin/' + id,
     method: 'get'
@@ -27,7 +27,7 @@ export function getFixtureparamsPogopin(id) {
 }
 
 // 新增治具
-export function addFixtureparamsPogopin(data) {
+export function addFixtureParamsPogopin(data) {
   return request({
     url: '/fixture/params/pogopin',
     method: 'post',
@@ -36,7 +36,7 @@ export function addFixtureparamsPogopin(data) {
 }
 
 // 修改治具
-export function updateFixtureparamsPogopin(data) {
+export function updateFixtureParamsPogopin(data) {
   return request({
     url: '/fixture/params/pogopin',
     method: 'put',
@@ -45,7 +45,7 @@ export function updateFixtureparamsPogopin(data) {
 }
 
 // 删除治具因子
-export function delFixtureparamsPogopin(data) {
+export function delFixtureParamsPogopin(data) {
   return request({
     url: '/fixture/params/pogopin',
     method: 'delete',
@@ -54,14 +54,14 @@ export function delFixtureparamsPogopin(data) {
 }
 
 // AA
-export function getFixtureparamsAa(id) {
+export function getFixtureParamsAa(id) {
   return request({
     url: '/fixture/params/aa/' + id,
     method: 'get'
   })
 }
 
-export function addFixtureparamsAa(data) {
+export function addFixtureParamsAa(data) {
   return request({
     url: '/fixture/params/aa',
     method: 'post',
@@ -69,7 +69,7 @@ export function addFixtureparamsAa(data) {
   })
 }
 
-export function updateFixtureparamsAa(data) {
+export function updateFixtureParamsAa(data) {
   return request({
     url: '/fixture/params/aa',
     method: 'put',
@@ -77,14 +77,55 @@ export function updateFixtureparamsAa(data) {
   })
 }
 
-
-export function delFixtureparamsAa(data) {
+export function delFixtureParamsAa(data) {
   return request({
     url: '/fixture/params/aa',
     method: 'delete',
     data: data
   })
 }
+
+// Lock
+export function listFixtureParamsLock(query) {
+  return request({
+    url: '/fixture/params/lock/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getFixtureParamsLock(id) {
+  return request({
+    url: '/fixture/params/lock/' + id,
+    method: 'get'
+  })
+}
+
+export function addFixtureParamsLock(data) {
+  return request({
+    url: '/fixture/params/lock',
+    method: 'post',
+    data: data
+  })
+}
+
+export function updateFixtureParamsLock(data) {
+  return request({
+    url: '/fixture/params/lock',
+    method: 'put',
+    data: data
+  })
+}
+
+export function delFixtureParamsLock(data) {
+  return request({
+    url: '/fixture/params/lock',
+    method: 'delete',
+    data: data
+  })
+}
+
+
 // 根据id获取治具共享信息
 export function getFixtureSharedInfo(id) {
   return request({
@@ -195,7 +236,7 @@ export function getFixtureTrendingLineData() {
 }
 
 // 获取pogopin因子
-export function listFixtureparamsPogopin(query) {
+export function listFixtureParamsPogopin(query) {
   return request({
     url: '/fixture/params/pogopin/list',
     method: 'get',
@@ -204,7 +245,7 @@ export function listFixtureparamsPogopin(query) {
 }
 
 // 获取AA因子
-export function listFixtureparamsAa(query) {
+export function listFixtureParamsAa(query) {
   return request({
     url: '/fixture/params/aa/list',
     method: 'get',
