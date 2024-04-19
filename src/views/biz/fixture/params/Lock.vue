@@ -204,39 +204,92 @@
     <el-table-column prop="fixtureName" label="品名" align="center" width="120" fixed show-overflow-tooltip />
     <el-table-column prop="fixtureSpec" label="规格" align="center" width="120" show-overflow-tooltip />
     <el-table-column prop="fixtureCategory" label="治具类型" align="center" width="120" />
-    <el-table-column prop="mcId" label="设备型号" align="center" width="120" />
-    <el-table-column prop="prodLevel" label="产品类型" align="center" width="120" />
+    <el-table-column prop="mcId" label="设备型号" align="center" width="120">
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.fixture_lock_mc_id" :value="scope.row.mcId"></dict-tag>
+      </template>
+    </el-table-column>
+    <el-table-column prop="prodLevel" label="产品类型" align="center" width="120">
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.fixture_lock_prod_level" :value="scope.row.prodLevel"></dict-tag>
+      </template>
+    </el-table-column>
+    <el-table-column prop="fixtureSharedStatus" label="使用机型" align="center" width="120">
+      <template slot-scope="scope">
+        <span v-if="scope.row.fixtureSharedStatus===1">
+          <router-link :to="{path: '/biz/fixture/search', query: {
+            materialId: scope.row.materialId,
+            deptId: queryParams.deptId
+          }}">
+            <dict-tag :options="dict.type.fixture_shared_status" :value="scope.row.fixtureSharedStatus"></dict-tag>
+          </router-link>
+        </span>
+        <span v-else>
+          <dict-tag :options="dict.type.fixture_shared_status" :value="scope.row.fixtureSharedStatus"></dict-tag>
+        </span>
+      </template>
+    </el-table-column>
     <el-table-column prop="vhType" label="V/H型号" align="center" width="120" />
     <el-table-column prop="vhLengthWidth" label="V/H（长*宽）" align="center" width="120" />
-    <el-table-column prop="vcmPinCategory" label="VCM Pin类别" align="center" width="120" />
+    <el-table-column prop="vcmPinCategory" label="VCM Pin类别" align="center" width="120">
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.fixture_lock_vcm_pin_category" :value="scope.row.vcmPinCategory"></dict-tag>
+      </template>
+    </el-table-column>
     <el-table-column prop="vhInnerDiameter" label="V/H内径" align="center" width="120" />
     <el-table-column prop="vcmDriverIc" label="VCM驱动IC" align="center" width="120" />
     <el-table-column prop="lensModel" label="Lens型号" align="center" width="120" />
-    <el-table-column prop="lensThread" label="Lens螺牙" align="center" width="120" />
+    <el-table-column prop="lensThread" label="Lens螺牙" align="center" width="120">
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.fixture_lock_lens_thread" :value="scope.row.lensThread"></dict-tag>
+      </template>
+    </el-table-column>
     <el-table-column prop="lensOutDiameter" label="Lens外径" align="center" width="120" />
     <el-table-column prop="lensBottomOutDiameter" label="Lens底面外径" align="center" width="120" />
     <el-table-column prop="lensEndDiameter" label="Lens端面直径" align="center" width="120" />
-    <el-table-column prop="lensNumberOfPetals" label="Lens花瓣数量" align="center" width="120" />
+    <el-table-column prop="lensNumberOfPetals" label="Lens花瓣数量" align="center" width="120">
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.fixture_lock_lens_number_of_petals" :value="scope.row.lensNumberOfPetals"></dict-tag>
+      </template>
+    </el-table-column>
     <el-table-column prop="remark" label="备注" align="center" width="120" />
-    <el-table-column  label="操作" align="center" width="120" fixed="right" />
+    <el-table-column label="操作" align="center" width="110" fixed="right" >
+      <template slot-scope="scope">
+        <div class="box-ops">
+          <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 2)" >新增共用机型</el-button>
+        </div>
+        <div class="box-ops">
+          <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 3)" >编辑</el-button>
+          <el-button size="mini" type="text" class="btn-ops" @click="handleDelete(scope.row, 1)">删除</el-button>
+          <el-button size="mini" type="text" class="btn-ops" @click="handleAddAndUpdateFixture(scope.row, 4)" >用参</el-button>
+        </div>
+      </template>
+    </el-table-column>
   </el-table>
+  <pagination
+    v-show="total>0"
+    :total="total"
+    :page.sync="queryParams.pageNum"
+    :limit.sync="queryParams.pageSize"
+    @pagination="getList"
+  />
 
   <modal-udf :title="title" :name="'fixtureParamsLockDialog'" :dialogShow="addFixtureDialogVisible" :width="'30%'" :is-close-on-click="false" :reset-btn="dialogReset" @closeChildDialog="closeChildDialog" v-dialog-drag-width v-dialog-drag-height>
     <el-form ref="fixtureForm" :model="form" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesUpdate : rulesFlag === 3 ? rules : rules" label-width="110px">
     <el-form-item label="料号" prop="materialId">
-      <el-input v-model="form.materialId" placeholder="料号" clearable />
+      <el-input v-model="form.materialId" :disabled="materialIdDisabled" placeholder="料号" clearable />
     </el-form-item>
       <el-form-item label="品名" prop="fixtureName">
-        <el-input v-model="form.fixtureName" placeholder="品名" clearable />
+        <el-input v-model="form.fixtureName" :disabled="materialIdDisabled" placeholder="品名" clearable />
       </el-form-item>
       <el-form-item label="规格" prop="fixtureSpec">
-        <el-input v-model="form.fixtureSpec" placeholder="规格" clearable />
+        <el-input v-model="form.fixtureSpec" :disabled="materialIdDisabled" placeholder="规格" clearable />
       </el-form-item>
       <el-form-item label="版本" prop="fixtureVersion">
-        <el-input v-model="form.fixtureVersion" placeholder="版本" clearable />
+        <el-input v-model="form.fixtureVersion" :disabled="materialIdDisabled" placeholder="版本" clearable />
       </el-form-item>
       <el-form-item label="治具类型" prop="fixtureCategory">
-        <el-select v-model="form.fixtureCategory" placeholder="治具类型" @change="handleQuery" clearable>
+        <el-select v-model="form.fixtureCategory" placeholder="治具类型" clearable>
         <el-option
           v-for="item in categoryOptions"
           :key="item"
@@ -245,8 +298,11 @@
         />
         </el-select>
       </el-form-item>
-      <el-form-item label="设备型号" prop="mcId">
-        <el-select v-model="form.mcId" placeholder="设备型号" @change="handleQuery" clearable>
+      <el-form-item label="使用机型" prop="prodType" v-if="prodTypeShow">
+        <el-input v-model="form.prodType" placeholder="使用机型" clearable />
+      </el-form-item>
+      <el-form-item label="设备型号" prop="mcId" v-if="formItemShow">
+        <el-select v-model="form.mcId" placeholder="设备型号" clearable>
           <el-option
             v-for="item in dict.type.fixture_lock_mc_id"
             :key="item.value"
@@ -255,23 +311,23 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="产品类型" prop="prodLevel">
-        <el-select v-model="form.prodLevel" placeholder="产品类型" clearable>
-          <el-option
+      <el-form-item label="产品类型" prop="prodLevel" v-if="formItemShow">
+        <el-radio-group v-model="form.prodLevel" palceholder="产品类型" clearable>
+          <el-radio
             v-for="item in dict.type.fixture_lock_prod_level"
             :key="item.value"
-            :label="item.label"
+            :label="item.value"
             :value="item.value"
-          />
-        </el-select>
+          >{{ item.label }}</el-radio>
+        </el-radio-group>
       </el-form-item>
-      <el-form-item label="V/H型号" prop="vhType">
+      <el-form-item label="V/H型号" prop="vhType" v-if="formItemShow">
         <el-input v-model="form.vhType" placeholder="V/H型号" clearable />
       </el-form-item>
-      <el-form-item label="V/H（长*宽）" prop="vhLengthWidth">
+      <el-form-item label="V/H（长*宽）" prop="vhLengthWidth" v-if="formItemShow">
         <el-input v-model="form.vhLengthWidth" placeholder="V/H（长*宽）" clearable />
       </el-form-item>
-      <el-form-item label="VCM Pin类别" prop="vcmPinCategory">
+      <el-form-item label="VCM Pin类别" prop="vcmPinCategory" v-if="formItemShow">
         <el-select v-model="form.vcmPinCategory" placeholder="VCM Pin类别" clearable>
           <el-option
             v-for="item in dict.type.fixture_lock_vcm_pin_category"
@@ -281,32 +337,46 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="V/H内径" prop="vhInnerDiameter">
+      <el-form-item label="V/H内径" prop="vhInnerDiameter" v-if="formItemShow">
         <el-input v-model="form.vhInnerDiameter" placeholder="V/H内径" clearable />
       </el-form-item>
-      <el-form-item label="VCM驱动IC" prop="vcmDriverIc">
+      <el-form-item label="VCM驱动IC" prop="vcmDriverIc" v-if="formItemShow">
         <el-input v-model="form.vcmDriverIc" placeholder="VCM驱动IC" clearable />
       </el-form-item>
-      <el-form-item label="Lens型号" prop="lensModel">
+      <el-form-item label="Lens型号" prop="lensModel" v-if="formItemShow">
         <el-input v-model="form.lensModel" placeholder="Lens型号" clearable />
       </el-form-item>
-      <el-form-item label="Lens螺牙" prop="lensThread">
-        <el-input v-model="form.lensThread" placeholder="Lens螺牙" clearable />
+      <el-form-item label="Lens螺牙" prop="lensThread" v-if="formItemShow">
+        <el-radio-group v-model="form.lensThread" placeholder="Lens螺牙" clearable>
+          <el-radio
+            v-for="item in dict.type.fixture_lock_lens_thread"
+            :key="item.value"
+            :label="item.value"
+          >{{ item.label }}</el-radio>"
+        </el-radio-group>
+
       </el-form-item>
-      <el-form-item label="Lens外径" prop="lensOuterDiameter">
+      <el-form-item label="Lens外径" prop="lensOuterDiameter" v-if="formItemShow">
         <el-input v-model="form.lensOuterDiameter" placeholder="Lens外径" clearable />
       </el-form-item>
-      <el-form-item label="Lens底面外径" prop="lensBottomOuterDiameter">
+      <el-form-item label="Lens底面外径" prop="lensBottomOuterDiameter" v-if="formItemShow">
         <el-input v-model="form.lensBottomOuterDiameter" placeholder="Lens底面外径" clearable />
       </el-form-item>
-      <el-form-item label="Lens端面直径" prop="lensEndDiameter">
+      <el-form-item label="Lens端面直径" prop="lensEndDiameter" v-if="formItemShow">
         <el-input v-model="form.lensEndDiameter" placeholder="Lens端面直径" clearable />
       </el-form-item>
-      <el-form-item label="Lens花瓣数量" prop="lensNumberOfPetals">
-        <el-input v-model="form.lensNumberOfPetals" placeholder="Lens花瓣数量" clearable />
+      <el-form-item label="Lens花瓣数量" prop="lensNumberOfPetals" v-if="formItemShow">
+        <el-select v-model="form.lensNumberOfPetals" placeholder="Lens花瓣数量" clearable>
+          <el-option
+            v-for="item in dict.type.fixture_lock_lens_number_of_petals"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
-        <el-input v-model="form.remark" placeholder="备注" clearable />
+        <el-input v-model="form.remark" placeholder="备注" type="textarea" clearable />
       </el-form-item>
     </el-form>
   </modal-udf>
@@ -367,14 +437,15 @@ import {
   addFixtureParamsLock,
   addFixtureSharedInfo,
   updateFixtureParamsLock,
-  materialIdRules
+  materialIdRules,
+  delFixtureParamsLock
 } from '@/api/biz/fixture/fixture'
 import ModalUdf from '@/views/biz/common/ModalUdf'
 
 export default {
   name: 'Lock',
   components: { ModalUdf },
-  dicts: ['fixture_lock_mc_id', 'fixture_lock_prod_level', 'fixture_lock_vcm_pin_category', 'fixture_lock_lens_thread',
+  dicts: ['fixture_shared_status', 'fixture_lock_mc_id', 'fixture_lock_prod_level', 'fixture_lock_vcm_pin_category', 'fixture_lock_lens_thread',
     'fixture_lock_lens_number_of_petals'],
 
   data() {
@@ -436,10 +507,12 @@ export default {
         deptId: '211',
         id: null,
         materialId: null,
-        prodType: null,
-        deviation: 0,
+        fixtureName: null,
+        fixtureSpec: null,
+        fixtureVersion: null,
         fixtureCategory: null,
         mcId: null,
+        prodLevel: null,
         vhType: null,
         vhLengthWidth: null,
         vcmPinCategory: null,
@@ -449,40 +522,41 @@ export default {
         lensThread: null,
         lensOuterDiameter: null,
         lensBottomOuterDiameter: null,
-        remark: null,
         lensEndDiameter: null,
         lensNumberOfPetals: null,
+        prodType: null,
+        remark: null
       },
       rules: {
         materialId: [
-          { required: true, message: '请输入需要新增的料号', trigger: ['blur', 'change'] },
-          { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: ['blur', 'change'] },
-          { validator: this.materialIdRules, trigger: 'blur' }],
+          { required: true,  message: '请输入需要新增的料号', trigger: 'blur' },
+          { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'change' },
+          { validator: this.materialIdRules, trigger: 'blur'}],
         fixtureCategory: [
-          { required: true, message: '请输入治具类型', trigger: 'change' },
-          { validator: this.fixtureCategoryRules, trigger: 'change' }],
+          { required: true, type: 'string', message: '请输入治具类型', trigger: 'change' }],
         prodType: [
-          { required: true, message: '请输入机种名称', trigger: ['blur', 'change'] },
-          { validator: this.prodTypeRules, trigger: ['blur', 'change'] }
+          { required: true, message: '请输入机种名称', trigger: 'blur' },
+          { validator: this.prodTypeRules, trigger: 'blur' }
         ]
       },
       rulesAddShared: {
         prodType: [
-          { required: true, message: '请输入机种名称', trigger: ['blur', 'change'] },
-          { validator: this.prodTypeRules, trigger: ['blur', 'change'] }
+          { required: true, message: '请输入机种名称', trigger: 'blur' },
+          { validator: this.prodTypeRules, trigger: 'blur' }
         ]
       },
       rulesUpdate: {
         fixtureCategory: [
-          { required: true, message: '请输入治具类型', trigger: 'change' },
-          { validator: this.fixtureCategoryRules, trigger: 'change' }],
+          { required: true, type: 'string', message: '请输入治具类型', trigger: 'change' },],
         prodType: [
-          { required: true, message: '请输入机种名称', trigger: ['blur', 'change'] },
-          { validator: this.prodTypeRules, trigger: ['blur', 'change'] }
+          { required: true, message: '请输入机种名称', trigger: 'blur' },
+          { validator: this.prodTypeRules, trigger: 'blur' }
         ]
       },
       rulesFlag: 0,
       btnFlag: null,
+      // flagChangeCnt: 0,
+      // isFormChange: false,
       advanced: false
     }
   },
@@ -490,6 +564,7 @@ export default {
   mounted() {
     this.getList()
   },
+
   methods: {
     checkPermi,
     checkRole,
@@ -516,6 +591,7 @@ export default {
       this.handleQuery()
     },
     resetFixture() {
+      this.reset();
       this.resetForm('fixtureForm')
     },
 
@@ -537,18 +613,20 @@ export default {
               this.addFixtureDialogVisible = false
               this.dialogReset = false
               this.getList()
-              this.reset()
+              this.resetFixture() // 重置表单、表单验证
             })
           }
         })
       } else if (this.form.submitFlag === 2) { // 修改治具信息
         this.$refs['fixtureForm'].validate(valid => {
           if (valid) {
-            updateFixtureParamsLock(this.form).then(() => {
-              this.$modal.msgSuccess('修改治具信息成功！')
-              this.getList()
-            })
-          }
+              updateFixtureParamsLock(this.form).then(() => {
+                this.$modal.msgSuccess('修改治具信息成功！')
+                this.getList()
+              })
+            } else {
+              this.$modal.msgWarning('数据没有修改，请修改后再提交！')
+            }
         })
       } else if (this.form.submitFlag === 3 && this.activeName === 'first') { // 新增治具类型
         if (this.fixtureCategoryForm.fixtureCategory !== null || this.fixtureCategoryForm.fixtureCategory !== '') {
@@ -564,7 +642,7 @@ export default {
           if (valid) {
             addFixtureSharedInfo(this.form).then(() => {
               this.$modal.msgSuccess("新增治具共用机型成功！")
-              this.reset()
+              this.resetFixture() // 重置表单、表单验证
               this.getList()
             })
           }
@@ -604,7 +682,7 @@ export default {
       this.prodTypeShow = false;
 
       if (!(this.btnFlag === 1)) {
-        this.reset()
+        this.resetFixture() // 重置表单、表单验证
       }
       this.btnFlag = null
     },
@@ -652,33 +730,24 @@ export default {
         deptId: '211',
         id: null,
         materialId: null,
-        fixtureCategory: null,
-        buckle: null,
         fixtureName: null,
+        fixtureSpec: null,
         fixtureVersion: null,
-        prodType: null,
-        connectorModel: null,
-        connectorTtlWidth: null,
-        connectorTtlLength: null,
-        connectorExposedCopperWidth: null,
-        pinPins: null,
-        pinSpacing: null,
-        isFixedPin: null,
-        connectorSheetWidth: null,
-        connectorSheetLength: null,
-        moduleHeadWidth: null,
-        moduleHeadLength: null,
-        moduleBodyHeight: null,
-        heightOfLensCenterToConnectorCenter: null,
-        connectorSubstrateThickness: null,
-        leftRightOffsetHeightHensCenterToConnectorCenter: null,
-        fovAngle: null,
-        isRegularFpc: null,
-        fpcMaximumWidth: null,
-        modulePlacement: null,
+        fixtureCategory: null,
         mcId: null,
-        testFixtures: null,
         prodLevel: null,
+        vhType: null,
+        vhLengthWidth: null,
+        vcmPinCategory: null,
+        vhInnerDiameter: null,
+        vcmDriverIc: null,
+        lensModel: null,
+        lensThread: null,
+        lensOuterDiameter: null,
+        lensBottomOuterDiameter: null,
+        lensEndDiameter: null,
+        lensNumberOfPetals: null,
+        prodType: null,
         remark: null
       }
       this.resetForm('form')
@@ -720,12 +789,15 @@ export default {
         this.cancel()
       } else if (flag ===2) { // 确定
         this.submitForm()
-        this.$refs['fixtureForm'].validate(valid => {
-          if (valid) {
-            this.cancel()
-          }
-        })
-      } else if (flag === 3 && name === 'default') { // 重置
+        if (this.activeName === 'second') {
+        } else {
+          this.$refs['fixtureForm'].validate(valid => {
+            if (valid) {
+              this.cancel()
+            }
+          })
+        }
+      } else if (flag === 3 && name === 'fixtureParamsLockDialog') { // 重置
         this.resetFixture()
         this.reset()
       }
@@ -769,7 +841,7 @@ export default {
         this.btnFlag = 2
         this.addFixtureDialogVisible = true;
         this.title = "添加共用机型";
-        this.reset() // 重置表单、表单验证
+        this.resetFixture() // 重置表单、表单验证
         this.rulesFlag = 1;
         this.materialIdDisabled = true;
         this.materialInfoDisabled = true;
@@ -780,27 +852,17 @@ export default {
         this.form.fixtureSpec = row.fixtureSpec;
         this.form.fixtureCategory = row.fixtureCategory;
         this.form.fixtureVersion = row.fixtureVersion;
-        this.form.buckle = row.buckle === null ? null : row.buckle.toString();
         this.form.cId = row.cId;
         this.form.submitFlag = 4;
       } else if (flag === 3) { // 修改治具
         this.btnFlag = 3
-        this.reset() // 重置表单、表单验证
+        this.resetFixture() // 重置表单、表单验证
         this.rulesFlag = 2
         getFixtureParamsLock(row.id).then(response => {
           if (response.data != null) {
             // int 类型转换成 string，以便通过字典呈现
-            if (row['buckle'] != null && row['buckle'] !== '') {
-              response.data['buckle'] = response.data['buckle'].toString()
-            }
             if (row['fixtureSharedStatus'] != null && row['fixtureSharedStatus'] !== '') {
               response.data['fixtureSharedStatus'] = response.data['fixtureSharedStatus'].toString()
-            }
-            if (row['processRequirements'] != null && row['processRequirements'] !== '') {
-              response.data['processRequirements'] = response.data['processRequirements'].toString()
-            }
-            if (row['modulePlacement'] != null && row['modulePlacement'] !== '') {
-              response.data['modulePlacement'] = response.data['modulePlacement'].toString()
             }
             if (row['mcId'] != null && row['mcId'] !== '') {
               response.data['mcId'] = response.data['mcId'].toString()
@@ -808,17 +870,14 @@ export default {
             if (row['prodLevel'] != null && row['prodLevel'] !== '') {
               response.data['prodLevel'] = response.data['prodLevel'].toString()
             }
-            if (row['aaClampingDirection'] != null && row['aaClampingDirection'] !== '') {
-              response.data['aaClampingDirection'] = response.data['aaClampingDirection'].toString()
+            if (row['vcmPinCategory'] != null && row['vcmPinCategory'] !== '') {
+              response.data['vcmPinCategory'] = response.data['vcmPinCategory'].toString()
             }
-            if (row['motorPinDirection'] != null && row['motorPinDirection'] !== '') {
-              response.data['motorPinDirection'] = response.data['motorPinDirection'].toString()
+            if (row['lensThread'] != null && row['lensThread'] !== '') {
+              response.data['lensThread'] = response.data['lensThread'].toString()
             }
-            if (row['motorPowerPinDirection'] != null && row['motorPowerPinDirection'] !== '') {
-              response.data['motorPowerPinDirection'] = response.data['motorPowerPinDirection'].toString()
-            }
-            if (row['aaDistance'] != null && row['aaDistance'] !== '') {
-              response.data['aaDistance'] = response.data['aaDistance'].toString()
+            if (row['lensNumberOfPetals'] != null && row['lensNumberOfPetals'] !== '') {
+              response.data['lensNumberOfPetals'] = response.data['lensNumberOfPetals'].toString()
             }
             this.form = response.data
             this.addFixtureDialogVisible = true
@@ -832,20 +891,14 @@ export default {
         })
       } else if (flag === 4) { // 用参
         this.btnFlag = 4
-        this.reset() // 重置表单、表单验证
+        this.resetFixture() // 重置表单、表单验证
         this.rulesFlag = 0
         getFixtureParamsLock(row.id).then(response => {
-          this.reset()
+          this.resetFixture() // 重置表单、表单验证
           if (response.data != null) {
             // int 类型转换成 string，以便通过字典呈现
-            if (row['buckle'] != null && row['buckle'] !== '') {
-              response.data['buckle'] = response.data['buckle'].toString()
-            }
             if (row['fixtureSharedStatus'] != null && row['fixtureSharedStatus'] !== '') {
               response.data['fixtureSharedStatus'] = response.data['fixtureSharedStatus'].toString()
-            }
-            if (row['modulePlacement'] != null && row['modulePlacement'] !== '') {
-              response.data['modulePlacement'] = response.data['modulePlacement'].toString()
             }
             if (row['mcId'] != null && row['mcId'] !== '') {
               response.data['mcId'] = response.data['mcId'].toString()
@@ -853,14 +906,14 @@ export default {
             if (row['prodLevel'] != null && row['prodLevel'] !== '') {
               response.data['prodLevel'] = response.data['prodLevel'].toString()
             }
-            if (row['aaClampingDirection'] != null && row['aaClampingDirection'] !== '') {
-              response.data['aaClampingDirection'] = response.data['aaClampingDirection'].toString()
+            if (row['vcmPinCategory'] != null && row['vcmPinCategory'] !== '') {
+              response.data['vcmPinCategory'] = response.data['vcmPinCategory'].toString()
             }
-            if (row['motorPinDirection'] != null && row['motorPinDirection'] !== '') {
-              response.data['motorPinDirection'] = response.data['motorPinDirection'].toString()
+            if (row['lensThread'] != null && row['lensThread'] !== '') {
+              response.data['lensThread'] = response.data['lensThread'].toString()
             }
-            if (row['aaDistance'] != null && row['aaDistance'] !== '') {
-              response.data['aaDistance'] = response.data['aaDistance'].toString()
+            if (row['lensNumberOfPetals'] != null && row['lensNumberOfPetals'] !== '') {
+              response.data['lensNumberOfPetals'] = response.data['lensNumberOfPetals'].toString()
             }
             this.form = response.data
             this.form.materialId = null
@@ -872,6 +925,24 @@ export default {
             this.othersDisabled = false
             this.form.submitFlag = 1
           }
+        })
+      }
+    },
+
+    /** 删除按钮操作 */
+    handleDelete(row, flag) {
+      if (flag === 1) {
+        this.$modal.confirm('是否删除治具料号为 ' + row.materialId + '“的数据项？').then(response => {
+          return delFixtureParamsLock({
+            id: row.id,
+            materialId: row.materialId,
+            fixtureSharedStatus: row.fixtureSharedStatus,
+            deptId: 211
+          }).then(() => {
+            this.$modal.msgSuccess('删除成功！')
+            this.getList()
+            this.reset()
+          }).catch(() => {})
         })
       }
     },
@@ -925,7 +996,30 @@ export default {
     tableHeaderCellStyle({ row, column, rowIndex, columnIndex }) {
 
     },
-  }
+  },
+
+/*  watch: {
+    // 监听编辑是否有修改 - departAddForm
+    form: {
+      handler(val, oldVal) {
+        if (this.addFixtureDialogVisible === true) { // 等于编辑时才去监听
+          if (val.materialId !== oldVal.materialId || val.fixtureCategory !== oldVal.fixtureCategory || val.prodType !== oldVal.prodType ||
+            val.prodLevel !== oldVal.prodLevel || val.vcmPinCategory !== oldVal.vcmPinCategory || val.lensThread !== oldVal.lensThread ||
+            val.mcId !== oldVal.mcId || val.lensNumberOfPetals !== oldVal.lensNumberOfPetals || val.vhType !== oldVal.vhType ||
+            val.vhLengthWidth !== oldVal.vhLengthWidth || val.vhInnerDiameter !== oldVal.vhInnerDiameter || val.vcmDriverIc !== oldVal.vcmDriverIc ||
+            val.lensModel !== oldVal.lensModel || val.lensOuterDiameter !== oldVal.lensOuterDiameter || val.lensBottomOuterDiameter !== oldVal.lensBottomOuterDiameter ||
+            val.lensEndDiameter !== oldVal.lensEndDiameter || val.prodType !== oldVal.prodType || val.remark !== oldVal.remark) {
+            console.log("66666")
+            this.flagChangeCnt ++;
+          }
+          if (this.flagChangeCnt > 1) {
+            this.isFormChange = true  // 弹框提示
+            console.log(this.flagChangeCnt)
+          }
+        }
+      },
+    }
+  }*/
 }
 </script>
 

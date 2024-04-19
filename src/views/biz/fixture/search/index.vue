@@ -92,7 +92,7 @@
         <template slot-scope="scope">{{scope.row.fixtureCategory}}</template>
       </el-table-column>
       <el-table-column label="治具版本" align="center" min-width="35" prop="fixtureVersion" fixed />
-      <el-table-column label="连接器朝向" align="center" prop="buckle" fixed>
+      <el-table-column label="连接器朝向" align="center" prop="buckle" fixed v-if="queryParams.deptId===211">
         <template slot-scope="scope">
           <dict-tag v-if="queryParams.deptId === '209'" :options="dict.type.fixture_buckle_status" :value="scope.row.buckle" />
           <dict-tag v-else-if="queryParams.deptId === '210'" :options="dict.type.fixture_aa_buckle_status" :value="scope.row.buckle" />

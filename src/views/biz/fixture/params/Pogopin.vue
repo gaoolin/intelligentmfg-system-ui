@@ -701,7 +701,7 @@ export default {
       rules: {
         materialId: [
           { required: true,  message: '请输入需要新增的料号', trigger: 'blur' },
-          { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'blur' },
+          { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'change' },
           { validator: this.materialIdRules, trigger: 'blur'}],
         fixtureCategory: [
           { required: true, type: 'string', message: '请输入治具类型', trigger: 'change' }],
@@ -1096,11 +1096,14 @@ export default {
           this.cancel()
         } else if (flag ===2) { // 确定
           this.submitForm()
-          this.$refs['fixtureParamsPogopinForm'].validate(valid => {
-            if (valid) {
-              this.cancel()
-            }
-          })
+          if (this.activeName === 'second') {
+          } else {
+            this.$refs['fixtureForm'].validate(valid => {
+              if (valid) {
+                this.cancel()
+              }
+            })
+          }
         } else if (flag === 3 && name === 'default') { // 重置
           this.resetFixture()
           this.reset()

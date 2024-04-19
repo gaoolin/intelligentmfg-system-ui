@@ -711,30 +711,28 @@ export default {
       },
       rules: {
         materialId: [
-          { required: true, message: '请输入需要新增的料号', trigger: ['blur', 'change'] },
-          { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: ['blur', 'change'] },
-          { validator: this.materialIdRules, trigger: 'blur' }],
+          { required: true,  message: '请输入需要新增的料号', trigger: 'blur' },
+          { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'change' },
+          { validator: this.materialIdRules, trigger: 'blur'}],
         fixtureCategory: [
-          { required: true, message: '请输入治具类型', trigger: 'change' },
-          { validator: this.fixtureCategoryRules, trigger: 'change' }],
+          { required: true, type: 'string', message: '请输入治具类型', trigger: 'change' }],
         prodType: [
-          { required: true, message: '请输入机种名称', trigger: ['blur', 'change'] },
-          { validator: this.prodTypeRules, trigger: ['blur', 'change'] }
+          { required: true, message: '请输入机种名称', trigger: 'blur' },
+          { validator: this.prodTypeRules, trigger: 'blur' }
         ]
       },
       rulesAddShared: {
         prodType: [
-          { required: true, message: '请输入机种名称', trigger: ['blur', 'change'] },
-          { validator: this.prodTypeRules, trigger: ['blur', 'change'] }
+          { required: true, message: '请输入机种名称', trigger: 'blur' },
+          { validator: this.prodTypeRules, trigger: 'blur' }
         ]
       },
       rulesUpdate: {
         fixtureCategory: [
-          { required: true, message: '请输入治具类型', trigger: 'change' },
-          { validator: this.fixtureCategoryRules, trigger: 'change' }],
+          { required: true, type: 'string', message: '请输入治具类型', trigger: 'change' },],
         prodType: [
-          { required: true, message: '请输入机种名称', trigger: ['blur', 'change'] },
-          { validator: this.prodTypeRules, trigger: ['blur', 'change'] }
+          { required: true, message: '请输入机种名称', trigger: 'blur' },
+          { validator: this.prodTypeRules, trigger: 'blur' }
         ]
       },
       rulesFlag: 0,
@@ -1134,11 +1132,14 @@ export default {
         this.cancel()
       } else if (flag ===2) { // 确定
         this.submitForm()
-        this.$refs['fixtureForm'].validate(valid => {
-          if (valid) {
-            this.cancel()
-          }
-        })
+        if (this.activeName === 'second') {
+        } else {
+          this.$refs['fixtureForm'].validate(valid => {
+            if (valid) {
+              this.cancel()
+            }
+          })
+        }
       } else if (flag === 3 && name === 'fixtureParamsAaDialog') { // 重置
         this.reset()
       }
