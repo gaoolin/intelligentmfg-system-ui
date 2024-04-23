@@ -115,7 +115,18 @@
       <el-table-column label="操作" align="center" min-width="35" style="font-size: 8px" v-if="checkRole(['fixture:a', 'fixture:b'])">
         <template slot-scope="scope">
           <el-button size="mini" type="text" @click="handleEdit(scope.row)">修改</el-button>
-          <el-button type="text" size="mini" @click="handleDelete(scope.row)">删除</el-button>
+          <el-popover
+            style="margin-left: 5px"
+            placement="top"
+            width="160"
+            content="请选择要删除的内容">
+            <p>请选择要删除的内容！</p>
+            <div style="text-align: right; margin: 0">
+              <el-button size="mini" type="text" @click="handleDelete(scope.row, 1)">料号</el-button>
+              <el-button type="primary" size="mini" @click="handleDelete(scope.row, 2)">机型</el-button>
+            </div>
+            <el-button slot="reference" size="mini" type="text">删除</el-button>
+          </el-popover>
         </template>
       </el-table-column>
     </el-table>
@@ -148,10 +159,18 @@
         <el-form-item label="治具版本" prop="fixtureVersion">
           <el-input v-model="form.fixtureVersion" placeholder="请输入治具版本" :disabled="true" />
         </el-form-item>
-        <el-form-item label="连接器朝向" prop="buckle">
-          <el-radio-group v-model="form.buckle" placeholder="请输入连接器朝向" :disabled="true">
+        <el-form-item label="连接器朝向" prop="buckle" v-if="queryParams.deptId!=='211'">
+          <el-radio-group v-model="form.buckle" placeholder="请输入连接器朝向" :disabled="true" v-if="queryParams.deptId==='209'">
             <el-radio
               v-for="dict in dict.type.fixture_buckle_status"
+              :key="dict.value"
+              :label="dict.value"
+            >{{ dict.label }}
+            </el-radio>
+          </el-radio-group>
+          <el-radio-group v-model="form.buckle" placeholder="请输入连接器朝向" :disabled="true" v-else-if="queryParams.deptId==='210'">
+            <el-radio
+              v-for="dict in dict.type.fixture_aa_buckle_status"
               :key="dict.value"
               :label="dict.value"
             >{{ dict.label }}
@@ -412,7 +431,7 @@ export default {
         }
       },
     /** 删除按钮操作 */
-    handleDelete(row) {
+/*    handleDelete(row) {
       if (this.isDeptIdAll()) {
           this.$modal.confirm("是否删除治具料号为 " + row.materialId + '“的数据项？').then(() => {
             return delFixtureSharedInfo({
@@ -427,11 +446,45 @@ export default {
             }).catch(() => {});
           })
       }
+    },*/
+    handleDelete(row, flag) {
+      if (flag === 1) {
+        this.$modal.confirm("是否删除料号为:" + row.materialId + '的数据项？').then(response => {
+
+          return delFixtureSharedInfo({
+            id: row.id,
+            materialId: row.materialId,
+            fixtureCategory: row.fixtureCategory,
+            deptId: this.queryParams.deptId
+          }).then(() => {
+            this.$modal.msgSuccess("删除成功");
+            this.getList();
+            this.reset();
+          }).catch(() => {});
+        })
+      } else if (flag === 2) {
+        this.$modal.confirm('是否确认删除料号为:' + row.materialId + ', 型号为:' + row.prodType + '的数据项？').then(response => {
+
+          return delFixtureSharedInfo({
+            id: row.id,
+            materialId: row.materialId,
+            fixtureCategory: row.fixtureCategory,
+            prodType: row.prodType,
+            deptId: this.queryParams.deptId
+          }).then(() => {
+            this.$modal.msgSuccess("删除成功");
+            this.getList();
+            this.reset();
+          }).catch(() => {});
+        })
+      }
     },
     handleEdit(row) {
       if (this.isDeptIdAll()) {
         getFixtureSharedInfo(row.id).then(response => {
-          response.data['buckle'] = response.data['buckle'].toString()
+          if (row['buckle'] != null && row['buckle'] !== '') {
+            response.data['buckle'] = response.data['buckle'].toString()
+          }
           this.form = response.data
           this.dialogVisible = true
           this.title = '修改治具信息'
@@ -562,11 +615,9 @@ export default {
     if (this.$route.query.materialId === undefined || this.$route.query.materialId === null || this.$route.query.materialId === '') {
       this.queryParams.materialId = null
       this.queryParams.deptId = null
-      console.log('未选择料号')
     } else {
       this.queryParams.materialId = this.$route.query.materialId
       this.queryParams.deptId = this.$route.query.deptId
-      console.log('已选择料号')
     }
   }
 };

@@ -769,6 +769,7 @@ export default {
       this.handleQuery()
     },
     resetFixture() {
+      this.reset();
       this.resetForm('fixtureForm')
     },
 
@@ -796,7 +797,7 @@ export default {
         this.btnFlag = 2
         this.addFixtureDialogVisible = true;
         this.title = "添加共用机型";
-        this.reset() // 重置表单、表单验证
+        this.resetFixture() // 重置表单、表单验证
         this.rulesFlag = 1;
         this.materialIdDisabled = true;
         this.materialInfoDisabled = true;
@@ -812,7 +813,7 @@ export default {
         this.form.submitFlag = 4;
       } else if (flag === 3) { // 修改治具
         this.btnFlag = 3
-        this.reset() // 重置表单、表单验证
+        this.resetFixture() // 重置表单、表单验证
         this.rulesFlag = 2
         getFixtureParamsAa(row.id).then(response => {
           if (response.data != null) {
@@ -859,10 +860,10 @@ export default {
         })
       } else if (flag === 4) { // 用参
         this.btnFlag = 4
-        this.reset() // 重置表单、表单验证
+        this.resetFixture() // 重置表单、表单验证
         this.rulesFlag = 0
         getFixtureParamsAa(row.id).then(response => {
-          this.reset()
+          this.resetFixture()
           if (response.data != null) {
             // int 类型转换成 string，以便通过字典呈现
             if (row['buckle'] != null && row['buckle'] !== '') {
@@ -930,7 +931,7 @@ export default {
               this.addFixtureDialogVisible = false
               this.dialogReset = false
               this.getList()
-              this.reset()
+              this.resetFixture() // 重置表单、表单验证
             })
           }
         })
@@ -957,7 +958,7 @@ export default {
           if (valid) {
             addFixtureSharedInfo(this.form).then(() => {
               this.$modal.msgSuccess("新增治具共用机型成功！")
-              this.reset()
+              this.resetFixture()
               this.getList()
             })
           }
@@ -997,7 +998,7 @@ export default {
       this.prodTypeShow = false;
 
       if (!(this.btnFlag === 1)) {
-        this.reset()
+        this.resetFixture()
       }
       this.btnFlag = null
     },
@@ -1132,7 +1133,7 @@ export default {
         this.cancel()
       } else if (flag ===2) { // 确定
         this.submitForm()
-        if (this.activeName === 'second') {
+        if (this.activeName === 'second' || this.activeName === 'first') {
         } else {
           this.$refs['fixtureForm'].validate(valid => {
             if (valid) {
@@ -1141,7 +1142,7 @@ export default {
           })
         }
       } else if (flag === 3 && name === 'fixtureParamsAaDialog') { // 重置
-        this.reset()
+        this.resetFixture()
       }
     },
 

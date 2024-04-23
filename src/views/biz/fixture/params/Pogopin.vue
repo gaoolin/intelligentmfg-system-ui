@@ -379,7 +379,7 @@
 
   <!--   添加治具对话框   -->
   <modal-udf :title="title" :dialogShow="addFixtureDialogVisible" :width="'30%'" :isCloseOnClick="false" :resetBtn="dialogReset" @closeChildDialog="closeChildDialog" v-dialogDrag v-dialogDragWidth v-dialogDragHeight >
-    <el-form ref="fixtureParamsPogopinForm" :model="form" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesUpdate : rulesFlag === 3 ? rules : rules" label-width="110px" >
+    <el-form ref="fixtureForm" :model="form" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesUpdate : rulesFlag === 3 ? rules : rules" label-width="110px" >
       <el-form-item label="料号" prop="materialId">
         <el-input v-model="form.materialId" :disabled="materialIdDisabled" placeholder="请输入料号" />
       </el-form-item>
@@ -761,7 +761,7 @@ export default {
     resetFixture() {
       //重置form表单
       // this.$refs['fixtureForm'].resetFields();
-      this.resetForm('fixtureParamsPogopinForm')
+      this.resetForm('fixtureForm')
       // this.resetForm('form')
     },
 
@@ -889,7 +889,7 @@ export default {
     /** 提交按钮 */
     submitForm() {
       if (this.form.submitFlag === 1) { // 新增料号
-        this.$refs['fixtureParamsPogopinForm'].validate(valid => {
+        this.$refs['fixtureForm'].validate(valid => {
           if (valid) {
             addFixtureParamsPogopin(this.form).then(() => {
               this.$modal.msgSuccess('新增料号成功！')
@@ -901,7 +901,7 @@ export default {
           }
         })
       } else if (this.form.submitFlag === 2) { // 修改治具信息
-        this.$refs['fixtureParamsPogopinForm'].validate(valid => {
+        this.$refs['fixtureForm'].validate(valid => {
           if (valid) {
             updateFixtureParamsPogopin(this.form).then(() => {
               this.$modal.msgSuccess('修改治具信息成功！')
@@ -1095,11 +1095,14 @@ export default {
         if (flag === 0 || flag === 1) { // 取消
           this.cancel()
         } else if (flag ===2) { // 确定
-          this.submitForm()
-          if (this.activeName === 'second') {
+
+          if (this.activeName === 'second' || this.activeName === 'first') {
+            this.submitForm()
+            this.cancel()
           } else {
             this.$refs['fixtureForm'].validate(valid => {
               if (valid) {
+                this.submitForm()
                 this.cancel()
               }
             })

@@ -229,14 +229,14 @@
         </span>
       </template>
     </el-table-column>
-    <el-table-column prop="vhType" label="V/H型号" align="center" width="120" />
-    <el-table-column prop="vhLengthWidth" label="V/H（长*宽）" align="center" width="120" />
+    <el-table-column prop="vHType" label="V/H型号" align="center" width="120" />
+    <el-table-column prop="vHLengthWidth" label="V/H（长*宽）" align="center" width="120" />
     <el-table-column prop="vcmPinCategory" label="VCM Pin类别" align="center" width="120">
       <template slot-scope="scope">
         <dict-tag :options="dict.type.fixture_lock_vcm_pin_category" :value="scope.row.vcmPinCategory"></dict-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="vhInnerDiameter" label="V/H内径" align="center" width="120" />
+    <el-table-column prop="vHInnerDiameter" label="V/H内径" align="center" width="120" />
     <el-table-column prop="vcmDriverIc" label="VCM驱动IC" align="center" width="120" />
     <el-table-column prop="lensModel" label="Lens型号" align="center" width="120" />
     <el-table-column prop="lensThread" label="Lens螺牙" align="center" width="120">
@@ -244,8 +244,8 @@
         <dict-tag :options="dict.type.fixture_lock_lens_thread" :value="scope.row.lensThread"></dict-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="lensOutDiameter" label="Lens外径" align="center" width="120" />
-    <el-table-column prop="lensBottomOutDiameter" label="Lens底面外径" align="center" width="120" />
+    <el-table-column prop="lensOuterDiameter" label="Lens外径" align="center" width="120" />
+    <el-table-column prop="lensBottomOuterDiameter" label="Lens底面外径" align="center" width="120" />
     <el-table-column prop="lensEndDiameter" label="Lens端面直径" align="center" width="120" />
     <el-table-column prop="lensNumberOfPetals" label="Lens花瓣数量" align="center" width="120">
       <template slot-scope="scope">
@@ -322,10 +322,10 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="V/H型号" prop="vhType" v-if="formItemShow">
-        <el-input v-model="form.vhType" placeholder="V/H型号" clearable />
+        <el-input v-model="form.vHType" placeholder="V/H型号" clearable />
       </el-form-item>
       <el-form-item label="V/H（长*宽）" prop="vhLengthWidth" v-if="formItemShow">
-        <el-input v-model="form.vhLengthWidth" placeholder="V/H（长*宽）" clearable />
+        <el-input v-model="form.vHLengthWidth" placeholder="V/H（长*宽）" clearable />
       </el-form-item>
       <el-form-item label="VCM Pin类别" prop="vcmPinCategory" v-if="formItemShow">
         <el-select v-model="form.vcmPinCategory" placeholder="VCM Pin类别" clearable>
@@ -338,7 +338,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="V/H内径" prop="vhInnerDiameter" v-if="formItemShow">
-        <el-input v-model="form.vhInnerDiameter" placeholder="V/H内径" clearable />
+        <el-input v-model="form.vHInnerDiameter" placeholder="V/H内径" clearable />
       </el-form-item>
       <el-form-item label="VCM驱动IC" prop="vcmDriverIc" v-if="formItemShow">
         <el-input v-model="form.vcmDriverIc" placeholder="VCM驱动IC" clearable />
@@ -438,7 +438,7 @@ import {
   addFixtureSharedInfo,
   updateFixtureParamsLock,
   materialIdRules,
-  delFixtureParamsLock
+  delFixtureParamsLock,
 } from '@/api/biz/fixture/fixture'
 import ModalUdf from '@/views/biz/common/ModalUdf'
 
@@ -469,10 +469,10 @@ export default {
         deviation: 0,
         fixtureCategory: null,
         mcId: null,
-        vhType: null,
-        vhLengthWidth: null,
+        vHType: null,
+        vHLengthWidth: null,
         vcmPinCategory: null,
-        vhInnerDiameter: null,
+        vHInnerDiameter: null,
         vcmDriverIc: null,
         lensModel: null,
         lensThread: null,
@@ -513,10 +513,10 @@ export default {
         fixtureCategory: null,
         mcId: null,
         prodLevel: null,
-        vhType: null,
-        vhLengthWidth: null,
+        vHType: null,
+        vHLengthWidth: null,
         vcmPinCategory: null,
-        vhInnerDiameter: null,
+        vHInnerDiameter: null,
         vcmDriverIc: null,
         lensModel: null,
         lensThread: null,
@@ -571,6 +571,7 @@ export default {
     getList() {
       this.loading = true;
       listFixtureParamsLock(this.queryParams).then(response => {
+        console.log(response)
         this.tableData = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -788,18 +789,20 @@ export default {
       if (flag === 0 || flag === 1) { // 取消
         this.cancel()
       } else if (flag ===2) { // 确定
-        this.submitForm()
-        if (this.activeName === 'second') {
+
+        if (this.activeName === 'second' || this.activeName === 'first') {
+          this.submitForm()
+          this.cancel()
         } else {
           this.$refs['fixtureForm'].validate(valid => {
             if (valid) {
+              this.submitForm()
               this.cancel()
             }
           })
         }
       } else if (flag === 3 && name === 'fixtureParamsLockDialog') { // 重置
         this.resetFixture()
-        this.reset()
       }
     },
 
@@ -998,28 +1001,6 @@ export default {
     },
   },
 
-/*  watch: {
-    // 监听编辑是否有修改 - departAddForm
-    form: {
-      handler(val, oldVal) {
-        if (this.addFixtureDialogVisible === true) { // 等于编辑时才去监听
-          if (val.materialId !== oldVal.materialId || val.fixtureCategory !== oldVal.fixtureCategory || val.prodType !== oldVal.prodType ||
-            val.prodLevel !== oldVal.prodLevel || val.vcmPinCategory !== oldVal.vcmPinCategory || val.lensThread !== oldVal.lensThread ||
-            val.mcId !== oldVal.mcId || val.lensNumberOfPetals !== oldVal.lensNumberOfPetals || val.vhType !== oldVal.vhType ||
-            val.vhLengthWidth !== oldVal.vhLengthWidth || val.vhInnerDiameter !== oldVal.vhInnerDiameter || val.vcmDriverIc !== oldVal.vcmDriverIc ||
-            val.lensModel !== oldVal.lensModel || val.lensOuterDiameter !== oldVal.lensOuterDiameter || val.lensBottomOuterDiameter !== oldVal.lensBottomOuterDiameter ||
-            val.lensEndDiameter !== oldVal.lensEndDiameter || val.prodType !== oldVal.prodType || val.remark !== oldVal.remark) {
-            console.log("66666")
-            this.flagChangeCnt ++;
-          }
-          if (this.flagChangeCnt > 1) {
-            this.isFormChange = true  // 弹框提示
-            console.log(this.flagChangeCnt)
-          }
-        }
-      },
-    }
-  }*/
 }
 </script>
 
