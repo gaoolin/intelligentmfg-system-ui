@@ -147,11 +147,11 @@
             </el-form-item>
           </el-col>
           <el-col :md="4" :sm="12">
-            <el-form-item label="LENS中心到连接器中心高度左右偏移量" prop="leftRightOffsetHeightHensCenterToConnectorCenter"
+            <el-form-item label="LENS中心到连接器中心左右偏移量" prop="leftRightOffsetHeightLensCenterToConnectorCenter"
                           label-width="260px"
             >
-              <el-input v-model="queryParams.leftRightOffsetHeightHensCenterToConnectorCenter"
-                        placeholder="LENS中心到连接器中心高度左右偏移量" clearable @keyup.enter.native="handleQuery" @input="handleQuery"
+              <el-input v-model="queryParams.leftRightOffsetHeightLensCenterToConnectorCenter"
+                        placeholder="LENS中心到连接器中心左右偏移量" clearable @keyup.enter.native="handleQuery" @input="handleQuery"
               />
             </el-form-item>
           </el-col>
@@ -326,7 +326,7 @@
     <el-table-column prop="moduleBodyHeight" label="模组本体高度" align="center" width="120" />
     <el-table-column prop="heightOfLensCenterToConnectorCenter" label="LENS中心到连接器中心高度" align="center" width="120" />
     <el-table-column prop="connectorSubstrateThickness" label="连接器基板厚度" align="center" width="120" />
-    <el-table-column prop="leftRightOffsetHeightHensCenterToConnectorCenter" label="LENS中心到连接器中心高度左右偏移量" align="center" width="120" />
+    <el-table-column prop="leftRightOffsetHeightLensCenterToConnectorCenter" label="LENS中心到连接器中心左右偏移量" align="center" width="120" />
     <el-table-column prop="fovAngle" label="FOV角度" align="center" width="120" />
     <el-table-column prop="isRegularFpc" label="是否常规FPC" align="center" width="120" >
       <template slot-scope="scope">
@@ -465,8 +465,8 @@
       <el-form-item label="连接器基板厚度" prop="connectorSubstrateThickness" v-if="formItemShow">
         <el-input v-model="form.connectorSubstrateThickness" placeholder="连接器基板厚度" clearable />
       </el-form-item>
-      <el-form-item label="LENS中心到连接器中心高度左右偏移量" prop="leftRightOffsetHeightHensCenterToConnectorCenter" label-width="260px" v-if="formItemShow" >
-        <el-input v-model="form.leftRightOffsetHeightHensCenterToConnectorCenter" placeholder="LENS中心到连接器中心高度左右偏移量" clearable />
+      <el-form-item label="LENS中心到连接器中心左右偏移量" prop="leftRightOffsetHeightLensCenterToConnectorCenter" label-width="260px" v-if="formItemShow" >
+        <el-input v-model="form.leftRightOffsetHeightLensCenterToConnectorCenter" placeholder="LENS中心到连接器中心左右偏移量" clearable />
       </el-form-item>
       <el-form-item label="FOV角度" prop="fovAngle" v-if="formItemShow">
         <el-input v-model="form.fovAngle" placeholder="FOV角度" clearable />
@@ -688,7 +688,7 @@ export default {
         moduleBodyHeight: null,
         heightOfLensCenterToConnectorCenter: null,
         connectorSubstrateThickness: null,
-        leftRightOffsetHeightHensCenterToConnectorCenter: null,
+        leftRightOffsetHeightLensCenterToConnectorCenter: null,
         fovAngle: null,
         isRegularFpc: null,
         fpcMaximumWidth: null,
@@ -1025,7 +1025,7 @@ export default {
         moduleBodyHeight: null,
         heightOfLensCenterToConnectorCenter: null,
         connectorSubstrateThickness: null,
-        leftRightOffsetHeightHensCenterToConnectorCenter: null,
+        leftRightOffsetHeightLensCenterToConnectorCenter: null,
         fovAngle: null,
         isRegularFpc: null,
         fpcMaximumWidth: null,
