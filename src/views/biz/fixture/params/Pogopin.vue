@@ -379,7 +379,7 @@
 
   <!--   添加治具对话框   -->
   <modal-udf :title="title" :dialogShow="addFixtureDialogVisible" :width="'30%'" :isCloseOnClick="false" :resetBtn="dialogReset" @closeChildDialog="closeChildDialog" v-dialogDrag v-dialogDragWidth v-dialogDragHeight >
-    <el-form ref="fixtureForm" :model="form" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesUpdate : rulesFlag === 3 ? rules : rules" label-width="110px" >
+    <el-form ref="fixturePoGoPinForm" :model="form" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesUpdate : rulesFlag === 3 ? rules : rules" label-width="110px" >
       <el-form-item label="料号" prop="materialId">
         <el-input v-model="form.materialId" :disabled="materialIdDisabled" placeholder="请输入料号" />
       </el-form-item>
@@ -760,9 +760,8 @@ export default {
     },
     resetFixture() {
       //重置form表单
-      // this.$refs['fixtureForm'].resetFields();
-      this.resetForm('fixtureForm')
-      // this.resetForm('form')
+      // this.$refs['fixturePoGoPinForm'].resetFields();
+      this.reset()
     },
 
     /** 导出按钮操作 */
@@ -889,8 +888,9 @@ export default {
     /** 提交按钮 */
     submitForm() {
       if (this.form.submitFlag === 1) { // 新增料号
-        this.$refs['fixtureForm'].validate(valid => {
+        this.$refs['fixturePoGoPinForm'].validate(valid => {
           if (valid) {
+            console.log(this.form)
             addFixtureParamsPogopin(this.form).then(() => {
               this.$modal.msgSuccess('新增料号成功！')
               this.addFixtureDialogVisible = false
@@ -901,7 +901,7 @@ export default {
           }
         })
       } else if (this.form.submitFlag === 2) { // 修改治具信息
-        this.$refs['fixtureForm'].validate(valid => {
+        this.$refs['fixturePoGoPinForm'].validate(valid => {
           if (valid) {
             updateFixtureParamsPogopin(this.form).then(() => {
               this.$modal.msgSuccess('修改治具信息成功！')
@@ -919,11 +919,15 @@ export default {
           })
         }
       } else if (this.form.submitFlag === 4) { // 新增治具共用机型
-        addFixtureSharedInfo(this.form).then(response => {
-          this.$modal.msgSuccess("新增治具共用机型成功！")
-          this.reset()
-          this.getList()
-        })
+        this.$refs['fixturePoGoPinForm'].validate(valid => {
+            if (valid) {
+              addFixtureSharedInfo(this.form).then(response => {
+                this.$modal.msgSuccess("新增治具共用机型成功！")
+                this.reset()
+                this.getList()
+              })
+            }}
+        )
       } else {
         this.addFixtureDialogVisible = false
         this.dialogReset = false
@@ -1036,6 +1040,7 @@ export default {
         remark: null
       }
       this.resetForm('form')
+      this.resetForm('fixturePoGoPinForm')
     },
 
     /** 编辑治具类型 */
@@ -1095,14 +1100,11 @@ export default {
         if (flag === 0 || flag === 1) { // 取消
           this.cancel()
         } else if (flag ===2) { // 确定
-
+          this.submitForm()
           if (this.activeName === 'second' || this.activeName === 'first') {
-            this.submitForm()
-            this.cancel()
           } else {
-            this.$refs['fixtureForm'].validate(valid => {
+            this.$refs['fixturePoGoPinForm'].validate(valid => {
               if (valid) {
-                this.submitForm()
                 this.cancel()
               }
             })

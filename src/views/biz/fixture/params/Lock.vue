@@ -789,14 +789,11 @@ export default {
       if (flag === 0 || flag === 1) { // 取消
         this.cancel()
       } else if (flag ===2) { // 确定
-
+        this.submitForm()
         if (this.activeName === 'second' || this.activeName === 'first') {
-          this.submitForm()
-          this.cancel()
         } else {
           this.$refs['fixtureForm'].validate(valid => {
             if (valid) {
-              this.submitForm()
               this.cancel()
             }
           })
