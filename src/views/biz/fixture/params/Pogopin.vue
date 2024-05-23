@@ -890,7 +890,6 @@ export default {
       if (this.form.submitFlag === 1) { // 新增料号
         this.$refs['fixturePoGoPinForm'].validate(valid => {
           if (valid) {
-            console.log(this.form)
             addFixtureParamsPogopin(this.form).then(() => {
               this.$modal.msgSuccess('新增料号成功！')
               this.addFixtureDialogVisible = false
@@ -1155,11 +1154,10 @@ export default {
       }
     },
     prodTypeRules(rule, value, callback) {
-      //首先验证是否含有汉字
-      if (value) {
-        if (/[\u4E00-\u9FA5]/g.test(value)) {
-          callback(new Error('内容不能包含汉字!'));
-        }
+      if (value === '') {
+        callback(new Error("请输入机型！"))
+      } else {
+        callback();
       }
     },
 
