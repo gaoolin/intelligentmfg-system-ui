@@ -31,3 +31,20 @@ export function getGroupNames(query) {
   })
 }
 
+export function getParamsStdModels(query) {
+  return request({
+    url: '/aa/params/model/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function updateParamsStdModel(data) {
+  return request({
+    url: '/aa/params/model/update',
+    method: 'post',
+    data
+  })
+}
+
+

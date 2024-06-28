@@ -48,7 +48,7 @@
       <el-form-item label="机台号" prop="mcId">
         <el-input
           v-model="queryParams.mcId"
-          placeholder="请输入机型"
+          placeholder="请输入机台号"
           clearable
           @change="dataChange"
           @keyup.enter.native="handleQuery"
