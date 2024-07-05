@@ -394,22 +394,6 @@ export default {
       return /^[0-9]+.?[0-9]*$/.test(num)
     },
 
-    /** 日期转字符串 */
-    DateToStr(date) {
-      const year = date.getFullYear()
-      const month = date.getMonth()
-      const day = date.getDate()
-      const hours = date.getHours()
-      const min = date.getMinutes()
-      const second = date.getSeconds()
-      return year + '-' +
-        ((month + 1) > 9 ? (month + 1) : '0' + (month + 1)) + '-' +
-        (day > 9 ? day : ('0' + day)) + ' ' +
-        (hours > 9 ? hours : ('0' + hours)) + ':' +
-        (min > 9 ? min : ('0' + min)) + ':' +
-        (second > 9 ? second : ('0' + second))
-    },
-
     checkDtRange(rule, value, callback) {
       const days = this.getDiffDay(value[0], value[1])
       if (days > 90) {

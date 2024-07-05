@@ -40,6 +40,8 @@ import VueMeta from 'vue-meta'
 import DictData from '@/components/DictData'
 // 数值用千分位表示
 import { numberToCurrencyNo } from '@/utils/numberToCurrency'
+import { capitalizeFirstLetter } from '@/views/biz/globalMethods'
+import { dateToStr, getBit, convertNull } from '@/views/biz/globalMethods'
 // 配置全局过滤器，实现数字千分位格式
 Vue.filter('numberToCurrency', numberToCurrencyNo)
 
@@ -54,6 +56,13 @@ Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
+
+// 自定义全局方法挂载
+Vue.prototype.$capitalizeFirstLetter = capitalizeFirstLetter;
+Vue.prototype.$dateToStr = dateToStr;
+Vue.prototype.$getBit = getBit;
+Vue.prototype.$convertNull = convertNull;
+
 
 // 全局组件挂载
 Vue.component('DictTag', DictTag)

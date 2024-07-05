@@ -108,7 +108,7 @@ export default {
       historyList: [],
       title: "",
       // 状态时间范围
-      dateRangeCreateDate: [this.DateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)), this.DateToStr(new Date(new Date().valueOf()))],
+      dateRangeCreateDate: [this.$dateToStr(new Date(new Date().valueOf() - 1 * 1440 * 60 * 1000)), this.$dateToStr(new Date(new Date().valueOf()))],
       open: false,
       queryParams: {
         pageNum: 1,
@@ -197,21 +197,6 @@ export default {
       this.download('/fixture/history/export', {
         ...this.queryParams
       }, `pogopin_history_${new Date().getTime}.xlsx`)
-    },
-    /** 日期转字符串 */
-    DateToStr(date) {
-      const year = date.getFullYear()
-      const month = date.getMonth()
-      const day = date.getDate()
-      const hours = date.getHours()
-      const min = date.getMinutes()
-      const second = date.getSeconds()
-      return year + '-' +
-        ((month + 1) > 9 ? (month + 1) : '0' + (month + 1)) + '-' +
-        (day > 9 ? day : ('0' + day)) + ' ' +
-        (hours > 9 ? hours : ('0' + hours)) + ':' +
-        (min > 9 ? min : ('0' + min)) + ':' +
-        (second > 9 ? second : ('0' + second))
     },
   }
 };

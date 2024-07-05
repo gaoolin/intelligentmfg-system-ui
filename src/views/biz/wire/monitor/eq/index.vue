@@ -121,19 +121,19 @@
         <el-table-column label="设备编号(EQ)" align="center" prop="deviceMId"/>
         <el-table-column label="线径" align="center" prop="wireWidth" />
         <el-table-column label="实际用量" align="center" prop="actualWireUsage">
-          <template slot-scope="scope">{{ getBit(scope.row.actualWireUsage, 4) }}</template>
+          <template slot-scope="scope">{{ $getBit(scope.row.actualWireUsage, 4) }}</template>
         </el-table-column>
         <el-table-column label="维护用量" align="center" prop="standardWireUsage">
-          <template slot-scope="scope">{{ getBit(scope.row.standardWireUsage, 4) }}</template>
+          <template slot-scope="scope">{{ $getBit(scope.row.standardWireUsage, 4) }}</template>
         </el-table-column>
         <el-table-column label="BOM用量" align="center" prop="bomWireUsage">
-          <template slot-scope="scope">{{ getBit(scope.row.bomWireUsage, 4) }}</template>
+          <template slot-scope="scope">{{ $getBit(scope.row.bomWireUsage, 4) }}</template>
         </el-table-column>
         <el-table-column label="产量" align="center" prop="yield">
-          <template slot-scope="scope">{{ getBit(scope.row.yield, 0) | numberToCurrency }}</template>
+          <template slot-scope="scope">{{ $getBit(scope.row.yield, 0) | numberToCurrency }}</template>
         </el-table-column>
         <el-table-column label="差异(%)" align="center" prop="percents">
-          <template slot-scope="scope">{{ getBit(scope.row.percents, 2) }}</template>
+          <template slot-scope="scope">{{ $getBit(scope.row.percents, 2) }}</template>
         </el-table-column>
       </el-table>
 
@@ -179,8 +179,8 @@ export default {
       // 是否显示弹出层
       open: false,
       // 状态时间范围
-      daterangeCreateDate: [this.DateToStr(new Date(new Date().valueOf())).substring(0, 10),
-        this.DateToStr(new Date(new Date().valueOf() + 1 * 1440 * 60 * 1000)).substring(0, 10)],
+      daterangeCreateDate: [this.$dateToStr(new Date(new Date().valueOf())).substring(0, 10),
+        this.$dateToStr(new Date(new Date().valueOf() + 1 * 1440 * 60 * 1000)).substring(0, 10)],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -297,31 +297,7 @@ export default {
         ...this.queryParams
       }, `workshop_${new Date().getTime()}.xlsx`)
     },
-    /** 日期转字符串 */
-    DateToStr(date) {
-      const year = date.getFullYear()
-      const month = date.getMonth()
-      const day = date.getDate()
-      const hours = date.getHours()
-      const min = date.getMinutes()
-      const second = date.getSeconds()
-      return year + '-' +
-        ((month + 1) > 9 ? (month + 1) : '0' + (month + 1)) + '-' +
-        (day > 9 ? day : ('0' + day)) + ' ' +
-        (hours > 9 ? hours : ('0' + hours)) + ':' +
-        (min > 9 ? min : ('0' + min)) + ':' +
-        (second > 9 ? second : ('0' + second))
-    },
-    /** 四舍五入 保留N位小数 */
-    getBit(value, bit = 2) {
-      if (value !== null && value !== '') {
-        let str = Number(value)
-        str = str.toFixed(bit)
-        return str
-      } else {
-        return null
-      }
-    },
+
     /** 远程获取厂区名称 */
     getFactoryNameList() {
       factoryNameList().then(res => {
