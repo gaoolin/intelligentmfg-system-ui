@@ -399,7 +399,7 @@
             <div class="prop-container">
               <span class="prop-label">
                 zOffset:
-                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.zOffset) === 'Enable', 'disabled': $convertNull(scope.row.zOffset) === 'Disable'}">{{ $convertNull(scope.row.yLevel) }}</span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.zOffset) === 'Enable', 'disabled': $convertNull(scope.row.zOffset) === 'Disable'}">{{ $convertNull(scope.row.zOffset) }}</span>
               </span>
             </div>
           </template>

@@ -41,7 +41,7 @@ import DictData from '@/components/DictData'
 // 数值用千分位表示
 import { numberToCurrencyNo } from '@/utils/numberToCurrency'
 import { capitalizeFirstLetter } from '@/views/biz/globalMethods'
-import { dateToStr, getBit, convertNull } from '@/views/biz/globalMethods'
+import { dateToStr, getBit, convertNull, formatDt } from '@/views/biz/globalMethods'
 // 配置全局过滤器，实现数字千分位格式
 Vue.filter('numberToCurrency', numberToCurrencyNo)
 
@@ -62,7 +62,7 @@ Vue.prototype.$capitalizeFirstLetter = capitalizeFirstLetter;
 Vue.prototype.$dateToStr = dateToStr;
 Vue.prototype.$getBit = getBit;
 Vue.prototype.$convertNull = convertNull;
-
+Vue.prototype.$formatDt = formatDt;
 
 // 全局组件挂载
 Vue.component('DictTag', DictTag)

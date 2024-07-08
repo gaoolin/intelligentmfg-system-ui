@@ -57,7 +57,9 @@
       </el-tab-pane>
 
       <el-tab-pane label="在线模版" name="online">
-        <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px"
+                 :rule="rules"
+        >
           <el-form-item label="机型" prop="prodType">
             <el-input
               v-model="queryParams.prodType"
@@ -78,17 +80,15 @@
           </el-form-item>
 
           <el-form-item label="时段" prop="dtRange" label-width="50px">
-            <el-date-picker
+            <date-time-range-picker
               v-model="queryParams.dtRange"
-              style="width: 390px"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              type="datetimerange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions"
-              @change="dataChange"
-            ></el-date-picker>
+              label="时段"
+              prop="dtRange"
+              :max-span-value="30"
+              :max-span-unit="'minute'"
+              :required="true"
+              :enable-shortcuts="false"
+            ></date-time-range-picker>
           </el-form-item>
 
           <el-form-item>
@@ -104,7 +104,7 @@
           <el-table-column type="index" label="序号" width="55" align="center" fixed/>
 
           <!-- 产品信息 -->
-          <el-table-column label="机型相关" align="center" width="160">
+          <el-table-column label="机型相关" align="left" width="160">
             <template slot-scope="scope">
               <div class="prop-container">
                   <span class="prop-label">
@@ -682,8 +682,10 @@
           <!-- 操作 -->
           <el-table-column prop="option" label="操作" align="center" width="100" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" class="btn-ops" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="text" class="btn-ops" @click="handleUpload(scope.row)">设置为标准模版</el-button>
+              <div class="btn-ops-cell">
+                <el-button size="mini" type="text" class="btn-ops" @click="handleEdit(scope.row)">编辑</el-button>
+                <el-button size="mini" type="text" class="btn-ops" @click="handleUpload(scope.row)">设置为标准模版</el-button>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -695,6 +697,7 @@
           :page-sizes="[1, 2, 5, 10, 50]"
           @pagination="getList"
         />
+
         <!-- 编辑模态框 -->
         <el-dialog :visible.sync="editDialogVisible" :width="'30%'" append-to-body title="编辑标准List参数模版">
           <el-form ref="editFormRef" :rules="rules" label-width="180px" :model="editForm">
@@ -1211,12 +1214,16 @@
 
 <script>
 import { getToken } from '@/utils/auth'
-import { getAaParamsParsed, updateAaParamsModelInfo } from '@/api/biz/aa/params'
+import { getAaParamsParsed, addAaParamsModel } from '@/api/biz/aa/params'
 import { checkPermi, checkRole } from '@/utils/permission'
+import DateTimeRangePicker from '@/components/DateTimeRangePicker.vue'
 
 export default {
   name: 'index',
   dicts: ['aa_list_params_power'],
+  components: {
+    DateTimeRangePicker
+  },
 
   data() {
     return {
@@ -1250,7 +1257,6 @@ export default {
       // 刷新标识
       refreshKey: 0,
       // 是否显示弹出层
-      open: false,
       editDialogVisible: false,
       // 查询参数
       queryParams: {
@@ -1258,7 +1264,7 @@ export default {
         pageSize: 1,
         prodType: null,
         simId: null,
-        dtRange: []
+        dtRange: [null, null]
       },
       // 表单参数
       editForm: {},
@@ -1386,98 +1392,9 @@ export default {
         result52: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }]
       },
       outerActiveNames: ['1'], // 默认展开的外部项
-      innerActiveNames: [], // 内部项默认不展开
-      pickerOptions: {
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.setHours(0, 0, 0).valueOf())
-            end.setTime(end.setHours(23, 59, 59).valueOf())
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59) - 1 * 1440 * 60 * 1000)
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前两天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setTime(new Date(end.setHours(23, 59, 59).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            start.setTime(start.setTime(new Date(start.setHours(0, 0, 0).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前三天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 3 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 3 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 7 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 7 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前两天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 2 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前三天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 3 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '近一周',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 7 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '近一个月',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 30 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }]
-      }
+      innerActiveNames: [] // 内部项默认不展开
     }
   },
-
   methods: {
     checkPermi,
     checkRole,
@@ -1529,20 +1446,24 @@ export default {
 
     // tab-2
     getList() {
-      this.loading = true
       if (this.activeTab === 'online') {
-        this.queryParams.params = {}
-        this.queryParams.params['beginDate'] = this.queryParams.dtRange[0]
-        this.queryParams.params['endDate'] = this.queryParams.dtRange[1]
+        this.$refs.queryForm.validate(valid => {
+          if (valid) {
+            this.loading = true
+            this.queryParams.params = {
+              beginDate: this.$formatDt(this.queryParams.dtRange[0]),
+              endDate: this.$formatDt(this.queryParams.dtRange[1])
+            }
+            getAaParamsParsed(this.queryParams).then(response => {
+              this.resultList = response.rows
+              this.total = response.total
+              this.loading = false
+            })
+          }
+        })
       }
-
-      getAaParamsParsed(this.queryParams).then(response => {
-        this.resultList = response.rows
-        this.total = response.total
-        this.loading = false
-      })
-
     },
+
     dataChange() {
       this.getList()
     },
@@ -1557,27 +1478,32 @@ export default {
     /** 修改按钮操作 */
     handleEdit(row) {
       this.editForm = { ...row }
-      if (checkPermi('aa:params:model:upload')) {
-        this.open = true
-        this.title = '修改List参数模版信息'
-      }
+      // if (checkPermi('aa:params:model:upload')) {
+      // }
+      this.editDialogVisible = true
+      this.title = '修改List参数模版信息'
     },
 
     handleUpload(row) {
       this.loading = true
+      addAaParamsModel(row).then(response => {
+        this.$modal.msgSuccess('模版设置成功')
+        this.loading = false
+        this.getList()
+      })
 
     },
 
     // 取消按钮
     cancel() {
-      this.open = false
+      this.editDialogVisible = false
       this.reset()
     },
 
     // 表单重置
     reset() {
       this.editForm = {
-        id: null
+        id: null,
 
       }
       this.resetForm('editForm')
@@ -1586,11 +1512,13 @@ export default {
     submitForm: function() {
       this.$refs['editFormRef'].validate(valid => {
         if (valid) {
-          updateAaParamsModelInfo(this.editForm).then(response => {
+          addAaParamsModel(this.editForm).then(response => {
             this.$modal.msgSuccess('修改成功')
-            this.open = false
+            this.editDialogVisible = false
             this.getList()
-          })
+          }).catch(error => {
+            this.$message.error('提交失败，请重试');
+          });
         }
       })
     },
@@ -1634,11 +1562,20 @@ export default {
     }
   },
 
-  created() {
-    this.getList()
-  }
+  mounted() {
+    if (this.activeTab === 'online') {
+      this.getList()
+    }
+  },
 
+  created() {
+    const now = new Date()
+    const thirtyMinutesAgo = new Date(now.getTime() - 30 * 60 * 1000)
+    this.queryParams.dtRange = [thirtyMinutesAgo, now]
+  }
 }
+
+
 </script>
 
 <style scoped>
@@ -1745,5 +1682,29 @@ export default {
 
 .prop-value.disabled {
   color: red;
+}
+
+/* 覆盖特定列的 cell 样式 */
+::v-deep td.el-table_1_column_9.is-center.el-table__cell > div.cell {
+  padding: 0 !important; /* 覆盖 padding */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-ops-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%; /* 确保 div 高度为 100% */
+}
+
+/* 按钮的样式 */
+.btn-ops {
+  width: 100%;
+  text-align: center;
+  margin: 5px 0;
 }
 </style>

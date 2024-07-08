@@ -93,3 +93,11 @@ export function getAaParamsParsed(query) {
     params: query
   })
 }
+
+export function addAaParamsModel(data) {
+  return request({
+    url: '/aa/params/model/detail/add',
+    method: 'post',
+    data
+  })
+}
