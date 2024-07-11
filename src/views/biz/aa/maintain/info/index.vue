@@ -51,7 +51,7 @@
               active-color="#13ce66"
               inactive-color="#ff4949"
               @change="changeSwitch(scope.row.sid, scope.row.status)"
-              v-hasPermi="['aa:params:model:status']">
+            >
             </el-switch>
           </template>
         </el-table-column>
@@ -77,7 +77,6 @@
               type="text"
               icon="el-icon-edit"
               @click="handleUpdate(scope.row)"
-              v-hasPermi="['aa:params:model:info:edit']"
             >修改
             </el-button>
             <el-button
@@ -85,7 +84,6 @@
               type="text"
               icon="el-icon-delete"
               @click="handleDelete(scope.row)"
-              v-hasPermi="['aa:params:model:info:delete']"
             >删除
             </el-button>
           </template>

@@ -493,7 +493,7 @@
     />
 
     <!-- 编辑模态框 -->
-    <el-dialog :visible.sync="editDialogVisible" :width="'30%'" append-to-body title="编辑标准List参数模版">
+    <el-dialog :visible.sync="editDialogVisible" :width="'30%'" append-to-body title="编辑List标准参数模版">
       <el-form ref="editFormRef" :rules="rules" label-width="180px" :model="editForm">
         <el-form-item label="机型" prop="prodType">
           <el-input v-model="editForm.prodType" :disabled="true"/>

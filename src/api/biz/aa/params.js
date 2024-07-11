@@ -101,3 +101,19 @@ export function addAaParamsModel(data) {
     data
   })
 }
+
+export function fetchFactoryName() {
+  return request({
+    url: '/aa/params/common/factoryName',
+    method: 'get'
+  })
+}
+
+export function fetchWorkshopName(query) {
+  return request({
+    url: '/aa/params/common/workshopName',
+    method: 'get',
+    params: query
+  })
+}
+
