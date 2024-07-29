@@ -36,10 +36,8 @@
       <el-table v-loading="loading" :data="resultList" :key="refreshKey" border
                 :header-cell-style="tableHeaderCellStyle"
       >
-        <el-table-column type="index" label="序号" width="55" align="center" fixed/>
-
         <!-- 产品信息 -->
-        <el-table-column label="机型" align="center" width="100">
+        <el-table-column label="机型" align="center" width="100" fixed>
           <template slot-scope="scope">
             <span class="prop-label">{{ scope.row.prodType }}</span>
           </template>

@@ -50,7 +50,7 @@
               :inactive-value="0"
               active-color="#13ce66"
               inactive-color="#ff4949"
-              @change="changeSwitch(scope.row.sid, scope.row.status)"
+              @change="changeSwitch(scope.row.id, scope.row.status)"
             >
             </el-switch>
           </template>

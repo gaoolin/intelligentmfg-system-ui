@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <el-tabs v-model="activeTab">
-      <el-tab-pane label="人工模版" name="manual">
-        <div class="import-container">
+      <el-tab-pane label="人工模版" name="manual" >
+        <div class="import-container" v-if="activeTab === 'manual'">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
               <span class="card-title">List参数模版导入</span>
@@ -57,9 +57,7 @@
       </el-tab-pane>
 
       <el-tab-pane label="在线模版" name="online">
-        <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px"
-                 :rule="rules"
-        >
+        <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px" :rule="rules">
           <el-form-item label="机型" prop="prodType">
             <el-input
               v-model="queryParams.prodType"
@@ -99,12 +97,10 @@
 
         <!-- 数据表格 -->
         <el-table v-loading="loading" :data="resultList" :key="refreshKey" border
-                  :header-cell-style="tableHeaderCellStyle"
+                  :header-cell-style="tableHeaderCellStyle" v-if="activeTab === 'online'"
         >
-          <el-table-column type="index" label="序号" width="55" align="center" fixed/>
-
           <!-- 产品信息 -->
-          <el-table-column label="机型相关" align="left" width="160">
+          <el-table-column label="机型相关" align="left" width="160" fixed>
             <template slot-scope="scope">
               <div class="prop-container">
                   <span class="prop-label">
@@ -1706,5 +1702,9 @@ export default {
   width: 100%;
   text-align: center;
   margin: 5px 0;
+}
+
+.fade-leave-to{
+  display: none;
 }
 </style>
