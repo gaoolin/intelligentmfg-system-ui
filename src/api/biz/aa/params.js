@@ -117,3 +117,32 @@ export function fetchWorkshopName(query) {
   })
 }
 
+export function uploadAaSoftware(path, file) {
+  const formData = new FormData();
+  formData.append('path', path);
+  formData.append('file', file);
+  return request({
+    url: '/aa/params/hdfs/createFile',
+    method: 'post',
+    data: formData,
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+}
+
+export function listAaSoftwareInfo(query) {
+  return request({
+    url: '/aa/params/hdfs/list',
+    method: 'get',
+    params: query
+  });
+}
+
+
+export function downloadAaSoftware(hdfsPath) {
+  return request({
+    url: '/aa/params/hdfs/export',
+    method: 'get',
+    params: { hdfsPath: hdfsPath },
+    responseType: 'blob',
+  })
+}

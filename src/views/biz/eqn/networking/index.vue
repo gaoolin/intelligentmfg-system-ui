@@ -97,23 +97,7 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item label="采集时长" prop="interval">
-      <el-select
-        v-model="queryParams.interval"
-        filterable
-        placeholder="请输入采集时长"
-        clearable
-        @change="handleQuery"
-      >
-        <el-option
-          v-for="item in intervalOptions"
-          :key="item"
-          :label="item"
-          :value="item"
-        >
-        </el-option>
-      </el-select>
-    </el-form-item>
+
     <el-form-item>
       <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
       <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -237,7 +221,6 @@ export default {
       // 区选择器
       workshopOptions: [],
       deviceTypeOptions: ['DB', 'WB', 'HM', 'AA'],
-      intervalOptions: ['5分钟', '15分钟', '30分钟', '1小时', '3小时'],
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -356,7 +339,7 @@ export default {
 
     /** 导出 */
     handleExport() {
-      this.download('eqn/status/export', {
+      this.download('/aa/params/hdfs/downloadFile', {
         ...this.queryParams
       }, `设备联网情况明细_${new Date().getTime()}.xlsx`)
     },

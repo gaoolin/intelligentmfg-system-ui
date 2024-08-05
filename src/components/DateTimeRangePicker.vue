@@ -2,9 +2,9 @@
   <el-form-item :label="label" :prop="prop" :label-width="labelWidth" :rules="rules">
     <el-date-picker
       v-model="internalValue"
-      style="width: 390px"
-      value-format="yyyy-MM-dd HH:mm:ss"
-      type="datetimerange"
+      :style="{ width: inputWidth }"
+      :value-format="valueFormat"
+      :type="pickerType"
       range-separator="至"
       :start-placeholder="startPlaceholder"
       :end-placeholder="endPlaceholder"
@@ -48,6 +48,17 @@ export default {
     pickerOptions: {
       type: Object,
       default: () => ({})
+    },
+    type: {
+      type: String,
+      default: 'daterange', // 默认值为日期时间范围选择
+      validator(value) {
+        return ['daterange', 'datetimerange'].includes(value); // 验证type是否为指定的类型之一
+      }
+    },
+    customWidth: {
+      type: String,
+      default: '' // 允许用户自定义输入框宽度
     }
   },
   data() {
@@ -142,6 +153,19 @@ export default {
         shortcuts,
         ...this.pickerOptions
       }
+    },
+    pickerType() {
+      return this.type;
+    },
+    valueFormat() {
+      return this.type === 'daterange' ? 'yyyy-MM-dd' : 'yyyy-MM-dd HH:mm:ss';
+    },
+    inputWidth() {
+      if (this.type === 'daterange') {
+        return this.customWidth ? this.customWidth : '290px';
+      } else {
+        return this.customWidth ? this.customWidth : '390px';
+      }
     }
   },
   methods: {
@@ -185,7 +209,7 @@ export default {
 
     daysInMonth(date) {
       return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
-    }
+    },
   },
 
   created() {

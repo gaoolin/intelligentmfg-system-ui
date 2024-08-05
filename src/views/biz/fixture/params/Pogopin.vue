@@ -927,11 +927,10 @@ export default {
               })
             }}
         )
-      } else {
-        this.addFixtureDialogVisible = false
-        this.dialogReset = false
-        this.addFixtureCategoryDialogVisible = false
       }
+      this.addFixtureDialogVisible = false
+      this.dialogReset = false
+      this.addFixtureCategoryDialogVisible = false
     },
 
     /** 取消按钮 */
