@@ -33,6 +33,6 @@ RUN echo "0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/nginx" > /etc/crontabs/
     echo "CRON_TZ=Asia/Shanghai" >> /etc/crontabs/root
 
 # 启动 cron 服务和 nginx 服务
-CMD ["sh", "-c", "crond && nginx -g 'daemon off;'"]
+CMD ["/bin/sh", "-c", "crond && nginx -g 'daemon off;'"]
 
 EXPOSE 80
