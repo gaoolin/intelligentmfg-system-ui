@@ -32,7 +32,7 @@ COPY ./logrotate.d/nginx /etc/logrotate.d/nginx
 COPY ./start.sh /usr/src/app/start.sh
 RUN chmod +x /usr/src/app/start.sh
 
-# 启动脚本运行 crond 和 nginx
-CMD ["/usr/src/app/start.sh"]
+# 设置入口点来执行启动脚本
+ENTRYPOINT ["/usr/src/app/start.sh"]
 
 EXPOSE 80
