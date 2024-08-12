@@ -47,7 +47,8 @@ RUN chmod +x /etc/cron.daily/logrotate
 RUN apk add --no-cache cronie openrc && \
     echo "CRON_TZ=Asia/Shanghai" >> /etc/crontabs/root && \
     crontab /etc/cron.daily/logrotate && \
-    rc-update add cron boot
+    rc-service cron start && \
+    rc-update add cron default
 
 # 启动 cron 服务
 CMD ["cron", "-f"]
