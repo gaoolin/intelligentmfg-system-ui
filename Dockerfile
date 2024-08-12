@@ -6,49 +6,33 @@ LABEL maintainer=gaoolin@gmail.com
 RUN addgroup -S nginx && adduser -S -G nginx nginx
 
 # 时区设置
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-RUN echo 'Asia/Shanghai' >/etc/timezone
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo 'Asia/Shanghai' >/etc/timezone
 
-# 安装 logrotate
-RUN apk add --no-cache logrotate
+# 安装 logrotate 和 cron
+RUN apk add --no-cache logrotate cronie
 
-# 创建日志目录
-RUN mkdir -p /home/qtech/nginx
+# 创建日志目录并设置所有权
+RUN mkdir -p /home/qtech/nginx && \
+    chown -R nginx:nginx /home/qtech/nginx
 
-# 设置日志目录的所有权
-RUN chown -R nginx:nginx /home/qtech/nginx
-
-# 将dist目录内容复制到nginx容器html内部
+# 将 dist 目录内容复制到 nginx 容器的 html 目录下
 COPY dist /usr/share/nginx/html/
 
-# 删除官方nginx镜像默认的配置
+# 删除官方 nginx 镜像的默认配置
 RUN rm -rf /etc/nginx/conf.d/default.conf
 
-# 配置文件nginx.conf是要放在/etc/nginx/目录下, 而用于独立配置server的配置文件，需要放在/etc/nginx/conf.d/目录下
-ADD ./nginx.conf /etc/nginx/nginx.conf
-
-# 将独立配置server的配置文件添加到默认配置目录下
-# 注意：nginx.conf需要与Dockerfile在同一目录
-# ADD ./nginx-server.conf /etc/nginx/conf.d/
-
-# COPY nginx.conf /etc/nginx/nginx.conf
-EXPOSE 80
+# 将 nginx 配置文件复制到容器中
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
 # 添加 logrotate 配置文件
-ADD ./logrotate.d/nginx /etc/logrotate.d/nginx
+COPY ./logrotate.d/nginx /etc/logrotate.d/nginx
 
-# 设置 cron 任务来定期运行 logrotate
-# 创建 cron.daily 目录
-RUN mkdir -p /etc/cron.daily
-RUN echo "0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/nginx" > /etc/cron.daily/logrotate
-RUN chmod +x /etc/cron.daily/logrotate
+# 添加 cron 配置文件并设定任务
+RUN echo "0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/nginx" > /etc/crontabs/root && \
+    echo "CRON_TZ=Asia/Shanghai" >> /etc/crontabs/root
 
-# 安装 cron 并设置启动时运行
-RUN apk add --no-cache cronie openrc && \
-    echo "CRON_TZ=Asia/Shanghai" >> /etc/crontabs/root && \
-    crontab /etc/cron.daily/logrotate && \
-    rc-service cron start && \
-    rc-update add cron default
+# 启动 cron 服务和 nginx 服务
+CMD ["/bin/sh", "-c", "crond && nginx -g 'daemon off;'"]
 
-# 启动 cron 服务
-CMD ["cron", "-f"]
+EXPOSE 80
