@@ -1,0 +1,15 @@
+/home/qtech/nginx/*.log {
+    daily
+    rotate 7
+    compress
+    delaycompress
+    missingok
+    notifempty
+    size 100M
+    create 640 nginx nginx
+    sharedscripts
+    postrotate
+        # 重启 Nginx 服务
+        kill -HUP $(cat /var/run/nginx.pid) || true
+    endscript
+}
