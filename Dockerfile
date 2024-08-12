@@ -2,6 +2,9 @@ FROM registry.cn-shanghai.aliyuncs.com/kolenz/nginx:1.22.1-alpine
 
 LABEL maintainer=gaoolin@gmail.com
 
+# 创建 nginx 用户和组
+RUN addgroup -S nginx && adduser -S -G nginx nginx
+
 # 时区设置
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo 'Asia/Shanghai' >/etc/timezone
