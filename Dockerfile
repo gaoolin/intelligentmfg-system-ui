@@ -44,7 +44,7 @@ RUN echo "0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/nginx" > /etc/cron.dail
 RUN chmod +x /etc/cron.daily/logrotate
 
 # 安装 cron 并设置启动时运行
-RUN apk add --no-cache cronie && \
+RUN apk add --no-cache cronie openrc && \
     echo "CRON_TZ=Asia/Shanghai" >> /etc/crontabs/root && \
     crontab /etc/cron.daily/logrotate && \
     rc-update add cron boot
