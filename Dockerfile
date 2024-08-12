@@ -38,6 +38,8 @@ EXPOSE 80
 ADD ./logrotate.d/nginx /etc/logrotate.d/nginx
 
 # 设置 cron 任务来定期运行 logrotate
+# 创建 cron.daily 目录
+RUN mkdir -p /etc/cron.daily
 RUN echo "0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/nginx" > /etc/cron.daily/logrotate
 RUN chmod +x /etc/cron.daily/logrotate
 
