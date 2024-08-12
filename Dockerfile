@@ -32,7 +32,7 @@ ADD ./nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 
 # 添加 logrotate 配置文件
-ADD ./logrotate.d/nginx /etc/logrotate.d/nginx
+ADD ./logrotate.d /etc/logrotate.d
 
 # 设置 cron 任务来定期运行 logrotate
 RUN echo "0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/nginx" > /etc/cron.daily/logrotate
