@@ -9,8 +9,8 @@ RUN addgroup -S nginx && adduser -S -G nginx nginx
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo 'Asia/Shanghai' >/etc/timezone
 
-# 安装 logrotate 和 cron
-RUN apk add --no-cache logrotate cronie
+# 安装 logrotate、cronie 和 openrc
+RUN apk add --no-cache logrotate cronie openrc
 
 # 创建日志目录并设置所有权
 RUN mkdir -p /home/qtech/nginx && \
@@ -32,7 +32,10 @@ COPY ./logrotate.d/nginx /etc/logrotate.d/nginx
 RUN echo "0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/nginx" > /etc/crontabs/root && \
     echo "CRON_TZ=Asia/Shanghai" >> /etc/crontabs/root
 
+# 添加 cron 服务到 openrc 的默认运行级别
+RUN rc-update add crond default
+
 # 启动 cron 服务和 nginx 服务
-CMD ["/bin/sh", "-c", "crond && nginx -g 'daemon off;'"]
+CMD ["/bin/sh", "-c", "rc-service crond start && nginx -g 'daemon off;'"]
 
 EXPOSE 80
