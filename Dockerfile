@@ -28,11 +28,11 @@ COPY ./nginx.conf /etc/nginx/nginx.conf
 # 添加 logrotate 配置文件
 COPY ./logrotate.d/nginx /etc/logrotate.d/nginx
 
-# 添加 cron 配置文件并设定任务
-RUN echo "0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/nginx" > /etc/crontabs/root && \
-    echo "CRON_TZ=Asia/Shanghai" >> /etc/crontabs/root
+# 添加启动脚本
+COPY ./start.sh /usr/src/app/start.sh
+RUN chmod +x /usr/src/app/start.sh
 
-# 启动 cron 服务和 nginx 服务
-CMD ["/bin/sh", "-c", "crond && nginx -g 'daemon off;'"]
+# 启动脚本运行 crond 和 nginx
+CMD ["/usr/src/app/start.sh"]
 
 EXPOSE 80
