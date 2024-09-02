@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function getWbComparisonIndexOverview(query) {
+export function getWbOlpIndexOverview(query) {
   return request({
     url: '/wb/olp/index/overview',
     method: 'get',
@@ -8,7 +8,7 @@ export function getWbComparisonIndexOverview(query) {
   })
 }
 
-export function getWbComparisonIndexTrending(query) {
+export function getWbOlpIndexTrending(query) {
   return request({
     url: '/wb/olp/index/trending',
     method: 'get',

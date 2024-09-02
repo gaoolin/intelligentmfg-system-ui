@@ -9,15 +9,15 @@
 </template>
 
 <script>
-import { getWbComparisonIndexOverview, getWbComparisonIndexTrending } from '@/api/biz/wb/index'
-import WbComparisonIndexOverview from './WbComparisonIndexOverview'
-import WbComparisonTrending from './WbComparisonTrending'
+import { getWbOlpIndexOverview, getWbOlpIndexTrending } from '@/api/biz/wb/index'
+import WbOlpIndexOverview from './WbOlpIndexOverview'
+import WbOlpTrending from './WbOlpTrending'
 
 export default {
   name: 'Index',
   components: {
-    'bar-chart': WbComparisonTrending,
-    'panel-group': WbComparisonIndexOverview
+    'bar-chart': WbOlpTrending,
+    'panel-group': WbOlpIndexOverview
   },
 
   data() {
@@ -33,7 +33,7 @@ export default {
       panelData: {
         modTtl: 0,
         modAvgLine: 0,
-        ttlComparisonCnt: 0,
+        ttlWbOlpCnt: 0,
         ttlInterceptCnt: 0
       }
     }
@@ -41,14 +41,14 @@ export default {
 
   methods: {
     updateIndexOverviewData() {
-      getWbComparisonIndexOverview().then(response => {
-        this.$set(this.panelData, 'modTtl', response.data.wbComparisonStdModelsTtlCnt)
-        this.$set(this.panelData, 'modAvgLine', response.data.wbComparisonStdModelAvgCnt)
+      getWbOlpIndexOverview().then(response => {
+        this.$set(this.panelData, 'modTtl', response.data.wbOlpStdModelsTtlCnt)
+        this.$set(this.panelData, 'modAvgLine', response.data.wbOlpStdModelAvgCnt)
       })
     },
 
     updateIndexTrendingData() {
-      getWbComparisonIndexTrending().then(response => {
+      getWbOlpIndexTrending().then(response => {
         let xAxisDataTmp = []
         let xAxisData
         let data0 = []
@@ -127,7 +127,7 @@ export default {
         let ttl_0 = this.sum(data0)
         let ttl = this.sum(data0) + this.sum(data1) + this.sum(data2) + this.sum(data3) + this.sum(data4)
 
-        this.$set(this.panelData, 'ttlComparisonCnt', ttl)
+        this.$set(this.panelData, 'ttlWbOlpCnt', ttl)
         this.$set(this.panelData, 'ttlInterceptCnt', ttl - ttl_0)
         this.loading = false
       })

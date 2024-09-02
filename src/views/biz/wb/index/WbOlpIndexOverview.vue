@@ -38,7 +38,7 @@
           <div class="card-panel-text">
             近15天对比次数
           </div>
-          <count-to :start-val="0" :end-val="ttlComparisonCnt" :duration="2000" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="ttlWbOlpCnt" :duration="2000" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -78,7 +78,7 @@ export default {
     return {
       modTtl: 0,
       modAvgLine: 0,
-      ttlComparisonCnt: 0,
+      ttlWbOlpCnt: 0,
       ttlInterceptCnt: 0
     }
   },
@@ -91,7 +91,7 @@ export default {
     setPanelVal(val) {
       this.modTtl = val.modTtl;
       this.modAvgLine = val.modAvgLine;
-      this.ttlComparisonCnt = val.ttlComparisonCnt;
+      this.ttlWbOlpCnt = val.ttlWbOlpCnt;
       this.ttlInterceptCnt = val.ttlInterceptCnt
     },
 
