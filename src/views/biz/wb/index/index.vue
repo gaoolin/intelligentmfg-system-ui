@@ -1,23 +1,23 @@
 <template>
   <div class="dashboard-editor-container">
-<!--    <panel-group :panel-data="panelData" />-->
+    <panel-group :panel-data="panelData" />
 
-<!--    <el-row style="background:#fff; padding:16px 16px 0; margin-bottom:32px;">-->
-<!--      <bar-chart :chart-data="barChartData"/>-->
-<!--    </el-row>-->
+    <el-row style="background:#fff; padding:16px 16px 0; margin-bottom:32px;">
+      <bar-chart :chart-data="barChartData"/>
+    </el-row>
   </div>
 </template>
 
 <script>
-// import WbComparisonTrending from './biz/wb/statistics/WbComparisonTrending'
-// import WbComparisonIndexOverview from './biz/wb/statistics/WbComparisonIndexOverview'
 import { getWbComparisonIndexOverview, getWbComparisonIndexTrending } from '@/api/biz/wb/index'
+import WbComparisonIndexOverview from './WbComparisonIndexOverview'
+import WbComparisonTrending from './WbComparisonTrending'
 
 export default {
   name: 'Index',
   components: {
-    // 'bar-chart': WbComparisonTrending,
-    // 'panel-group': WbComparisonIndexOverview
+    'bar-chart': WbComparisonTrending,
+    'panel-group': WbComparisonIndexOverview
   },
 
   data() {
@@ -42,7 +42,6 @@ export default {
   methods: {
     updateIndexOverviewData() {
       getWbComparisonIndexOverview().then(response => {
-
         this.$set(this.panelData, 'modTtl', response.data.wbComparisonStdModelsTtlCnt)
         this.$set(this.panelData, 'modAvgLine', response.data.wbComparisonStdModelAvgCnt)
       })
@@ -152,7 +151,6 @@ export default {
     this.doIt()
   },
 }
-
 
 </script>
 

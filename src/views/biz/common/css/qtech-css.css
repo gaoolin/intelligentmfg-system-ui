@@ -1,0 +1,72 @@
+.dialog-footer {
+  text-align: right;
+}
+
+.el-table th {
+  text-align: center;
+}
+
+.el-button .el-button--primary {
+  background-color: #4fc3f7;
+  border-color: #004d40;
+  color: #ffffff;
+}
+
+/* 上传按钮和返回按钮的容器，增加下边距 */
+.upload-row {
+  margin-top: 10px;
+  margin-bottom: 10px; /* 下边距 */
+}
+
+/* 上传按钮样式 */
+.upload-row .el-button--primary {
+  background-color: #4fc3f7; /* 与表格标题颜色一致 */
+  border-color: #004d40; /* 深绿色边框色 */
+  color: #ffffff; /* 白色文字 */
+}
+
+/* 返回按钮样式 */
+.upload-row .el-button {
+  background-color: #4fc3f7; /* 与表格标题颜色一致 */
+  border-color: #004d40; /* 深绿色边框色 */
+  color: #ffffff; /* 白色文字 */
+}
+
+.el-table .el-button--primary {
+  background-color: #4fc3f7; /* 与表格标题颜色一致 */
+  border-color: #004d40; /* 深绿色边框色 */
+  color: #ffffff; /* 白色文字 */
+}
+
+.el-table .el-button--warning {
+  background-color: #ffb74d; /* 柔和的橙色，温暖但不突兀 */
+  border-color: #ffa726; /* 稍深的橙色边框 */
+  color: #ffffff; /* 白色文字 */
+}
+
+.el-table .el-button--danger {
+  background-color: #e57373; /* 柔和的红色，警示效果 */
+  border-color: #d32f2f; /* 深红色边框 */
+  color: #ffffff; /* 白色文字 */
+}
+
+.el-form-item {
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+/* 新增的 a 样式 */
+.table-hover a {
+  text-decoration: underline; /* 添加下划线 */
+}
+
+.table-hover a:hover {
+  font-size: 22px;
+  text-decoration: none;
+  color: #00afff;
+}
+
+.table-hover a:active {
+  text-decoration: none;
+  color: #e57373;
+}

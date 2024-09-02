@@ -1,13 +1,16 @@
-<!-- 公告栏组件 -->
 <template>
-  <div class="notice-bar" ref="noticeBarRef"  v-if="false">
-
-    <div class="notice-bar-content" ref="contentRef" :style="contentStyle">
-      <slot></slot>
-      <!-- 如果开启动画 内容循环 -->
+  <div class="notice-bar" ref="noticeBarRef">
+    <div
+      class="notice-bar-content"
+      ref="contentRef"
+      :style="contentStyle"
+      @mouseenter="pauseAnimate"
+      @mouseleave="resumeAnimate"
+    >
+      <slot :notices="notices" />
       <template v-if="animateFlag">
         <span class="content-headway" :style="{ width: `${headway}px` }"></span>
-        <slot></slot>
+        <slot :notices="notices" />
       </template>
     </div>
   </div>
@@ -16,20 +19,25 @@
 <script>
 export default {
   name: 'NoticeBar',
-  // 父组件传递数据
   props: {
-    // 进步 每秒移动像素值
+    notices: {
+      type: Array,
+      required: true
+    },
     speed: {
       type: Number,
       default: 50
     },
-    // 首尾间距
     headway: {
       type: Number,
       default: 60
+    },
+    pauseOnHover: {
+      type: Boolean,
+      default: true
     }
   },
-  data () {
+  data() {
     return {
       contentStyle: {
         transitionDuration: '0s',
@@ -38,60 +46,71 @@ export default {
       contentWidth: 0,
       time: 0,
       timer: undefined,
-      animateFlag: true
-    }
+      animateFlag: true,
+      isPaused: false,
+      currentTranslateX: 0
+    };
   },
-  // 方法集合
   methods: {
-    // 初始化
-    init () {
-      // 容器宽度
-      const barWidth = this.$refs.noticeBarRef.offsetWidth
-      // 内容宽度
-      const contentWidth = this.$refs.contentRef.offsetWidth
+    init() {
+      const barWidth = this.$refs.noticeBarRef.offsetWidth;
+      const contentWidth = this.$refs.contentRef.offsetWidth;
       if (contentWidth >= barWidth) {
-        // 内容宽度 + 间距
-        this.contentWidth = contentWidth + this.headway
-        this.animateFlag = true
-        this.openCycle()
+        this.contentWidth = contentWidth + this.headway;
+        this.animateFlag = true;
+        this.openCycle();
       }
     },
-    // 开启循环
-    openCycle () {
-      // 内容宽度 / 进步数值 = 动画时长
-      this.time = this.contentWidth / this.speed
-      this.startAnimate()
-      // 循环
+    openCycle() {
+      this.time = this.contentWidth / this.speed;
+      this.startAnimate();
       this.timer = setInterval(() => {
-        this.startAnimate()
-      }, this.time * 1000)
-      // 消除定时器
+        this.startAnimate();
+      }, this.time * 1000);
       this.$once('hook:beforeDestroy', () => {
-        clearInterval(this.timer)
-        this.timer = null
-      })
+        clearInterval(this.timer);
+        this.timer = null;
+      });
     },
-    // 开启动画
-    startAnimate () {
-      // 动画初始状态
-      this.contentStyle = {
-        transitionDuration: '0s',
-        transform: 'translateX(0px)'
-      }
-      // 动画开启 time 动画时间 contentWidth 动画长度
-      setTimeout(() => {
+    startAnimate() {
+      if (!this.isPaused) {
+        this.currentTranslateX = 0;
         this.contentStyle = {
-          transitionDuration: `${this.time}s`,
-          transform: `translateX(-${this.contentWidth}px)`
-        }
-      }, 10)
+          transitionDuration: '0s',
+          transform: `translateX(${this.currentTranslateX}px)`
+        };
+        setTimeout(() => {
+          this.currentTranslateX = -this.contentWidth;
+          this.contentStyle = {
+            transitionDuration: `${this.time}s`,
+            transform: `translateX(${this.currentTranslateX}px)`
+          };
+        }, 10);
+      }
+    },
+    pauseAnimate() {
+      if (this.pauseOnHover) {
+        this.isPaused = true;
+        const computedStyle = window.getComputedStyle(this.$refs.contentRef);
+        const matrix = new WebKitCSSMatrix(computedStyle.transform);
+        this.currentTranslateX = matrix.m41;
+        this.contentStyle.transitionDuration = '0s';
+        this.contentStyle.transform = `translateX(${this.currentTranslateX}px)`;
+      }
+    },
+    resumeAnimate() {
+      if (this.pauseOnHover && this.isPaused) {
+        this.isPaused = false;
+        const remainingTime = (this.contentWidth + this.currentTranslateX) / this.speed;
+        this.contentStyle.transitionDuration = `${remainingTime}s`;
+        this.contentStyle.transform = `translateX(-${this.contentWidth}px)`;
+      }
     }
   },
-  // 生命周期 - 页面完成（可以访问当前dom实例）
-  mounted () {
-    this.init()
+  mounted() {
+    this.init();
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -104,15 +123,8 @@ export default {
   height: 3%;
   align-items: center;
   overflow: hidden;
-  &::before {
-    content: '';
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    right: 0;
-    background: #e6a23c;
-    //background: linear-gradient(150deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%);
-  }
+  background: var(--notice-bar-bg, #e6a23c);
+
   .notice-bar-content {
     position: absolute;
     white-space: nowrap;

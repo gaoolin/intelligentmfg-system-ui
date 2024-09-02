@@ -197,7 +197,7 @@
 import { getToken } from '@/utils/auth'
 import { getAaParamsParsed, updateAaParamsModelInfo } from '@/api/biz/aa/params'
 import { checkPermi, checkRole } from '@/utils/permission'
-import DateTimeRangePicker from '@/components/DateTimeRangePicker.vue'
+import DateTimeRangePicker from '@/views/biz/common/DateTimeRangePicker.vue'
 
 export default {
   name: 'index',

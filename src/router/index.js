@@ -166,28 +166,28 @@ export const dynamicRoutes = [
     ]
   },
   {
-    path: '/biz/wbcomparison/statistics/percentage',
+    path: '/biz/wb/statistics/percentage',
     component: Layout,
     hidden: true,
     children: [
       {
         path: 'index',
-        component: () => import('@/views/biz/wbcomparison/statistics/percentage/index'),
+        component: () => import('@/views/biz/wb/statistics/percentage/index'),
         name: 'percentage',
-        meta: { title: '阶1', activeMenu: '/biz/wbcomparison/statistics/percentage' }
+        meta: { title: '阶1', activeMenu: '/biz/wb/statistics/percentage' }
       }
     ]
   },
   {
-    path: '/biz/wbcomparison/statistics/particulars',
+    path: '/biz/wb/statistics/particulars',
     component: Layout,
     hidden: true,
     children: [
       {
         path: 'index',
-        component: () => import('@/views/biz/wbcomparison/statistics/particulars/index'),
+        component: () => import('@/views/biz/wb/statistics/particulars/index'),
         name: 'particulars',
-        meta: { title: '阶2', activeMenu: '/biz/wbcomparison/statistics/particulars' }
+        meta: { title: '阶2', activeMenu: '/biz/wb/statistics/particulars' }
       }
     ]
   },

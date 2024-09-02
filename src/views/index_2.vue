@@ -56,7 +56,7 @@
 
 <script>
 import * as echarts from 'echarts'
-import { getWbComparisonIndexOverview, getWbComparisonIndexTrending } from '@/api/biz/wbcomparison/index'
+import { getWbComparisonIndexOverview, getWbComparisonIndexTrending } from '@/api/biz/wb/index'
 
 export default {
   name: 'Index',

@@ -12,7 +12,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="cyan" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -33,12 +33,13 @@
 
     <template>
       <el-table
-        v-loading="loading"
-        :data="list"
+        v-loading="loading" :data="list"
+        :header-cell-style="headerCellStyle"
+        :cell-style="bodyCellStyle"
+        :style="tableStyle()"
         border
-        style="width: 100%;"
-        :header-cell-style="{background:'#F0F2F5',color:'#606266'}">
-        <el-table-column label="序号" type="index" align="center" width="50"/>
+        style="width: 100%;">
+        <el-table-column label="序号" type="index" align="center" width="60"/>
         <el-table-column label="机型" align="center" prop="prodType"/>
         <el-table-column label="list参数个数" align="center" prop="listParams"/>
         <el-table-column label="item参数个数" align="center" prop="itemParams"/>
@@ -134,7 +135,8 @@
 </template>
 
 <script>
-
+import '@/views/biz/common/css/qtech-css.css'
+import { headerCellStyle, rowClassName, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
 import {
   deleteAaParamsModelInfo,
   getAaParamsModelInfo,
@@ -187,6 +189,11 @@ export default {
   },
 
   methods: {
+    headerCellStyle,
+    rowClassName,
+    bodyCellStyle,
+    tableStyle,
+
     /** 查询参数列表 */
     getList() {
       this.loading = true

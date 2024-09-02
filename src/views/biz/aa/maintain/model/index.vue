@@ -34,7 +34,9 @@
     <template>
       <!-- 数据表格 -->
       <el-table v-loading="loading" :data="resultList" :key="refreshKey" border
-                :header-cell-style="tableHeaderCellStyle"
+                :header-cell-style="headerCellStyle"
+                :cell-style="bodyCellStyle"
+                :style="tableStyle()"
       >
         <!-- 产品信息 -->
         <el-table-column label="机型" align="center" width="100" fixed>
@@ -985,6 +987,8 @@
 <script>
 import { getAaParamsStdModels, updateAaParamsStdModel, exportAaParamsModel } from '@/api/biz/aa/params'
 import { checkPermi, checkRole } from '@/utils/permission' // 权限判断函数
+import '@/views/biz/common/css/qtech-css.css'
+import { headerCellStyle, rowClassName, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
 
 export default {
   name: 'index',
@@ -1146,6 +1150,11 @@ export default {
   methods: {
     checkPermi,
     checkRole,
+
+    headerCellStyle,
+    rowClassName,
+    bodyCellStyle,
+    tableStyle,
 
     getList() {
       this.loading = true
@@ -1316,9 +1325,6 @@ export default {
         }
       })
     },
-    tableHeaderCellStyle({ row, column, rowIndex, columnIndex }) {
-      return 'font-size: 14px; font-weight: bolder; align-items: center; text-align: center;'
-    },
 
     /** 字段校验规则 */
     checkParamsRule(rule, value, callback) {
@@ -1352,7 +1358,7 @@ export default {
       if (this.editForm[field] === '') {
         this.$set(this.editForm, field, null)
       }
-    }
+    },
   },
 
   created() {

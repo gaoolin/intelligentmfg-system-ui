@@ -16,21 +16,6 @@ export function listLatestCheckStatus(query) {
   })
 }
 
-export function getFactoryNames() {
-  return request({
-    url: '/aa/params/latest/status/factoryNames',
-    method: 'get'
-  })
-}
-
-export function getGroupNames(query) {
-  return request({
-    url: '/aa/params/latest/status/groupNames',
-    method: 'get',
-    params: query
-  })
-}
-
 export function getAaParamsStdModels(query) {
   return request({
     url: '/aa/params/model/detail/list',
@@ -144,5 +129,36 @@ export function downloadAaSoftware(hdfsPath) {
     method: 'get',
     params: { hdfsPath: hdfsPath },
     responseType: 'blob',
+  })
+}
+
+export function listAaEquipmentInfo(query) {
+  return request({
+    url: '/aa/params/eq/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function updateAaEqReverseStat(data) {
+  return request({
+    url: '/aa/params/eq/ignore',
+    method: 'post',
+    data
+  })
+}
+
+export function getFactoryNames() {
+  return request({
+    url: '/aa/params/common/factoryNames',
+    method: 'get'
+  })
+}
+
+export function getGroupNames(query) {
+  return request({
+    url: '/aa/params/common/workshopNames',
+    method: 'get',
+    params: query
   })
 }

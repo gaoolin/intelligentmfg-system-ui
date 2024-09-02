@@ -77,15 +77,15 @@
             />
           </el-form-item>
 
-          <el-form-item label="时段" prop="dtRange" label-width="50px">
+          <el-form-item prop="dtRange" label-width="50px">
             <date-time-range-picker
               v-model="queryParams.dtRange"
               label="时段"
               prop="dtRange"
               :max-span-value="30"
-              :max-span-unit="'minute'"
+              :max-span-unit="'day'"
               :required="true"
-              :enable-shortcuts="false"
+              :enableShortcuts="false"
             ></date-time-range-picker>
           </el-form-item>
 
@@ -97,40 +97,37 @@
 
         <!-- 数据表格 -->
         <el-table v-loading="loading" :data="resultList" :key="refreshKey" border
-                  :header-cell-style="tableHeaderCellStyle" v-if="activeTab === 'online'"
+                  :header-cell-style="headerCellStyle"
+                  :row-class-name="rowClassName"
+                  :cell-style="cellStyle"
+                  :style="tableStyle()" v-if="activeTab === 'online'"
         >
           <!-- 产品信息 -->
-          <el-table-column label="机型相关" align="left" width="160" fixed>
+          <el-table-column label="机型相关" align="left">
             <template slot-scope="scope">
               <div class="prop-container">
-                  <span class="prop-label">
-                    <div>
-                      机型:
-                    </div>
-                    <div>
-                      {{ $convertNull(scope.row.prodType) }}
-                    </div>
+                <span class="prop-label">
+                  机型:
+                  <span>
+                    {{ $convertNull(scope.row.prodType) }}
                   </span>
+                </span>
               </div>
               <div class="prop-container">
-                  <span class="prop-label">
-                    <div>
-                      盒子号:
-                    </div>
-                    <div>
-                      {{ $convertNull(scope.row.simId) }}
-                    </div>
+                <span class="prop-label">
+                  盒子号:
+                  <span style="font-size: 12px">
+                    {{ $convertNull(scope.row.simId) }}
                   </span>
+                </span>
               </div>
               <div class="prop-container">
-                  <span class="prop-label">
-                    <div>
-                      接收时间:
-                    </div>
-                    <div>
-                      {{ $convertNull(scope.row.receivedTime) }}
-                    </div>
+                <span class="prop-label">
+                  接收时间:
+                  <span style="font-size: 12px">
+                    {{ $convertNull(scope.row.receivedTime) }}
                   </span>
+                </span>
               </div>
             </template>
           </el-table-column>
@@ -1212,7 +1209,8 @@
 import { getToken } from '@/utils/auth'
 import { getAaParamsParsed, addAaParamsModel } from '@/api/biz/aa/params'
 import { checkPermi, checkRole } from '@/utils/permission'
-import DateTimeRangePicker from '@/components/DateTimeRangePicker.vue'
+import DateTimeRangePicker from '@/views/biz/common/DateTimeRangePicker.vue'
+import '@/views/biz/common/css/qtech-css.css'
 
 export default {
   name: 'index',
@@ -1555,7 +1553,36 @@ export default {
       if (this.editForm[field] === '') {
         this.$set(this.editForm, field, null)
       }
-    }
+    },
+
+    headerCellStyle() {
+      return {
+        backgroundColor: '#4fc3f7',  // 明亮的背景色
+        color: '#ffffff',            // 白色字体，强烈对比
+        fontWeight: 'bold',          // 粗体字体
+        textAlign: 'center',         // 居中文本对齐
+        fontSize: '15px'             // 清晰易读的字体大小
+      }
+    },
+    rowClassName({ row, rowIndex }) {
+      return rowIndex % 2 === 0 ? 'even-row' : 'odd-row'
+    },
+    cellStyle() {
+      return {
+        backgroundColor: '#e0f7fa',   // Clean, white background for clarity
+        color: '#111111',             // Harmonious teal text color
+        textAlign: 'center',          // Centered text for uniformity
+        fontSize: '16px',             // Slightly smaller font for readability
+        fontWeight: 'bold'
+      }
+    },
+    tableStyle() {
+      return {
+        border: '1px solid #4fc3f7',  // 深绿色边框
+        borderRadius: '8px',          // 圆角边框
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' // 添加阴影
+      }
+    },
   },
 
   mounted() {

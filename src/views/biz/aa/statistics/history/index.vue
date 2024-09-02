@@ -116,7 +116,12 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="resultList" :key="refreshKey">
+    <el-table v-loading="loading" :data="resultList" :key="refreshKey"
+              :header-cell-style="headerCellStyle"
+              :row-class-name="rowClassName"
+              :cell-style="cellStyle"
+              :style="tableStyle()"
+    >
       <el-table-column type="index" label="序号" width="55" align="center" fixed/>
       <el-table-column prop="factoryName" label="厂区" align="center" fixed/>
       <el-table-column prop="groupName" label="车间" align="center" fixed/>
@@ -143,6 +148,7 @@
 </template>
 
 <script>
+import '@/views/biz/common/css/qtech-css.css'
 import { listHistoryCheckStatus, getFactoryNames, getGroupNames } from '@/api/biz/aa/params'
 
 export default {
@@ -343,8 +349,37 @@ export default {
       diffDate = Math.abs(dt1 - dt2) // 取相差毫秒数的绝对值
       totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
       return totalDays // 相差的天数
-    }
+    },
 
+
+    headerCellStyle() {
+      return {
+        backgroundColor: '#4fc3f7',  // 明亮的背景色
+        color: '#ffffff',            // 白色字体，强烈对比
+        fontWeight: 'bold',          // 粗体字体
+        textAlign: 'center',         // 居中文本对齐
+        fontSize: '15px'             // 清晰易读的字体大小
+      }
+    },
+    rowClassName({ row, rowIndex }) {
+      return rowIndex % 2 === 0 ? 'even-row' : 'odd-row'
+    },
+    cellStyle() {
+      return {
+        backgroundColor: '#e0f7fa',   // Clean, white background for clarity
+        color: '#111111',             // Harmonious teal text color
+        textAlign: 'center',          // Centered text for uniformity
+        fontSize: '16px',             // Slightly smaller font for readability
+        fontWeight: 'bold'
+      }
+    },
+    tableStyle() {
+      return {
+        border: '1px solid #4fc3f7',  // 深绿色边框
+        borderRadius: '8px',          // 圆角边框
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' // 添加阴影
+      }
+    },
   },
 
   created() {
