@@ -26,16 +26,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <!--<el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['wb:info:add']"
-        >新增</el-button>
-      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -44,7 +34,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['wb:info:edit']"
+          v-hasPermi="['wbOlp:info:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -55,7 +45,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['wb:info:remove']"
+          v-hasPermi="['wbOlp:info:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -65,22 +55,24 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['wb:info:export']"
+          v-hasPermi="['wbOlp:info:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="comparisonList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="comparisonList"
+      @selection-change="handleSelectionChange"
+      :cell-style="bodyCellStyle"
+      :header-cell-style="headerCellStyle"
+      :style="tableStyle()"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column type="index" label="序号" width="55" align="center" fixed />
       <el-table-column label="机型" align="center" prop="mcId" />
       <el-table-column label="线数" align="center" prop="lineCount" />
-<!--      <el-table-column label="状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.comparison_mod_status" :value="scope.row.status"/>
-        </template>
-      </el-table-column>-->
       <el-table-column prop="status" label="模版状态" width="80" align="center">
         <template slot-scope="scope">
           <el-switch
@@ -107,14 +99,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['wb:info:edit']"
+            v-hasPermi="['wbOlp:info:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['wb:info:remove']"
+            v-hasPermi="['wbOlp:info:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -165,6 +157,8 @@
 </template>
 
 <script>
+import '@/views/biz/common/css/qtech-css.css'
+import { bodyCellStyle, headerCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles'
 import { listComparison, getComparison, delComparison, addComparison, updateComparison } from "@/api/biz/wb/info";
 import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
 
@@ -214,6 +208,9 @@ export default {
   methods: {
     checkPermi,
     checkRole,
+    headerCellStyle,
+    bodyCellStyle,
+    tableStyle,
     /** 查询智慧打线图列表 */
     getList() {
       this.loading = true;

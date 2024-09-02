@@ -23,8 +23,7 @@
         </el-link>
       </div>
     </el-upload>
-    <br/>
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer"  style="text-align: center; margin-top: 5px">
       <el-button type="primary" @click="submitUpload"> 上 传 服 务 器</el-button>
     </div>
   </div>
@@ -44,7 +43,7 @@ export default {
         // 设置上传的请求头部
         headers: { Authorization: 'Bearer ' + getToken() },
         // 上传的地址
-        url: process.env.VUE_APP_BASE_API + '/wbcomparison/upload/manual',
+        url: process.env.VUE_APP_BASE_API + '/wb/olp/upload/manual',
         // 上传的文件列表
         fileList: []
       }
@@ -63,7 +62,7 @@ export default {
 
     /** 下载模板操作 */
     importTemplate() {
-      this.download('/wb/upload/importTemplate', {}, `智慧打线图标准模版.xlsx`)
+      this.download('/wb/olp/upload/importTemplate', {}, `智慧打线图标准模版.xlsx`)
     },
     // 文件上传中处理
     handleFileUploadProgress(event, file, fileList) {

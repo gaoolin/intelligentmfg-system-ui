@@ -82,6 +82,8 @@
       :data="dataList" border stripe
       highlight-current-row
       @selection-change="handleSelectionChange"
+      :header-cell-style="headerCellStyle"
+      :style="tableStyle()"
     >
       <el-table-column prop="tableRowId" label="#" type="selection" align="center">
       </el-table-column>
@@ -120,7 +122,7 @@
       </el-table-column>
       <el-table-column prop="checkPort" label="校验值" align="center" min-width="40px">
       </el-table-column>
-      <el-table-column prop="pId" label="产品序号" align="center" min-width="30px">
+      <el-table-column prop="pId" label="产品序号" align="center" min-width="40px">
       </el-table-column>
 
       <el-table-column prop="operation" label="操作" fixed="right" align="center" width="108px">
@@ -144,8 +146,9 @@
 </template>
 
 <script>
+import '@/views/biz/common/css/qtech-css.css'
+import { bodyCellStyle, headerCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles'
 import { listUpload, addOnline } from '@/api/biz/wb/upload'
-
 import RightToolBarDownload from '@/views/biz/common/RightToolBarDownload'
 
 export default {
@@ -252,6 +255,9 @@ export default {
   },
 
   methods: {
+    headerCellStyle,
+    bodyCellStyle,
+    tableStyle,
     getList() {
       this.$refs['queryForm'].validate(valid => {
         if (valid) {
