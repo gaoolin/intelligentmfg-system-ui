@@ -75,7 +75,7 @@
       v-loading="loading"
       :data="tableData"
       :span-method="arraySpanMethod"
-      :cell-style="bodyCellStyle"
+      :cell-style="mergeCellStyles"
       :header-cell-style="headerCellStyle"
       :style="tableStyle()"
       class="table-hover"
@@ -436,6 +436,30 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
+
+    /** 样式控制方法 */
+    mergeCellStyles({ row, column, rowIndex, columnIndex }) {
+      let baseStyle = bodyCellStyle()
+      if (columnIndex === 6 && row[column.property] > 0) {
+        return {
+          ...baseStyle,
+          color: '#D32F2F', // 柔和的砖红色
+          fontSize: '18px',
+          fontWeight: 'bolder'
+        };
+      } else if ((columnIndex === 7 || columnIndex === 8) && row[column.property] > 0) {
+        return {
+          ...baseStyle,
+          color: '#D32F2F', // 柔和的砖红色
+          fontSize: '16px',
+          fontWeight: 'bolder',
+          background: '#FFF3E0' // 增加背景颜色，突显警示效果
+        };
+      } else {
+        return baseStyle;
+      }
+    },
+
     /** 四舍五入 保留N位小数 */
     getBit(value, bit = 2) {
       if (value !== null && value !== '') {

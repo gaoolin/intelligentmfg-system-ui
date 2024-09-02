@@ -454,25 +454,17 @@ export default {
     /** 样式控制方法 */
     mergeCellStyles({ row, column, rowIndex, columnIndex }) {
       let baseStyle = bodyCellStyle()
-
-      if (columnIndex === 6 && row[column.property] > 0) {
+      if ((columnIndex === 6 && row[column.property] > 0) || (columnIndex === 7 && row[column.property] !== 'qualified')) {
         return {
           ...baseStyle,
-          color: '#FF3030',
-          fontSize: '18px',
-          fontWeight: 'bolder'
-        }
-      } else if (columnIndex === 7 && row[column.property] !== 'qualified') {
-        return {
-          ...baseStyle,
-          background: 'linear-gradient(to right, #D32F2F, #F44336)', // 设置渐变背景
-          color: '#FFFFFF',
+          background: '#FFF3E0', // 增加背景颜色，突显警示效果
+          color: '#D32F2F', // 柔和的砖红色
           fontSize: '12px', // 略微调小字体使其更协调
           fontWeight: 'bold', // 字体加粗
-          padding: '8px', // 添加内边距
-          border: '1px solid #B71C1C', // 添加边框
-          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)', // 添加阴影效果
-          transition: 'all 0.3s ease' // 添加过渡效果
+          // padding: '8px', // 添加内边距
+          // border: '1px solid #B71C1C', // 添加边框
+          // boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)', // 添加阴影效果
+          // transition: 'all 0.3s ease' // 添加过渡效果
         }
       } else {
         return baseStyle
