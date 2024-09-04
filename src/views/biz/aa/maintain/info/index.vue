@@ -136,13 +136,8 @@
 
 <script>
 import '@/views/biz/common/css/qtech-css.css'
-import { headerCellStyle, rowClassName, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
-import {
-  deleteAaParamsModelInfo,
-  getAaParamsModelInfo,
-  updateAaParamsModelInfo,
-  updateAaParamsModelInfoStatus
-} from '@/api/biz/aa/params'
+import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
+import { deleteAaParamsModelInfo, getAaParamsModelInfo, updateAaParamsModelInfo, updateAaParamsModelInfoStatus } from '@/api/biz/aa/params'
 
 export default {
   name: 'index.vue',
@@ -190,7 +185,6 @@ export default {
 
   methods: {
     headerCellStyle,
-    rowClassName,
     bodyCellStyle,
     tableStyle,
 

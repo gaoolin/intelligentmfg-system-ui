@@ -47,8 +47,15 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="queryList" @selection-change="handleSelectionChange">
-      <el-table-column label="序号" type="index" align="center" />
+    <el-table
+      v-loading="loading"
+      :data="queryList"
+      @selection-change="handleSelectionChange"
+      :cell-style="bodyCellStyle"
+      :header-cell-style="headerCellStyle"
+      :style="tableStyle()"
+    >
+      <el-table-column label="序号" type="index" width="60" align="center" />
       <el-table-column label="机型" align="center" prop="mcId" />
       <el-table-column label="线径" align="center" prop="wireWidth" />
       <el-table-column label="标准用量" align="center" prop="standardWireUsage" >
@@ -112,6 +119,8 @@
 </template>
 
 <script>
+import '@/views/biz/common/css/qtech-css.css'
+import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
 import { listQuery, getQuery, delQuery, addQuery, updateQuery } from "@/api/biz/wire/standard/query";
 
 export default {
@@ -158,6 +167,9 @@ export default {
     this.getList();
   },
   methods: {
+    headerCellStyle,
+    bodyCellStyle,
+    tableStyle,
     /** 查询金线标准用量信息列表 */
     getList() {
       this.loading = true;

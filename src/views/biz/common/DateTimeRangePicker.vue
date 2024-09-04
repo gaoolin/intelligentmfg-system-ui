@@ -1,15 +1,14 @@
 <template>
   <el-form-item style="width: 100%; margin: 0; padding: 0;" :label="label" :prop="prop" :label-width="labelWidth" :rules="rules">
     <el-date-picker
-      v-model="internalValue"
-      :style="{ width: inputWidth }"
-      :value-format="valueFormat"
-      :type="pickerType"
+      v-model="queryParams.dtRange"
+      style="width: 340px"
+      value-format="yyyy-MM-dd HH:mm:ss"
+      type="datetimerange"
       range-separator="至"
-      :start-placeholder="startPlaceholder"
-      :end-placeholder="endPlaceholder"
-      :picker-options="mergedPickerOptions"
-      @change="handleChange"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      :picker-options="pickerOptions"
     ></el-date-picker>
   </el-form-item>
 </template>

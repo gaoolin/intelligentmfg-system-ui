@@ -93,7 +93,6 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
-          @change="dataChange"
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -118,8 +117,7 @@
 
     <el-table v-loading="loading" :data="resultList" :key="refreshKey"
               :header-cell-style="headerCellStyle"
-              :row-class-name="rowClassName"
-              :cell-style="cellStyle"
+              :cell-style="bodyCellStyle"
               :style="tableStyle()"
     >
       <el-table-column type="index" label="序号" width="55" align="center" fixed/>
@@ -130,9 +128,9 @@
       <el-table-column prop="prodType" label="机型" align="center"/>
       <el-table-column prop="simId" label="盒子号" align="center"/>
       <el-table-column prop="checkDt" label="点检时间" align="center"/>
-      <el-table-column prop="statusCode" label="状态" align="center" >
+      <el-table-column prop="statusCode" label="状态" align="center">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.aa_list_params_status" :value="scope.row.statusCode" />
+          <dict-tag :options="dict.type.aa_list_params_status" :value="scope.row.statusCode"/>
         </template>
       </el-table-column>
       <el-table-column prop="description" label="描述" align="center" show-overflow-tooltip/>
@@ -149,7 +147,9 @@
 
 <script>
 import '@/views/biz/common/css/qtech-css.css'
-import { listHistoryCheckStatus, getFactoryNames, getGroupNames } from '@/api/biz/aa/params'
+import { pickerOptionsSet1 } from '@/views/biz/common/js/pickerOptionsConfig'
+import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
+import { getFactoryNames, getGroupNames, listHistoryCheckStatus } from '@/api/biz/aa/params'
 
 export default {
   name: 'index.vue',
@@ -181,100 +181,15 @@ export default {
         prodType: null,
         simId: null,
         statusCode: null,
-        dtRange: [],
+        dtRange: []
       },
-      pickerOptions: {
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.setHours(0, 0, 0).valueOf())
-            end.setTime(end.setHours(23, 59, 59).valueOf())
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59) - 1 * 1440 * 60 * 1000)
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前两天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setTime(new Date(end.setHours(23, 59, 59).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            start.setTime(start.setTime(new Date(start.setHours(0, 0, 0).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前三天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 3 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 3 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 7 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 7 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前两天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 2 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前三天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 3 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '近一周',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 7 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '近一个月',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 30 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }]
-      }
+      pickerOptions: pickerOptionsSet1
     }
   },
-
   methods: {
+    headerCellStyle,
+    bodyCellStyle,
+    tableStyle,
     /** 查询设备比对结果列表 */
     getList() {
       this.loading = true
@@ -319,10 +234,6 @@ export default {
       this.handleQuery()
     },
 
-    dataChange() {
-      this.getList()
-    },
-
     handleExport() {
       this.download('aa/params/history/status/export', {
         ...this.queryParams
@@ -350,38 +261,7 @@ export default {
       totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
       return totalDays // 相差的天数
     },
-
-
-    headerCellStyle() {
-      return {
-        backgroundColor: '#4fc3f7',  // 明亮的背景色
-        color: '#ffffff',            // 白色字体，强烈对比
-        fontWeight: 'bold',          // 粗体字体
-        textAlign: 'center',         // 居中文本对齐
-        fontSize: '15px'             // 清晰易读的字体大小
-      }
-    },
-    rowClassName({ row, rowIndex }) {
-      return rowIndex % 2 === 0 ? 'even-row' : 'odd-row'
-    },
-    cellStyle() {
-      return {
-        backgroundColor: '#e0f7fa',   // Clean, white background for clarity
-        color: '#111111',             // Harmonious teal text color
-        textAlign: 'center',          // Centered text for uniformity
-        fontSize: '16px',             // Slightly smaller font for readability
-        fontWeight: 'bold'
-      }
-    },
-    tableStyle() {
-      return {
-        border: '1px solid #4fc3f7',  // 深绿色边框
-        borderRadius: '8px',          // 圆角边框
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' // 添加阴影
-      }
-    },
   },
-
   created() {
     this.$set(this.queryParams, 'dtRange', [this.$dateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.$dateToStr(new Date(new Date().setHours(23, 59, 59).valueOf()))])
     this.getList()

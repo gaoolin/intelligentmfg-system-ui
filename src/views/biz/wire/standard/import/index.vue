@@ -23,10 +23,7 @@
         </el-link>
       </div>
     </el-upload>
-    <br/>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="submitUpload"> 上 传 服 务 器</el-button>
-    </div>
+    <el-button type="primary" style="margin-top: 3px;" @click="submitUpload"> 上 传 服 务 器</el-button>
   </div>
 </template>
 

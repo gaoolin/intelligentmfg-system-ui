@@ -985,10 +985,10 @@
 </template>
 
 <script>
-import { getAaParamsStdModels, updateAaParamsStdModel, exportAaParamsModel } from '@/api/biz/aa/params'
+import { getAaParamsStdModels, updateAaParamsStdModel } from '@/api/biz/aa/params'
 import { checkPermi, checkRole } from '@/utils/permission' // 权限判断函数
 import '@/views/biz/common/css/qtech-css.css'
-import { headerCellStyle, rowClassName, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
+import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
 
 export default {
   name: 'index',
@@ -1150,9 +1150,7 @@ export default {
   methods: {
     checkPermi,
     checkRole,
-
     headerCellStyle,
-    rowClassName,
     bodyCellStyle,
     tableStyle,
 
@@ -1339,6 +1337,7 @@ export default {
         callback(new Error('请输入正确的参数值, 必须是Enable、Disable或空值'))
       }
     },
+
     checkNumericOrEmpty(rule, value, callback) {
       const numericPattern = /^-?\d+(\.\d+)?$/
       if (!value) {

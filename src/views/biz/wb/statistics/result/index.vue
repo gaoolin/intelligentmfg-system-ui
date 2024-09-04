@@ -42,7 +42,7 @@
           v-model="queryParams.simId"
           placeholder="请输入盒子号"
           clearable
-          @keyup.enter.native="handleQuery"
+          @change="handleQuery"
         />
       </el-form-item>
       <el-form-item label="机型" prop="prodType">
@@ -50,8 +50,7 @@
           v-model="queryParams.prodType"
           placeholder="请输入机型"
           clearable
-          @change="dataChange"
-          @keyup.enter.native="handleQuery"
+          @change="handleQuery"
         />
       </el-form-item>
       <el-form-item label="状态" prop="status">

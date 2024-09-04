@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-    <el-card style="margin-top: 2px">
       <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
         <el-form-item label="厂区" prop="factoryName">
           <el-select
@@ -10,7 +9,7 @@
             clearable
             filterable
             :loading="loading"
-            @change="changeOneSelection($event, factoryOptions, queryParams.factoryName)"
+            @change="handleQuery"
           >
             <el-option
               v-for="item in factoryOptions"
@@ -30,6 +29,7 @@
             filterable
             :loading="loading"
             @focus="getWorkshopNameList"
+            @change="handleQuery"
           >
             <el-option
               v-for="item in workshopOptions"
@@ -81,7 +81,7 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="queryParams.status" placeholder="请选择状态" clearable style="width: 240px">
+          <el-select v-model="queryParams.status" placeholder="请选择状态" clearable @change="handleQuery" style="width: 240px">
             <el-option
               v-for="dict in dict.type.wire_diff_status"
               :key="dict.value"
@@ -110,10 +110,17 @@
         </el-col>
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
-    </el-card>
 
-    <el-card style="margin-top: 2px">
-      <el-table v-loading="loading" :data="eqList" @selection-change="handleSelectionChange">
+
+    <el-card>
+      <el-table
+        v-loading="loading"
+        :data="eqList"
+        @selection-change="handleSelectionChange"
+        :cell-style="bodyCellStyle"
+        :header-cell-style="headerCellStyle"
+        :style="tableStyle()"
+      >
         <el-table-column label="序号" type="index" width="55" align="center"/>
         <el-table-column label="厂区" align="center" prop="factoryName"/>
         <el-table-column label="车间" align="center" prop="workshop"/>
@@ -149,11 +156,11 @@
 </template>
 
 <script>
+import '@/views/biz/common/css/qtech-css.css'
+import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
+import { pickerOptionsSet2 } from '@/views/biz/common/js/pickerOptionsConfig'
 import { listEq } from '@/api/biz/wire/monitor/eq'
-import {
-  factoryNameList,
-  workshopNameList
-} from '@/api/biz/wire/monitor/factoryAndWorkshopNameList'
+import { factoryNameList, workshopNameList } from '@/api/biz/wire/monitor/factoryAndWorkshopNameList'
 
 export default {
   name: 'Eq',
@@ -202,33 +209,7 @@ export default {
       // 区选择器
       workshopOptions: [],
       // 时间选择器范围
-      pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-            picker.$emit('pick', [start, end])
-          }
-        }]
-      }
+      pickerOptions: pickerOptionsSet2,
     }
   },
   created() {
@@ -236,6 +217,9 @@ export default {
     this.getFactoryNameList();
   },
   methods: {
+    headerCellStyle,
+    bodyCellStyle,
+    tableStyle,
     /** 查询金线消耗量列表 */
     getList() {
       this.loading = true
@@ -313,6 +297,7 @@ export default {
           targetStr = item
         }
       })
+      this.handleQuery();
     },
     /** 根据厂给定的值，查询区的值 */
     getWorkshopNameList() {
@@ -326,3 +311,6 @@ export default {
   }
 }
 </script>
+<style scoped>
+
+</style>

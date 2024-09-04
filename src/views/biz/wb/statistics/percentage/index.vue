@@ -11,6 +11,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
+          @change="handleQuery"
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="厂区" prop="companyName">
@@ -131,6 +132,7 @@
 
 <script>
 import '@/views/biz/common/css/qtech-css.css'
+import { pickerOptionsSet1 } from '@/views/biz/common/js/pickerOptionsConfig'
 import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
 import { listComparisonRatio } from '@/api/biz/wb/percentage'
 import { getFactoryNames, getGroupNames } from '@/api/biz/wb/index'
@@ -145,93 +147,7 @@ export default {
       total: 0,
       loading: true,
       tableData: null,
-      pickerOptions: {
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setHours(0, 0, 0).valueOf())
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59) - 1 * 1440 * 60 * 1000)
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前两天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setTime(new Date(end.setHours(23, 59, 59).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            start.setTime(start.setTime(new Date(start.setHours(0, 0, 0).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前三天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 3 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 3 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 7 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 7 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前两天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 2 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前三天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 3 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '近一周',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 7 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '近一个月',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 30 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }]
-      },
+      pickerOptions: pickerOptionsSet1,
       // 厂选择器
       factoryOptions: [],
       // 区选择器
@@ -439,25 +355,29 @@ export default {
 
     /** 样式控制方法 */
     mergeCellStyles({ row, column, rowIndex, columnIndex }) {
-      let baseStyle = bodyCellStyle()
-      if (columnIndex === 6 && row[column.property] > 0) {
-        return {
-          ...baseStyle,
-          color: '#D32F2F', // 柔和的砖红色
-          fontSize: '18px',
-          fontWeight: 'bolder'
-        };
-      } else if ((columnIndex === 7 || columnIndex === 8) && row[column.property] > 0) {
-        return {
-          ...baseStyle,
+      let baseStyle = bodyCellStyle();
+
+      // 默认样式
+      let style = {
+        ...baseStyle,
+        background: baseStyle.backgroundColor || '#e0f7fa',  // 这里确保背景色被重置
+        color: baseStyle.color || '#111111',
+        textAlign: baseStyle.textAlign || 'center',
+        fontSize: baseStyle.fontSize || '14px',
+        fontWeight: baseStyle.fontWeight || 'bold'
+      };
+
+      if ((columnIndex === 7 || columnIndex === 8) && row[column.property] > 0) {
+        style = {
+          ...style,
           color: '#D32F2F', // 柔和的砖红色
           fontSize: '16px',
           fontWeight: 'bolder',
           background: '#FFF3E0' // 增加背景颜色，突显警示效果
         };
-      } else {
-        return baseStyle;
       }
+
+      return style;
     },
 
     /** 四舍五入 保留N位小数 */

@@ -177,6 +177,8 @@
 </template>
 
 <script>
+import '@/views/biz/common/css/qtech-css.css'
+import { pickerOptionsSet1 } from '@/views/biz/common/js/pickerOptionsConfig'
 import { listOverview, getUpdateTime } from '@/api/biz/wb/overview'
 import { getFactoryNames, getGroupNames } from '@/api/biz/wb/index'
 import { listEqInfo } from '@/api/biz/eqn/networking'
@@ -193,94 +195,7 @@ export default {
       showSearch: true,
       loading: true,
       tableData: null,
-      pickerOptions: {
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.setHours(0, 0, 0).valueOf())
-            end.setTime(end.setHours(23, 59, 59).valueOf())
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59) - 1 * 1440 * 60 * 1000)
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前两天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setTime(new Date(end.setHours(23, 59, 59).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            start.setTime(start.setTime(new Date(start.setHours(0, 0, 0).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前三天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 3 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 3 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 7 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 7 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前两天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 2 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前三天至今',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 3 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '近一周',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 7 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '近一个月',
-          onClick(picker) {
-            const end = new Date(new Date().setHours(23, 59, 59).valueOf())
-            const start = new Date()
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 30 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }]
-      },
+      pickerOptions: pickerOptionsSet1,
       open: false,
       // 厂选择器
       factoryOptions: [],

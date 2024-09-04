@@ -122,9 +122,9 @@
   <el-table
     v-loading="loading"
     :data="tableData"
-    :cell-style="tableBodyCellStyle"
-    :header-cell-style="tableHeaderCellStyle"
-    style="width: 100%; color: #363636"
+    :header-cell-style="headerCellStyle"
+    :cell-style="bodyCellStyle"
+    :style="tableStyle()"
   >
     <el-table-column prop="companyName" label="厂区" align="center" min-width="100" fit></el-table-column>
     <el-table-column prop="deptName" label="站位" align="center" min-width="100" fit></el-table-column>
@@ -152,6 +152,8 @@
 </template>
 
 <script>
+import '@/views/biz/common/css/qtech-css.css'
+import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
 import { getFactoryNames, getGroupNames, listEqStatus, listOfflineEqs } from '@/api/biz/eqn/networking'
 import RightToolBarGoBack from '@/views/biz/common/RightToolBarGoBack'
 
@@ -169,53 +171,6 @@ export default {
       total: 0,
       loading: true,
       tableData: null,
-      pickerOptions: {
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.setHours(0, 0, 0).valueOf())
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59) - 1 * 1440 * 60 * 1000)
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前两天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setTime(new Date(end.setHours(23, 59, 59).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            start.setTime(start.setTime(new Date(start.setHours(0, 0, 0).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前三天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 3 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 3 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 7 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 7 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }]
-      },
       // 厂选择器
       factoryOptions: [],
       // 区选择器
@@ -256,6 +211,10 @@ export default {
   },
 
   methods: {
+    headerCellStyle,
+    bodyCellStyle,
+    tableStyle,
+
     load() {
       if (this.queryParams.label === '1') {
         this.listOfflineEqs()

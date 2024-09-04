@@ -66,17 +66,16 @@
     </el-row>
 
     <el-table
-
+      class="ele-body-base"
       v-loading="loading"
       :data="filterTableData"
       ref="table"
       id="table"
       show-summary
       border
-      :cell-style="bodyCellStyle"
-      :header-cell-style="headerCellStyle"
-      :style="tableStyle()"
-      class="table-hover"
+      :span-method="arraySpanMethod"
+      :cell-style="tableBodyCellStyle"
+      :header-cell-style="tableHeaderCellStyle"
     >
       <el-table-column prop="companyName" label="厂区" align="center" min-width="120" fit></el-table-column>
       <el-table-column prop="groupName" label="车间" align="center" min-width="120" fit></el-table-column>
@@ -84,9 +83,9 @@
       <el-table-column prop="ttlEqs" align="center" min-width="120" fit>
         <template slot-scope="scope" slot="header">
           <span>设备总数</span>
-            <el-tooltip class="item" effect="dark" placement="top-start" content="设备总数 = [有qcp参数模版] + [无qcp参数模版] + [未联网]">
-              <i class="el-icon-question" style="color:#272728; margin-left:2px;'"> </i>
-            </el-tooltip>
+          <el-tooltip class="item" effect="dark" placement="top-start" content="设备总数 = [有qcp参数模版] + [无qcp参数模版] + [未联网]">
+            <i class="el-icon-question" style="color:#272728; margin-left:2px;'"> </i>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column >
@@ -165,8 +164,6 @@
 </template>
 
 <script>
-import '@/views/biz/common/css/qtech-css.css'
-import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
 import { listQcpOverview, getDataMaxTime } from '@/api/biz/qcp/parameters'
 import RightToolBarDownload from '@/views/biz/common/RightToolBarDownload'
 
@@ -235,9 +232,6 @@ export default {
   },
 
   methods: {
-    headerCellStyle,
-    bodyCellStyle,
-    tableStyle,
     getList() {
       this.loading = true
       listQcpOverview(this.queryParams).then(response => {
@@ -338,6 +332,26 @@ export default {
       this.handleQuery()
     },
 
+    /** 样式控制方法 */
+    tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
+
+      return 'padding: 0; font-size: 16px; text-align: center; font-weight: bolder; '
+
+    },
+
+    tableHeaderCellStyle({ row, column, rowIndex, columnIndex }) {
+      let cellStyle1 = 'font-size: 1vw; font-weight: bolder; text-align: center; color: #fff; background: #3498db'
+      let cellStyle2 = 'font-size: 0.8vw; font-weight: bold; text-align: center; color: #fff; background: #3498db'
+
+      if (columnIndex === 4 && rowIndex === 0) {
+        return cellStyle2
+      }
+      if ((columnIndex < 4 || columnIndex > 4) && rowIndex === 0) {
+        return cellStyle1
+      }
+      return cellStyle2
+    },
+
     /** 表格合并行 */
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
       let needMerge = this.needMergeArr.some((item) => {
@@ -413,34 +427,21 @@ export default {
           // console.log(tds)
           tds[0].colSpan = 3
           tds[0].style.textAlign = 'center'
-          // tds[0].style.background = '#3498db'
-          tds[0].style.background = '#4fc3f7'
+          tds[0].style.background = '#3498db'
           tds[0].style.color = '#ffffff'
-          tds[0].style.fontSize = '1vw'
-          tds[0].style.fontWeight = 'bold'
           // 合并3个单元格右移了2个空单元格，需对其进行设置
           tds[1].style.display = 'none'
           tds[2].style.display = 'none'
-          tds[3].style.background = '#4fc3f7'
+          tds[3].style.background = '#3498db'
           tds[3].style.color = '#ffffff'
-          tds[3].style.fontSize = '1vw'
-          tds[3].style.fontWeight = 'bold'
-          tds[4].style.background = '#4fc3f7'
+          tds[4].style.background = '#3498db'
           tds[4].style.color = '#ffffff'
-          tds[4].style.fontSize = '1vw'
-          tds[4].style.fontWeight = 'bold'
-          tds[5].style.background = '#4fc3f7'
+          tds[5].style.background = '#3498db'
           tds[5].style.color = '#ffffff'
-          tds[5].style.fontSize = '1vw'
-          tds[5].style.fontWeight = 'bold'
-          tds[6].style.background = '#4fc3f7'
+          tds[6].style.background = '#3498db'
           tds[6].style.color = '#ffffff'
-          tds[6].style.fontSize = '1vw'
-          tds[6].style.fontWeight = 'bold'
-          tds[7].style.background = '#4fc3f7'
+          tds[7].style.background = '#3498db'
           tds[7].style.color = '#ffffff'
-          tds[7].style.fontSize = '1vw'
-          tds[7].style.fontWeight = 'bold'
         })
       }
     }
@@ -449,12 +450,53 @@ export default {
 </script>
 
 <style scoped>
+.table-content-font {
+  font-size: 16px;
+  color: #ff007b;
+}
+
+.table-link-font {
+  font-size: 16px;
+  font-weight: bolder;
+}
+
+a:link {
+  text-decoration: none;
+  color: brown;
+}
+
+a:visited {
+  text-decoration: none;
+  color: brown;
+}
+
+a:hover {
+  font-size: 25px;
+  text-decoration: none;
+  color: #ff007b;
+}
+
+a:active {
+  text-decoration: none;
+  color: black;
+}
+
+
+::v-deep .el-table .el-table__footer-wrapper .cell {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bolder;
+}
+
+::v-deep .el-table .cell {
+  white-space: pre-line;
+  text-align: center;
+}
 ::v-deep .el-table .el-table__header-wrapper th, .el-table .el-table__fixed-header-wrapper th {
+  background-color: #17B3A3;
   padding: 0;
+  color: black;
   height: 20px !important;
 }
 
-::v-deep .el-table .el-table__body-wrapper td, .el-table .el-table__fixed-body-wrapper td, .el-table .el-table__footer-wrapper td, .el-table .el-table__fixed-footer-wrapper td, .el-table .el-table__body el-table__row {
-  padding: 1px !important;
-}
 </style>

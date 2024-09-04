@@ -78,15 +78,16 @@
           </el-form-item>
 
           <el-form-item prop="dtRange" label-width="50px">
-            <date-time-range-picker
+            <el-date-picker
               v-model="queryParams.dtRange"
-              label="时段"
-              prop="dtRange"
-              :max-span-value="30"
-              :max-span-unit="'day'"
-              :required="true"
-              :enableShortcuts="false"
-            ></date-time-range-picker>
+              style="width: 340px"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              :picker-options="pickerOptions"
+            ></el-date-picker>
           </el-form-item>
 
           <el-form-item>
@@ -98,8 +99,7 @@
         <!-- 数据表格 -->
         <el-table v-loading="loading" :data="resultList" :key="refreshKey" border
                   :header-cell-style="headerCellStyle"
-                  :row-class-name="rowClassName"
-                  :cell-style="cellStyle"
+                  :cell-style="bodyCellStyle"
                   :style="tableStyle()" v-if="activeTab === 'online'"
         >
           <!-- 产品信息 -->
@@ -1209,15 +1209,12 @@
 import { getToken } from '@/utils/auth'
 import { getAaParamsParsed, addAaParamsModel } from '@/api/biz/aa/params'
 import { checkPermi, checkRole } from '@/utils/permission'
-import DateTimeRangePicker from '@/views/biz/common/DateTimeRangePicker.vue'
 import '@/views/biz/common/css/qtech-css.css'
+import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
 
 export default {
   name: 'index',
   dicts: ['aa_list_params_power'],
-  components: {
-    DateTimeRangePicker
-  },
 
   data() {
     return {
@@ -1392,6 +1389,9 @@ export default {
   methods: {
     checkPermi,
     checkRole,
+    headerCellStyle,
+    bodyCellStyle,
+    tableStyle,
 
     uploadFail() {
       this.$modal.msgError('远程服务异常！')
@@ -1517,10 +1517,6 @@ export default {
       })
     },
 
-    tableHeaderCellStyle({ row, column, rowIndex, columnIndex }) {
-      return 'font-size: 14px; font-weight: bolder; align-items: center; text-align: center;'
-    },
-
     /** 字段校验规则 */
     checkParamsRule(rule, value, callback) {
       if (!value) {
@@ -1552,35 +1548,6 @@ export default {
     handleInputChange(field) {
       if (this.editForm[field] === '') {
         this.$set(this.editForm, field, null)
-      }
-    },
-
-    headerCellStyle() {
-      return {
-        backgroundColor: '#4fc3f7',  // 明亮的背景色
-        color: '#ffffff',            // 白色字体，强烈对比
-        fontWeight: 'bold',          // 粗体字体
-        textAlign: 'center',         // 居中文本对齐
-        fontSize: '15px'             // 清晰易读的字体大小
-      }
-    },
-    rowClassName({ row, rowIndex }) {
-      return rowIndex % 2 === 0 ? 'even-row' : 'odd-row'
-    },
-    cellStyle() {
-      return {
-        backgroundColor: '#e0f7fa',   // Clean, white background for clarity
-        color: '#111111',             // Harmonious teal text color
-        textAlign: 'center',          // Centered text for uniformity
-        fontSize: '16px',             // Slightly smaller font for readability
-        fontWeight: 'bold'
-      }
-    },
-    tableStyle() {
-      return {
-        border: '1px solid #4fc3f7',  // 深绿色边框
-        borderRadius: '8px',          // 圆角边框
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' // 添加阴影
       }
     },
   },

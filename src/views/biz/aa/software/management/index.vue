@@ -13,18 +13,17 @@
           />
         </el-form-item>
 
-        <el-form-item prop="dtRange">
-          <date-time-range-picker
+        <el-form-item label="时段" prop="dtRange" label-width="50px">
+          <el-date-picker
             v-model="queryParams.dtRange"
-            label="时段"
-            prop="dtRange"
-            :type="'daterange'"
-            :max-span-value="30"
-            :max-span-unit="'day'"
-            :required="true"
-            :enable-shortcuts="true"
+            style="width: 340px"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
             :picker-options="pickerOptions"
-          ></date-time-range-picker>
+          ></el-date-picker>
         </el-form-item>
 
         <el-form-item>
@@ -55,9 +54,9 @@
     </el-row>
 
     <el-card>
-    <el-table :header-cell-style="headerCellStyle" :row-class-name="rowClassName"
-              :cell-style="cellStyle"
-              :style="tableStyle()" :data="fileList" style="width: 100%"
+    <el-table :header-cell-style="headerCellStyle"
+              :cell-style="bodyCellStyle"
+              :style="tableStyle()" :data="fileList"
               border
               @selection-change="handleSelectionChange"
     >
@@ -115,14 +114,14 @@
 </template>
 
 <script>
-import { downloadAaSoftware, listAaSoftwareInfo } from '@/api/biz/aa/params'
-import DateTimeRangePicker from '@/views/biz/common/DateTimeRangePicker.vue'
-import RightToolBarGoBack from '@/views/biz/common/RightToolBarGoBack'
 import '@/views/biz/common/css/qtech-css.css';
+import { pickerOptionsSet3 } from '@/views/biz/common/js/pickerOptionsConfig'
+import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
+import { downloadAaSoftware, listAaSoftwareInfo } from '@/api/biz/aa/params'
+import RightToolBarGoBack from '@/views/biz/common/RightToolBarGoBack'
 
 export default {
   components: {
-    DateTimeRangePicker,
     RightToolBarGoBack
   },
   data() {
@@ -134,53 +133,7 @@ export default {
       total: 0,
       loading: true,
       fileList: null,
-      pickerOptions: {
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.setHours(0, 0, 0).valueOf())
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59) - 1 * 1440 * 60 * 1000)
-            start.setTime(start.setTime(new Date().setHours(0, 0, 0) - 1 * 1440 * 60 * 1000))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前两天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setTime(new Date(end.setHours(23, 59, 59).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            start.setTime(start.setTime(new Date(start.setHours(0, 0, 0).valueOf() - 2 * 1440 * 60 * 1000).getTime()))
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前三天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 3 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 3 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '前一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(end.setHours(23, 59, 59).valueOf() - 7 * 1440 * 60 * 1000)
-            start.setTime(start.setHours(0, 0, 0).valueOf() - 7 * 1440 * 60 * 1000)
-            picker.$emit('pick', [start, end])
-          }
-        }]
-      },
+      pickerOptions: pickerOptionsSet3,
       // 厂选择器
       factoryOptions: [],
       // 区选择器
@@ -206,6 +159,10 @@ export default {
     }
   },
   methods: {
+    headerCellStyle,
+    bodyCellStyle,
+    tableStyle,
+
     getList() {
       this.loading = true
       listAaSoftwareInfo(this.queryParams).then(res => {
@@ -278,38 +235,7 @@ export default {
       this.currentPage = page
       this.fetchFiles()
     },
-    headerCellStyle() {
-      return {
-        backgroundColor: '#4fc3f7',  // 明亮的背景色
-        color: '#ffffff',            // 白色字体，强烈对比
-        fontWeight: 'bold',          // 粗体字体
-        borderBottom: '1px solid #004d40', // 深绿色底部边框
-        textAlign: 'center',         // 居中文本对齐
-        fontSize: '14px'             // 清晰易读的字体大小
-      }
-    },
-    rowClassName({ row, rowIndex }) {
-      return rowIndex % 2 === 0 ? 'even-row' : 'odd-row';
-    },
-    cellStyle() {
-      return {
-        backgroundColor: '#e0f7fa',   // Clean, white background for clarity
-        color: '#111111',             // Harmonious teal text color
-        borderBottom: '1px solid #004d40', // Deep teal border for continuity
-        textAlign: 'center',          // Centered text for uniformity
-        fontSize: '15px',             // Slightly smaller font for readability
-        fontWeight: 'bold',
-      }
-    },
-    tableStyle() {
-      return {
-        border: '1px solid #4fc3f7',  // 深绿色边框
-        borderRadius: '8px',          // 圆角边框
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // 添加阴影
-      }
-    },
   },
-
   created() {
   },
 

@@ -108,8 +108,7 @@
 
     <el-table v-loading="loading" :data="tableData"
               :header-cell-style="headerCellStyle"
-              :row-class-name="rowClassName"
-              :cell-style="cellStyle"
+              :cell-style="bodyCellStyle"
               :style="tableStyle()"
               border stripe
               style="width: 100%">
@@ -128,10 +127,10 @@
         </template>
         <template slot-scope="scope">
           <el-switch
-            v-model="scope.row.status === null ? 0 : scope.row.status"
+            v-model="scope.row.statusComputed"
             :active-value="0"
             :inactive-value="1"
-            :active-text="scope.row.status === 1 ? '放行' : '受控'"
+            :active-text="scope.row.statusComputed === 1 ? '放行' : '受控'"
             active-color="#13ce66"
             inactive-color="#ff4949"
             @change="changeSwitch(scope.row)">
@@ -155,7 +154,7 @@
 
 <script>
 import '@/views/biz/common/css/qtech-css.css'
-
+import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
 import { listAaEquipmentInfo, updateAaEqReverseStat, getFactoryNames, getGroupNames } from '@/api/biz/aa/params'
 
 export default {
@@ -191,7 +190,6 @@ export default {
         simId: null,
         prodType: null,
         status: null,
-        lastOpTime: null,
         remark: null
       },
       formLabelWidth: '68px',
@@ -201,11 +199,14 @@ export default {
   },
 
   methods: {
+    headerCellStyle,
+    bodyCellStyle,
+    tableStyle,
+
     /** 查询列表 */
     getList() {
       this.loading = true
       listAaEquipmentInfo(this.queryParams).then(response => {
-        console.log(response)
         this.tableData = response.rows
         this.total = response.total
         this.loading = false
@@ -215,7 +216,6 @@ export default {
     getFactoryNames() {
       this.factoryOptions = []
       getFactoryNames().then(response => {
-        console.log(response)
         for (const i in response.data) {
           let o = {}
           const tmp = response.data[i]['factoryName']
@@ -268,38 +268,11 @@ export default {
         this.columns[item].visible = !data.includes(key)
       }
     },
-    headerCellStyle() {
-      return {
-        backgroundColor: '#4fc3f7',  // 明亮的背景色
-        color: '#ffffff',            // 白色字体，强烈对比
-        fontWeight: 'bold',          // 粗体字体
-        textAlign: 'center',         // 居中文本对齐
-        fontSize: '15px'             // 清晰易读的字体大小
-      }
-    },
-    rowClassName({ row, rowIndex }) {
-      return rowIndex % 2 === 0 ? 'even-row' : 'odd-row'
-    },
-    cellStyle() {
-      return {
-        backgroundColor: '#e0f7fa',   // Clean, white background for clarity
-        color: '#111111',             // Harmonious teal text color
-        textAlign: 'center',          // Centered text for uniformity
-        fontSize: '16px',             // Slightly smaller font for readability
-        fontWeight: 'bold'
-      }
-    },
-    tableStyle() {
-      return {
-        border: '1px solid #4fc3f7',  // 深绿色边框
-        borderRadius: '8px',          // 圆角边框
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' // 添加阴影
-      }
-    },
+
     /** 修改模版状态 */
     changeSwitch(row) {
       this.queryParams.simId = row.simId
-      this.queryParams.status = row.status
+      this.queryParams.status = row.statusComputed
       updateAaEqReverseStat(this.queryParams).then(response => {
         if (response.code === 200) {
           this.$modal.msgSuccess('修改成功！')
@@ -311,12 +284,30 @@ export default {
       })
       this.queryParams.simId = null
       this.queryParams.status = null
-    }
+    },
+
+    initializeStatus() {
+      this.tableData.forEach(row => {
+        row.statusComputed = row.status === null ? 0 : row.status;
+      });
+    },
+
+
   },
 
   created() {
     this.getList()
     this.getFactoryNames()
+    this.initializeStatus()
+  },
+
+  watch: {
+    'tableData': {
+      deep: true,
+      handler(tableData) {
+        this.initializeStatus();
+      }
+    }
   }
 }
 

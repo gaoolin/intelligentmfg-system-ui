@@ -41,6 +41,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :picker-options="pickerOptions"
+          @change="handleQuery"
         >
         </el-date-picker>
       </el-form-item>
@@ -147,6 +148,7 @@
 
 <script>
 import '@/views/biz/common/css/qtech-css.css'
+import { pickerOptionsSet8 } from '@/views/biz/common/js/pickerOptionsConfig'
 import { bodyCellStyle, headerCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles'
 import { listUpload, addOnline } from '@/api/biz/wb/upload'
 import RightToolBarDownload from '@/views/biz/common/RightToolBarDownload'
@@ -177,35 +179,7 @@ export default {
       // 表单参数
       form: {},
       // 时间选择器范围
-      pickerOptions: {
-        shortcuts: [{
-          text: '近5分钟',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 60 * 1000 * 5)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '近10分钟',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 60 * 1000 * 10)
-            end.setTime(end.getTime() - 60 * 1000 * 5)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '近15分钟',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 60 * 1000 * 15)
-            end.setTime(end.getTime() - 60 * 1000 * 10)
-            picker.$emit('pick', [start, end])
-          }
-        }]
-      },
+      pickerOptions: pickerOptionsSet8,
 
       // 查询参数
       queryParams: {

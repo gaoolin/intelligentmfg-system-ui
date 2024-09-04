@@ -81,9 +81,9 @@
     v-loading="loading"
     :data="tableData"
     border
-    :span-method="arraySpanMethod"
-    :cell-style="tableBodyCellStyle"
-    :header-cell-style="tableHeaderCellStyle"
+    :cell-style="bodyCellStyle"
+    :header-cell-style="headerCellStyle"
+    :style="tableStyle()"
   >
     <el-table-column prop="companyName" label="厂区" align="center" min-width="100" fit></el-table-column>
     <el-table-column prop="groupName" label="车间" align="center" min-width="100" fit></el-table-column>
@@ -105,10 +105,10 @@
 </template>
 
 <script>
+import '@/views/biz/common/css/qtech-css.css'
+import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
 import { listQcpParams } from '@/api/biz/qcp/parameters'
-
 import { getFactoryNames, getGroupNames } from '@/api/biz/eqn/networking'
-
 import RightToolBarUDF from '@/views/biz/common/RightToolBarGoBack'
 
 export default {
@@ -166,6 +166,9 @@ export default {
   },
 
   methods: {
+    headerCellStyle,
+    bodyCellStyle,
+    tableStyle,
     getList() {
       this.loading = true
       listQcpParams(this.queryParams).then(response => {

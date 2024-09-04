@@ -52,7 +52,11 @@
 
 .el-form-item {
   margin-top: 5px;
-  margin-bottom: 0px;
+  margin-bottom: 3px !important;
+}
+
+.el-form-item--small {
+  margin-bottom: 3px !important;
 }
 
 /* 新增的 a 样式 */
