@@ -1,3 +1,4 @@
+/* qtech-css.css */
 .dialog-footer {
   text-align: right;
 }
@@ -12,42 +13,39 @@
   color: #ffffff;
 }
 
-/* 上传按钮和返回按钮的容器，增加下边距 */
 .upload-row {
   margin-top: 10px;
-  margin-bottom: 10px; /* 下边距 */
+  margin-bottom: 10px;
 }
 
-/* 上传按钮样式 */
 .upload-row .el-button--primary {
-  background-color: #4fc3f7; /* 与表格标题颜色一致 */
-  border-color: #004d40; /* 深绿色边框色 */
-  color: #ffffff; /* 白色文字 */
+  background-color: #4fc3f7;
+  border-color: #004d40;
+  color: #ffffff;
 }
 
-/* 返回按钮样式 */
 .upload-row .el-button {
-  background-color: #4fc3f7; /* 与表格标题颜色一致 */
-  border-color: #004d40; /* 深绿色边框色 */
-  color: #ffffff; /* 白色文字 */
+  background-color: #4fc3f7;
+  border-color: #004d40;
+  color: #ffffff;
 }
 
 .el-table .el-button--primary {
-  background-color: #4fc3f7; /* 与表格标题颜色一致 */
-  border-color: #004d40; /* 深绿色边框色 */
-  color: #ffffff; /* 白色文字 */
+  background-color: #4fc3f7;
+  border-color: #004d40;
+  color: #ffffff;
 }
 
 .el-table .el-button--warning {
-  background-color: #ffb74d; /* 柔和的橙色，温暖但不突兀 */
-  border-color: #ffa726; /* 稍深的橙色边框 */
-  color: #ffffff; /* 白色文字 */
+  background-color: #ffb74d;
+  border-color: #ffa726;
+  color: #ffffff;
 }
 
 .el-table .el-button--danger {
-  background-color: #e57373; /* 柔和的红色，警示效果 */
-  border-color: #d32f2f; /* 深红色边框 */
-  color: #ffffff; /* 白色文字 */
+  background-color: #e57373;
+  border-color: #d32f2f;
+  color: #ffffff;
 }
 
 .el-form-item {
@@ -59,9 +57,8 @@
   margin-bottom: 3px !important;
 }
 
-/* 新增的 a 样式 */
 .table-hover a {
-  text-decoration: underline; /* 添加下划线 */
+  text-decoration: underline;
 }
 
 .table-hover a:hover {
@@ -74,3 +71,4 @@
   text-decoration: none;
   color: #e57373;
 }
+

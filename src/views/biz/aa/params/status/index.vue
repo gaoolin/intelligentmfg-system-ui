@@ -276,14 +276,12 @@ export default {
       updateAaEqReverseStat(this.queryParams).then(response => {
         if (response.code === 200) {
           this.$modal.msgSuccess('修改成功！')
-          this.getList()
+          this.resetQuery()
         } else {
           this.$modal.msgError('返回状态码异常，请检查！')
         }
       }).catch(() => {
       })
-      this.queryParams.simId = null
-      this.queryParams.status = null
     },
 
     initializeStatus() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login-container">
     <!-- 公告栏 -->
     <notice-bar v-show="showNotice" :notices="notices" :speed="60" :headway="80" :pauseOnHover="true">
       <template v-slot="{ notices }">
@@ -7,67 +7,41 @@
       </template>
     </notice-bar>
 
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">智能制造管理系统</h3>
-      <el-form-item prop="username" class="login-form-item">
-        <el-input
-          v-model="loginForm.username"
-          type="text"
-          auto-complete="off"
-          placeholder="账号"
-        >
-          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon"/>
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="password" class="login-form-item">
-        <el-input
-          v-model="loginForm.password"
-          type="password"
-          auto-complete="off"
-          placeholder="密码"
-          clearable
-          @keyup.enter.native="handleLogin"
-        >
-          <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon"/>
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="code" v-if="captchaEnabled">
-        <el-input
-          v-model="loginForm.code"
-          autocomplete="off"
-          placeholder="验证码"
-          style="width: 63%"
-          @keyup.enter.native="handleLogin"
-        >
-          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon"/>
-        </el-input>
-        <div class="login-code">
-          <img :src="codeUrl" @click="getCode" class="login-code-img"/>
-        </div>
-      </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin: 15px 0px 0px 0px;">记住密码</el-checkbox>
-      <el-form-item style="width:100%;" class="login-form-btn">
-        <el-button
-          :loading="loading"
-          size="medium"
-          type="primary"
-          style="width:100%;"
-          @click.native.prevent="handleLogin"
-        >
-          <span v-if="!loading">登 录</span>
-          <span v-else>登 录 中...</span>
-        </el-button>
-        <div style="float: right;" v-if="register">
-          <router-link class="link-type" :to="'/register'">立即注册</router-link>
-        </div>
-      </el-form-item>
-    </el-form>
-    <div class="el-login-profile">
-      <div>系统问题联系人：高志林</div>
-    </div>
-    <!--  底部  -->
-    <div class="el-login-footer">
-      <span>Copyright © 2021-2024</span>
+    <div class="login-box">
+      <h2 class="title">智能制造管理系统</h2>
+      <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
+        <el-form-item>
+          <el-input
+            v-model="loginForm.username"
+            prefix-icon="el-icon-user"
+            auto-complete="off"
+            placeholder="请输入账号"
+            class="input-field"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="loginForm.password"
+            prefix-icon="el-icon-lock"
+            auto-complete="off"
+            type="password"
+            placeholder="请输入密码"
+            class="input-field"
+            @keyup.enter.native="handleLogin"
+          ></el-input>
+        </el-form-item>
+        <el-form-item class="remember-me">
+          <el-checkbox v-model="loginForm.rememberMe">记住密码</el-checkbox>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            class="login-button"
+            @click="handleLogin"
+          >登录
+          </el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -83,30 +57,18 @@ export default {
   name: 'Login',
   // import引入的组件需要注入到对象中才能使用
   components: { NoticeBar },
-
   data() {
     return {
       notices: [
         "公告1：本系统原有登入方式将在近期停止使用。",
         "公告2：原qcp参数监控系统将在2024年2月6日关闭。",
-        "公告3：请各位同事使用本系统对应模块查看相关数据。",
-        "公告3：请各位同事使用本系统对应模块查看相关数据。",
-        "公告3：请各位同事使用本系统对应模块查看相关数据。",
-        "公告3：请各位同事使用本系统对应模块查看相关数据。",
-        "公告3：请各位同事使用本系统对应模块查看相关数据。",
-        "公告3：请各位同事使用本系统对应模块查看相关数据。",
-        "公告3：请各位同事使用本系统对应模块查看相关数据。",
-        "公告3：请各位同事使用本系统对应模块查看相关数据。",
         "公告3：请各位同事使用本系统对应模块查看相关数据。"
       ],
       showNotice: false,
-      codeUrl: '',
       loginForm: {
         username: '',
         password: '',
-        rememberMe: false,
-        code: '',
-        uuid: ''
+        rememberMe: false
       },
       loginRules: {
         username: [
@@ -118,26 +80,13 @@ export default {
         code: [{ required: true, trigger: 'change', message: '请输入验证码' }]
       },
       loading: false,
-      // 验证码开关
-      captchaEnabled: false,
-      // 注册开关
-      register: false,
       redirect: undefined,
-    };
-  },
-  watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
+      styleChange: {
+        height: '',
+        width: ''
+      }
     }
   },
-  created() {
-    this.getCode()
-    this.getCookie()
-  },
-
   methods: {
     getCode() {
       getCodeImg().then(res => {
@@ -158,6 +107,7 @@ export default {
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
       }
     },
+
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -215,109 +165,91 @@ export default {
         }
       })
     }
-  }
+  },
+
+  created() {
+    this.getCode()
+    this.getCookie()
+  },
+
+  mounted() {
+    const that = this
+    that.styleChange.height = window.innerHeight + 'px' // 屏幕高度
+    that.styleChange.width = window.innerWidth + 'px' // 屏幕宽度
+    console.log('高度', that.styleChange.height)
+    console.log('宽度', that.styleChange.width)
+  },
+
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    }
+  },
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
-.login {
+<style lang="scss" scoped>
+.login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 100vh;
   background-image: url("../assets/images/login-background.jpg");
   background-size: cover;
 }
 
-.title {
-  margin: 0px auto 25px auto;
+.login-box {
+  width: 400px;
+  padding: 20px 40px 20px 40px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
   text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.title {
   color: #fff;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: bold;
-  //font-weight: 500;
+  margin-bottom: 20px;
 }
 
 .login-form {
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0);
-  width: 380px;
-  padding: 25px 25px 5px 25px;
-
-  .el-input {
-    height: 38px;
-    input {
-      height: 38px;
-    }
-  }
-  .input-icon {
-    height: 39px;
-    width: 14px;
-    margin-left: 2px;
-  }
-}
-
-.login-form-item {
-    margin-top: 22px;
-}
-
-.login-form-btn {
-  margin-top: 3px;
-}
-
-.login-tip {
-  font-size: 13px;
-  text-align: center;
-  color: #bfbfbf;
-}
-
-.login-code {
-  width: 33%;
-  height: 38px;
-  float: right;
-
-  img {
-    cursor: pointer;
-    vertical-align: middle;
-  }
-}
-
-.el-login-profile {
-  position: absolute; /* 绝对定位，使其相对于最近的已定位祖先元素定位 */
-  bottom: 10px; /* 距离底部10px，可以根据需要调整 */
-  left: 10px; /* 距离左侧10px，可以根据需要调整 */
-  z-index: 1000; /* 保证该元素在最上层，避免被其他元素遮挡 */
-  background-color: rgba(0, 0, 0, 0.5); /* 半透明背景，使文字清晰可见 */
-  color: white; /* 字体颜色 */
-  padding: 5px 10px; /* 内边距，确保文字不会贴在盒子边缘 */
-  border-radius: 4px; /* 圆角效果，可以根据需要调整 */
-  font-size: 14px; /* 字体大小，根据需要调整 */
-}
-
-.el-login-footer {
-  height: 40px;
-  line-height: 40px;
-  position: fixed;
-  bottom: 0;
   width: 100%;
-  text-align: center;
+}
+
+.input-field {
+  margin-bottom: 20px;
+
+  input {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    height: 45px;
+    font-size: 16px;
+  }
+}
+
+.remember-me {
   color: #fff;
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  letter-spacing: 1px;
+  text-align: left;
 }
 
-.login-code-img {
-  height: 38px;
-}
-
-.notice-bar-container {
+.login-button {
+  margin:0px 0px 0px 0px;
   width: 100%;
-  height: 3%;
-  padding: 0 16px;
-  display: flex;
-  align-items: flex-start;
-  background-color: #fff;
-  border-radius: 3px;
+  height: 50px;
+  background-color: #1b6acf;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #1456a8;
 }
 </style>

@@ -10,7 +10,6 @@
       <slot :notices="notices" />
       <template v-if="animateFlag">
         <span class="content-headway" :style="{ width: `${headway}px` }"></span>
-        <slot :notices="notices" />
       </template>
     </div>
   </div>
@@ -67,10 +66,6 @@ export default {
       this.timer = setInterval(() => {
         this.startAnimate();
       }, this.time * 1000);
-      this.$once('hook:beforeDestroy', () => {
-        clearInterval(this.timer);
-        this.timer = null;
-      });
     },
     startAnimate() {
       if (!this.isPaused) {
@@ -85,14 +80,14 @@ export default {
             transitionDuration: `${this.time}s`,
             transform: `translateX(${this.currentTranslateX}px)`
           };
-        }, 10);
+        }, 50);
       }
     },
     pauseAnimate() {
       if (this.pauseOnHover) {
         this.isPaused = true;
         const computedStyle = window.getComputedStyle(this.$refs.contentRef);
-        const matrix = new WebKitCSSMatrix(computedStyle.transform);
+        const matrix = new DOMMatrix(computedStyle.transform);
         this.currentTranslateX = matrix.m41;
         this.contentStyle.transitionDuration = '0s';
         this.contentStyle.transform = `translateX(${this.currentTranslateX}px)`;
@@ -109,9 +104,13 @@ export default {
   },
   mounted() {
     this.init();
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   }
 };
 </script>
+
 
 <style lang="scss" scoped>
 .notice-bar {

@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch"
+             label-width="68px">
       <el-form-item label="机型" prop="mcId">
         <el-input
           v-model="queryParams.mcId"
@@ -325,6 +326,6 @@ export default {
         ...this.queryParams
       }, `comparison_${new Date().getTime()}.xlsx`)
     }
-  }
+  },
 };
 </script>

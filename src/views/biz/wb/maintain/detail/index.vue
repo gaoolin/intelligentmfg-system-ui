@@ -310,6 +310,6 @@ export default {
         ...this.queryParams
       }, `detail_${new Date().getTime()}.xlsx`)
     }
-  }
+  },
 };
 </script>

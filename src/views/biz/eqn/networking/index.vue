@@ -154,6 +154,7 @@
 <script>
 import '@/views/biz/common/css/qtech-css.css'
 import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
+import { getDiffDay } from '@/views/biz/common/js/utils';
 import { getFactoryNames, getGroupNames, listEqStatus, listOfflineEqs } from '@/api/biz/eqn/networking'
 import RightToolBarGoBack from '@/views/biz/common/RightToolBarGoBack'
 
@@ -314,64 +315,13 @@ export default {
       this.handleQuery();
     },
 
-    /** 四舍五入 保留N位小数 */
-    getBit(value, bit = 2) {
-      if (value !== null && value !== '') {
-        let str = Number(value)
-        str = str.toFixed(bit)
-        return str
-      } else {
-        return null
-      }
-    },
-
-    /** 小数转化为百分数 */
-    toPercent(point, n) {
-      let str = Number(point * 100).toFixed(n)
-      str += '%'
-      return str
-    },
-
-    isNUmber(num) {
-      return /^[0-9]+.?[0-9]*$/.test(num)
-    },
-
     checkDtRange(rule, value, callback) {
-      const days = this.getDiffDay(value[0], value[1])
+      const days = getDiffDay(value[0], value[1])
       if (days > 90) {
         return callback(new Error('时间跨度不能超过90天'))
       } else {
         callback()
       }
-    },
-
-    /** 计算日期间隔天数 */
-    getDiffDay(date_1, date_2) {
-      // 计算两个日期之间的差值
-      let totalDays, diffDate
-      let myDate_1 = Date.parse(date_1)
-      let myDate_2 = Date.parse(date_2)
-      // 将两个日期都转换为毫秒格式，然后做差
-      diffDate = Math.abs(myDate_1 - myDate_2) // 取相差毫秒数的绝对值
-      totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
-      return totalDays // 相差的天数
-    },
-
-    /** 样式控制方法 */
-    tableBodyCellStyle({ row, column, rowIndex, columnIndex }) {
-        return 'font-size: 18px; font-weight: bolder;'
-    },
-
-    tableHeaderCellStyle({ row, column, rowIndex, columnIndex }) {
-      let cellStyle1
-      let cellStyle2
-      let cellStyle3
-
-      cellStyle1 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#436EEE'
-      cellStyle2 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#FF3030'
-      cellStyle3 = 'font-size: 21px; font-weight: bolder; color: #fff; background:#00BFBF'
-
-      return cellStyle1
     },
   },
 }
