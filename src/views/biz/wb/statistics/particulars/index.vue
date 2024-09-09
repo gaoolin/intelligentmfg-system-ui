@@ -110,6 +110,7 @@
 import '@/views/biz/common/css/qtech-css.css'
 import { pickerOptionsSet1 } from '@/views/biz/common/js/pickerOptionsConfig'
 import { bodyCellStyle, headerCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles'
+import { getBit, toPercent, checkDtRange, arraySpanMethod, mergeAction, rowMergeHandle } from '@/views/biz/common/js/utils';
 import { listComparisonDetail } from '@/api/biz/wb/percentage'
 import { getFactoryNames, getGroupNames } from '@/api/biz/wb/index'
 
@@ -164,7 +165,10 @@ export default {
               1: { type: 'string', required: true, message: '请选择结束日期' }
             }
           }, {
-            validator: this.checkDtRange, trigger: 'blur'
+            validator: (rule, value, callback) => {
+              // 调用 checkDtRange 方法并指定 intervalDays 的值
+              checkDtRange(rule, value, callback); // 指定 intervalDays 为 60 天
+            }, trigger: 'blur',
           }]
       }
     }
@@ -196,6 +200,7 @@ export default {
     headerCellStyle,
     bodyCellStyle,
     tableStyle,
+    getBit, toPercent,
     getList() {
       this.$refs['queryForm'].validate(valid => {
         if (valid) {
@@ -207,7 +212,6 @@ export default {
             listComparisonDetail(this.queryParams).then(response => {
               this.tableData = response.rows
               this.total = response.total
-              this.rowMergeArrs = this.rowMergeHandle(this.needMergeArr, response.rows)
               this.loading = false
             })
           }
@@ -256,120 +260,24 @@ export default {
         }
       })
     },
-    /** 表格合并行 */
-    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-      let needMerge = this.needMergeArr.some((item) => {
-        return item.colName === column.property
-      })
-      if (needMerge === true) {
-        return this.mergeAction(column.property, rowIndex, column)
-      }
-    },
-
-    mergeAction(val, rowIndex, colData) {
-      let _row = this.rowMergeArrs[val].rowArr[rowIndex]
-      let _col = _row > 0 ? 1 : 0
-      return [_row, _col]
-    },
-
-    rowMergeHandle(arr, data) {
-      if (!Array.isArray(arr) && !arr.length) return false
-      if (!Array.isArray(data) && !data.length) return false
-      let needMerge = {}
-
-      arr.forEach((mergeItem) => {
-        // 创建合并管理对象
-        needMerge[mergeItem.colName] = {
-          rowArr: [],
-          rowMergeNum: 0
-        }
-        let currentMergeItemData = needMerge[mergeItem.colName]
-
-        // 进行合并管理对象数据的遍历整理
-        data.forEach((item, index) => {
-          if (index === 0) {
-            currentMergeItemData.rowArr.push(1)
-            currentMergeItemData.rowMergeNum = 0
-          } else {
-            let currentRowData = data[index]
-            let preRowData = data[index - 1]
-
-            if (this.colMergeCheck(currentRowData, preRowData, mergeItem.mergeCheckNames)) {
-              currentMergeItemData.rowArr[currentMergeItemData.rowMergeNum] += 1
-              currentMergeItemData.rowArr.push(0)
-            } else {
-              currentMergeItemData.rowArr.push(1)
-              currentMergeItemData.rowMergeNum = index
-            }
-          }
-        })
-      })
-      return needMerge
-    },
-
-    colMergeCheck(currentRowData, preRowData, mergeCheckNames) {
-      if (!Array.isArray(mergeCheckNames) && !mergeCheckNames.length) return false
-      let result = true
-      for (let index = 0; index < mergeCheckNames.length; index++) {
-        const mergeCheckName = mergeCheckNames[index]
-        if (currentRowData[mergeCheckName] !== preRowData[mergeCheckName]) {
-          result = false
-          break
-        }
-      }
-      return result
-    },
 
     /** 导出 */
     handleExport() {
-      this.download('wb/particulars/export', {
+      this.download('wb/olp/particulars/export', {
         ...this.queryParams
       }, `打线图机台比对明细_${new Date().getTime()}.xlsx`)
-    },
-    /** 四舍五入 保留N位小数 */
-    getBit(value, bit = 2) {
-      if (value !== null && value !== '') {
-        let str = Number(value)
-        str = str.toFixed(bit)
-        return str
-      } else {
-        return null
-      }
-    },
-    /** 小数转化为百分数 */
-    toPercent(point, n) {
-      let str = Number(point * 100).toFixed(n)
-      str += '%'
-      return str
-    },
-    isNUmber(num) {
-      return /^[0-9]+.?[0-9]*$/.test(num)
-    },
-
-    checkDtRange(rule, value, callback) {
-      const days = this.getDiffDay(value[0], value[1])
-      if (days > 90) {
-        return callback(new Error('时间跨度不能超过90天'))
-      } else {
-        callback()
-      }
-    },
-
-    /** 计算日期间隔天数 */
-    getDiffDay(date_1, date_2) {
-      // 计算两个日期之间的差值
-      let totalDays, diffDate
-      let myDate_1 = Date.parse(date_1)
-      let myDate_2 = Date.parse(date_2)
-      // 将两个日期都转换为毫秒格式，然后做差
-      diffDate = Math.abs(myDate_1 - myDate_2) // 取相差毫秒数的绝对值
-      totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
-      return totalDays // 相差的天数
     },
 
     /** 样式控制方法 */
     mergeCellStyles({ row, column, rowIndex, columnIndex }) {
       let baseStyle = bodyCellStyle()
+
+      // 默认样式
+      let style = {
+        ...baseStyle,
+        background: baseStyle.backgroundColor || '#e0f7fa'  // 这里确保背景色被重置
+      };
+
       if ((columnIndex === 6 && row[column.property] > 0) || (columnIndex === 7 && row[column.property] !== 'qualified')) {
         return {
           ...baseStyle,
@@ -383,11 +291,30 @@ export default {
           // transition: 'all 0.3s ease' // 添加过渡效果
         }
       } else {
-        return baseStyle
+        return style
+      }
+    },
+
+  },
+
+  computed: {
+    arraySpanMethod() {
+      return (params) => {
+        return arraySpanMethod(params, this.needMergeArr, (val, rowIndex, colData) => {
+          return mergeAction(val, rowIndex, colData, this.rowMergeArrs);
+        });
+      };
+    }
+  },
+
+  watch: {
+    tableData: {
+      deep: true,
+      handler() {
+        this.rowMergeArrs = rowMergeHandle(this.needMergeArr, this.tableData);
       }
     }
-
-  }
+  },
 }
 </script>
 

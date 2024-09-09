@@ -154,7 +154,6 @@
 <script>
 import '@/views/biz/common/css/qtech-css.css'
 import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
-import { getDiffDay } from '@/views/biz/common/js/utils';
 import { getFactoryNames, getGroupNames, listEqStatus, listOfflineEqs } from '@/api/biz/eqn/networking'
 import RightToolBarGoBack from '@/views/biz/common/RightToolBarGoBack'
 
@@ -313,15 +312,6 @@ export default {
         this.resetForm("queryForm");
       }
       this.handleQuery();
-    },
-
-    checkDtRange(rule, value, callback) {
-      const days = getDiffDay(value[0], value[1])
-      if (days > 90) {
-        return callback(new Error('时间跨度不能超过90天'))
-      } else {
-        callback()
-      }
     },
   },
 }

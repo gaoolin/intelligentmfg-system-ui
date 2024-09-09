@@ -1,51 +1,88 @@
-/** 小数转化为百分数 */
-export function toPercent(point, n) {
-  let str = Number(point * 100).toFixed(n)
-  str += '%'
-  return str
+/**
+ * 小数转换为百分比字符串
+ * @param {number} point - 小数
+ * @param {number} [n=2] - 保留小数位数，默认2
+ * @returns {string} 百分比字符串
+ */
+export function toPercent(point, n = 2) {
+  return `${Number(point * 100).toFixed(n)}%`;
 }
 
-/** 四舍五入 保留N位小数 */
+/**
+ * 四舍五入保留指定小数位数
+ * @param {string|number} value - 数值
+ * @param {number} [bit=2] - 保留小数位数，默认2
+ * @returns {string|null} 格式化后的字符串或null
+ */
 export function getBit(value, bit = 2) {
-  if (value !== null && value !== '') {
-    let str = Number(value)
-    str = str.toFixed(bit)
-    return str
-  } else {
-    return null
+  if (value != null && value !== '') {
+    return Number(value).toFixed(bit);
   }
+  return null;
 }
 
-/** 判断是否为数字 isNUmber */
+/**
+ * 验证是否为有效数字字符串
+ * @param {string} val - 字符串
+ * @returns {boolean} 是否为有效数字
+ */
 export function isNumberStr(val) {
-  return /^[0-9]+(.[0-9]{1,2})?$/.test(val)
+  return /^\d+(\.\d{1,2})?$/.test(val);
 }
 
-/** 计算日期间隔天数 */
-export function getDiffDay(date_1, date_2) {
-  // 计算两个日期之间的差值
-  let totalDays, diffDate
-  let myDate_1 = Date.parse(date_1)
-  let myDate_2 = Date.parse(date_2)
-  // 将两个日期都转换为毫秒格式，然后做差
-  diffDate = Math.abs(myDate_1 - myDate_2) // 取相差毫秒数的绝对值
-  totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
-  return totalDays // 相差的天数
-}
+/**
+ * 计算两个日期之间的时间差
+ * @param {Date|string} date1 - 第一个日期
+ * @param {Date|string} date2 - 第二个日期
+ * @param {string} [unit='day'] - 时间单位，默认为天（day），可选值为 day, hour, minute, second
+ * @returns {number} 时间差
+ */
+function getDistanceOfDt(date1, date2, unit = 'day') {
+  const msDiff = Math.abs(Date.parse(date1) - Date.parse(date2));
 
-/** 规则校验 */
-export function checkDtRange(rule, value, callback, intervalDays = 30) {
-  if (value === null || value === '') {
-    return callback(new Error('请选择日期区间'));
-  } else {
-    const days = getDiffDay(value[0], value[1]);
-    if (days > intervalDays) {
-      return callback(new Error('时间跨度不能超过30天'));
-    } else {
-      callback();
-    }
+  let diff;
+  switch (unit) {
+    case 'day':
+      diff = Math.floor(msDiff / (1000 * 3600 * 24));
+      break;
+    case 'hour':
+      diff = Math.floor(msDiff / (1000 * 3600));
+      break;
+    case 'minute':
+      diff = Math.floor(msDiff / (1000 * 60));
+      break;
+    case 'second':
+      diff = Math.floor(msDiff / 1000);
+      break;
+    default:
+      throw new Error('无效的时间单位');
   }
+
+  return diff;
 }
+
+/**
+ * 检查日期区间是否合法
+ * @param {Object} rule - 规则对象
+ * @param {Array<Date|string>} value - 日期数组
+ * @param {Function} callback - 回调函数
+ * @param {number} [intervalValue=30] - 时间跨度值，默认30
+ * @param {string} [unit='day'] - 时间单位，默认为天（day），可选值为 day, hour, minute, second
+ */
+export function checkDtRange(rule, value, callback, intervalValue = 30, unit = 'day') {
+  if (!value || value.length < 2) {
+    return callback(new Error('请选择日期区间'));
+  }
+
+  const diff = getDistanceOfDt(value[0], value[1], unit);
+
+  if (diff > intervalValue) {
+    return callback(new Error(`时间跨度不能超过${intervalValue} ${unit}s`));
+  }
+
+  callback();
+}
+
 
 /** 表格合并行 */
 /**

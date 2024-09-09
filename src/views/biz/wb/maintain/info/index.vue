@@ -93,7 +93,7 @@
       <el-table-column label="最后更新人" align="center" prop="updateBy" />
       <el-table-column label="最后更新时间" min-width="150" align="center" prop="updateTime" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="checkRole(['comparison:admin'])">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="checkRole(['wbOlp:admin'])">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -322,7 +322,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('wb/info/export', {
+      this.download('wb/olp/info/export', {
         ...this.queryParams
       }, `comparison_${new Date().getTime()}.xlsx`)
     }

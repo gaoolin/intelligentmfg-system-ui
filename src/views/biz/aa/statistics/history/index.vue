@@ -240,27 +240,6 @@ export default {
       }, `AA参数反控机台状态_${new Date().getTime()}.xlsx`)
     },
 
-    /** 规则校验 */
-    checkDtRange(rule, value, callback) {
-      const days = this.getDiffDay(value[0], value[1])
-      if (days > 365) {
-        return callback(new Error('时间跨度不能超过一年'))
-      } else {
-        callback()
-      }
-    },
-
-    /** 计算日期间隔天数 */
-    getDiffDay(dtStr1, dtStr2) {
-      // 计算两个日期之间的差值
-      let totalDays, diffDate
-      let dt1 = Date.parse(dtStr1)
-      let dt2 = Date.parse(dtStr2)
-      // 将两个日期都转换为毫秒格式，然后做差
-      diffDate = Math.abs(dt1 - dt2) // 取相差毫秒数的绝对值
-      totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
-      return totalDays // 相差的天数
-    },
   },
   created() {
     this.$set(this.queryParams, 'dtRange', [this.$dateToStr(new Date(new Date().setHours(0, 0, 0).valueOf())), this.$dateToStr(new Date(new Date().setHours(23, 59, 59).valueOf()))])

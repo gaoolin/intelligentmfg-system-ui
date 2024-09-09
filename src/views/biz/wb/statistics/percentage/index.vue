@@ -46,11 +46,39 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="机台号" prop="mcId">
+        <el-input
+          v-model="queryParams.mcId"
+          placeholder="请输入机台号"
+          clearable
+          @keyup.enter.native="handleQuery"
+          @input="handleQuery" />
+      </el-form-item>
+      <el-form-item label="设备编号" prop="eqId">
+        <el-input
+          v-model="queryParams.eqId"
+          placeholder="请输入设备编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+          @input="handleQuery" />
+      </el-form-item>
       <el-form-item label="机型" prop="prodType">
         <el-input
           v-model="queryParams.prodType"
-          placeholder="请输入车间"
+          placeholder="请输入机型"
           clearable/>
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请输入比对状态" clearable
+                   :key="queryParams.category" @change="handleQuery"
+        >
+          <el-option
+            v-for="dict in dict.type.comparison_result_code"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -134,12 +162,14 @@
 import '@/views/biz/common/css/qtech-css.css'
 import { pickerOptionsSet1 } from '@/views/biz/common/js/pickerOptionsConfig'
 import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
-import { getBit, toPercent, checkDtRange, arraySpanMethod, mergeAction, rowMergeHandle, colMergeCheck } from '@/views/biz/common/js/utils';
+import { getBit, toPercent, checkDtRange, arraySpanMethod, mergeAction, rowMergeHandle } from '@/views/biz/common/js/utils';
 import { listComparisonRatio } from '@/api/biz/wb/percentage'
 import { getFactoryNames, getGroupNames } from '@/api/biz/wb/index'
 
 export default {
   name: 'index',
+  dicts: ['comparison_result_code'],
+
   data() {
     return {
       // 显示搜索条件
@@ -158,8 +188,10 @@ export default {
         pageSize: 10,
         companyName: null,
         groupName: null,
-        dtRange: [],
+        mcId: null,
+        eqId: null,
         prodType: null,
+        dtRange: [],
         flag: null,
       },
       // 需要合并项的列
@@ -188,7 +220,10 @@ export default {
               1: { type: 'string', required: true, message: '请选择结束日期' }
             }
           }, {
-            validator: checkDtRange, trigger: 'blur'
+            validator: (rule, value, callback) => {
+              // 调用 checkDtRange 方法并指定 intervalDays 的值
+              checkDtRange(rule, value, callback); // 指定 intervalDays 为 60 天
+            }, trigger: 'blur',
           }]
       },
     }
@@ -200,7 +235,6 @@ export default {
     tableStyle,
     toPercent,
     getBit,
-    checkDtRange,
     getList() {
       this.$refs['queryForm'].validate(valid => {
         if (valid) {
@@ -264,7 +298,7 @@ export default {
 
     /** 导出 */
     handleExport() {
-      this.download('wb/percentage/export', {
+      this.download('wb/olp/percentage/export', {
         ...this.queryParams
       }, `打线图机台比对正确率_${new Date().getTime()}.xlsx`)
     },
@@ -286,14 +320,12 @@ export default {
       this.queryParams.groupName = this.$route.query.groupName
       this.queryParams.flag = this.$route.query.flag
     }
-
   },
 
   mounted() {
     this.getList();
     // overview.methods.getFactoryNames()
     this.getFactoryNames();
-    this.rowMergeArrs = rowMergeHandle(this.needMergeArr, this.tableData);
   },
 
   computed: {

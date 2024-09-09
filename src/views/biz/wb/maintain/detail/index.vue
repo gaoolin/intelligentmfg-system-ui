@@ -74,7 +74,7 @@
       <el-table-column label="pad卡控" align="center" prop="padThreshold" />
       <el-table-column label="金线长" align="center" prop="wireLen" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="checkRole(['comparison:admin'])">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="checkRole(['wbOlp:admin'])">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -306,7 +306,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('wb/detail/export', {
+      this.download('wb/olp/detail/export', {
         ...this.queryParams
       }, `detail_${new Date().getTime()}.xlsx`)
     }

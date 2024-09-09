@@ -66,13 +66,13 @@
     </el-row>
 
     <el-table
-
       v-loading="loading"
       :data="filterTableData"
       ref="table"
       id="table"
       show-summary
       border
+      :span-method="arraySpanMethod"
       :cell-style="bodyCellStyle"
       :header-cell-style="headerCellStyle"
       :style="tableStyle()"
@@ -91,14 +91,14 @@
       </el-table-column>
       <el-table-column >
         <template slot-scope="scope" slot="header">
-          <span :style="tableHeaderCellStyle">已联网</span>
+          <span>已联网</span>
           <el-tooltip class="item" effect="dark" placement="top-start" content="已联网设备数 = [有qcp参数模版] + [无qcp参数模版]">
             <i class="el-icon-question" style="color:#272728; margin-left:2px;'"> </i>
           </el-tooltip>
         </template>
         <el-table-column prop="onlineEqs" align="center" min-width="120" fit>
           <template slot-scope="scope" slot="header">
-            <span :style="tableHeaderCellStyle">有qcp参数模版</span>
+            <span>有qcp参数模版</span>
             <el-tooltip class="item" effect="dark" placement="top-start" content="设备已联网且有qcp参数模版">
               <i class="el-icon-question" style="color:#272728; margin-left:2px;'"> </i>
             </el-tooltip>
@@ -167,6 +167,7 @@
 <script>
 import '@/views/biz/common/css/qtech-css.css'
 import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
+import { arraySpanMethod, mergeAction, rowMergeHandle } from '@/views/biz/common/js/utils';
 import { listQcpOverview, getDataMaxTime } from '@/api/biz/qcp/parameters'
 import RightToolBarDownload from '@/views/biz/common/RightToolBarDownload'
 
@@ -228,12 +229,6 @@ export default {
     }
   },
 
-  mounted() {
-    // overview.methods.getFactoryNames()
-    // 2、用于合并行或列
-    this.rowMergeArrs = this.rowMergeHandle(this.needMergeArr, this.filterTableData)
-  },
-
   methods: {
     headerCellStyle,
     bodyCellStyle,
@@ -256,8 +251,6 @@ export default {
         this.workshopOptions = Array.from(groupNameSet)
         this.deviceTypeOptions = Array.from(deviceTypeSet)
 
-        // 2、用于合并行或列
-        this.rowMergeArrs = this.rowMergeHandle(this.needMergeArr, this.filterTableData)
         this.loading = false
       })
     },
@@ -298,8 +291,6 @@ export default {
         }
         return a && b && c
       })
-
-      this.rowMergeArrs = this.rowMergeHandle(this.needMergeArr, this.filterTableData)
     },
 
     updateSelectionElements(val) {
@@ -337,72 +328,7 @@ export default {
       this.resetForm('queryForm')
       this.handleQuery()
     },
-
-    /** 表格合并行 */
-    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-      let needMerge = this.needMergeArr.some((item) => {
-        return item.colName === column.property
-      })
-      if (needMerge === true) {
-        return this.mergeAction(column.property, rowIndex, column)
-      }
-    },
-
-    mergeAction(val, rowIndex, colData) {
-      let _row = this.rowMergeArrs[val].rowArr[rowIndex]
-      let _col = _row > 0 ? 1 : 0
-      return [_row, _col]
-    },
-
-    rowMergeHandle(arr, data) {
-      if (!Array.isArray(arr) && !arr.length) return false
-      if (!Array.isArray(data) && !data.length) return false
-      let needMerge = {}
-
-      arr.forEach((mergeItem) => {
-        // 创建合并管理对象
-        needMerge[mergeItem.colName] = {
-          rowArr: [],
-          rowMergeNum: 0
-        }
-        let currentMergeItemData = needMerge[mergeItem.colName]
-
-        // 进行合并管理对象数据的遍历整理
-        data.forEach((item, index) => {
-          if (index === 0) {
-            currentMergeItemData.rowArr.push(1)
-            currentMergeItemData.rowMergeNum = 0
-          } else {
-            let currentRowData = data[index]
-            let preRowData = data[index - 1]
-
-            if (this.colMergeCheck(currentRowData, preRowData, mergeItem.mergeCheckNames)) {
-              currentMergeItemData.rowArr[currentMergeItemData.rowMergeNum] += 1
-              currentMergeItemData.rowArr.push(0)
-            } else {
-              currentMergeItemData.rowArr.push(1)
-              currentMergeItemData.rowMergeNum = index
-            }
-          }
-        })
-      })
-      return needMerge
-    },
-
-    colMergeCheck(currentRowData, preRowData, mergeCheckNames) {
-      if (!Array.isArray(mergeCheckNames) && !mergeCheckNames.length) return false
-      let result = true
-      for (let index = 0; index < mergeCheckNames.length; index++) {
-        const mergeCheckName = mergeCheckNames[index]
-        if (currentRowData[mergeCheckName] !== preRowData[mergeCheckName]) {
-          result = false
-          break
-        }
-      }
-      return result
-    }
   },
-
   watch: {
     filterTableData: {
       immediate: true,
@@ -441,10 +367,22 @@ export default {
           tds[7].style.color = '#ffffff'
           tds[7].style.fontSize = '1vw'
           tds[7].style.fontWeight = 'bold'
-        })
+        });
+
+        this.rowMergeArrs = rowMergeHandle(this.needMergeArr, this.filterTableData);
       }
+    },
+  },
+
+  computed: {
+    arraySpanMethod() {
+      return (params) => {
+        return arraySpanMethod(params, this.needMergeArr, (val, rowIndex, colData) => {
+          return mergeAction(val, rowIndex, colData, this.rowMergeArrs);
+        });
+      };
     }
-  }
+  },
 }
 </script>
 

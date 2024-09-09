@@ -150,6 +150,7 @@
 import '@/views/biz/common/css/qtech-css.css'
 import { pickerOptionsSet8 } from '@/views/biz/common/js/pickerOptionsConfig'
 import { bodyCellStyle, headerCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles'
+import { checkDtRange} from '@/views/biz/common/js/utils';
 import { listUpload, addOnline } from '@/api/biz/wb/upload'
 import RightToolBarDownload from '@/views/biz/common/RightToolBarDownload'
 
@@ -213,7 +214,10 @@ export default {
               1: { type: 'string', required: true, message: '请选择结束日期' }
             }
           }, {
-            validator: this.checkDtRange, trigger: 'change'
+            validator: (rule, value, callback) => {
+              // 调用 checkDtRange 方法并指定 intervalDays 的值
+              checkDtRange(rule, value, callback, 15, 'minute'); // 指定 intervalDays 为 60 天
+            }, trigger: 'blur',
           }]
       }
     }
@@ -349,7 +353,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('wb/upload/export', {
+      this.download('wb/olp/upload/export', {
         ...this.queryParams
       }, `comparison_${new Date().getTime()}.xlsx`)
     },
@@ -367,32 +371,6 @@ export default {
         }
       )
     },
-
-    /** 规则校验 */
-    checkDtRange(rule, value, callback) {
-      if (value === null || value === '') {
-        return callback(new Error('请选择日期区间'))
-      } else {
-        const seconds = this.getDiffDay(value[0], value[1])
-        if (seconds > 30) {
-          return callback(new Error('时间跨度不能超过30分钟'))
-        } else {
-          callback()
-        }
-      }
-    },
-
-    /** 计算日期间隔天数 */
-    getDiffDay(date_1, date_2) {
-      // 计算两个日期之间的差值
-      let totalSeconds, diffDate
-      let myDate_1 = Date.parse(date_1)
-      let myDate_2 = Date.parse(date_2)
-      // 将两个日期都转换为毫秒格式，然后做差
-      diffDate = Math.abs(myDate_1 - myDate_2) // 取相差毫秒数的绝对值
-      totalSeconds = Math.floor(diffDate / (1000 * 60)) // 向下取整
-      return totalSeconds // 相差的分钟
-    }
   },
 
   watch: {
