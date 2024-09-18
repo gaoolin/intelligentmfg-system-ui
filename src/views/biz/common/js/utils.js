@@ -198,3 +198,30 @@ export function colMergeCheck(currentRowData, preRowData, mergeCheckNames) {
 
   return result;
 }
+
+/**
+ * 格式化文件大小
+ * @param {number} size - 文件大小（以字节为单位）
+ * @returns {string} 格式化后的文件大小字符串
+ */
+export function formatFileSize(size) {
+  // 参数校验
+  if (typeof size !== 'number' || isNaN(size)) {
+    throw new Error('Invalid size provided');
+  }
+
+  const units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
+  let unitIndex = 0;
+
+  // 动态确定单位
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex++;
+  }
+
+  // 格式化输出
+  return `${size.toFixed(2)} ${units[unitIndex]}`;
+}
+
+
+
