@@ -261,7 +261,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加智慧打线图";
+      this.title = "添加打线图模版信息";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -270,7 +270,7 @@ export default {
       getComparison(sid).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改智慧打线图";
+        this.title = "修改打线图模版信息";
       });
     },
     /** 提交按钮 */

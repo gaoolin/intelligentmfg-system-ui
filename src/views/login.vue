@@ -287,11 +287,12 @@ export default {
   bottom: 10px; /* 距离底部10px，可以根据需要调整 */
   left: 10px; /* 距离左侧10px，可以根据需要调整 */
   z-index: 1000; /* 保证该元素在最上层，避免被其他元素遮挡 */
-  background-color: rgba(0, 0, 0, 0.5); /* 半透明背景，使文字清晰可见 */
+  background-color: rgba(0, 0, 0, 0.8); /* 半透明背景，使文字清晰可见 */
   color: white; /* 字体颜色 */
   padding: 5px 10px; /* 内边距，确保文字不会贴在盒子边缘 */
   border-radius: 4px; /* 圆角效果，可以根据需要调整 */
-  font-size: 14px; /* 字体大小，根据需要调整 */
+  font-size: 15px; /* 字体大小，根据需要调整 */
+  font-family: 'Microsoft YaHei UI','Microsoft YaHei',DengXian,SimSun,'Segoe UI',Tahoma,Helvetica,sans-serif; /* 指定字体为 Arial，并提供一个备选字体 */
 }
 
 .el-login-footer {
@@ -302,7 +303,7 @@ export default {
   width: 100%;
   text-align: center;
   color: #fff;
-  font-family: Arial, sans-serif;
+  font-family: 'Microsoft YaHei UI','Microsoft YaHei',DengXian,SimSun,'Segoe UI',Tahoma,Helvetica,sans-serif;
   font-size: 12px;
   letter-spacing: 1px;
 }

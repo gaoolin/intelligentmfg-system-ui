@@ -258,12 +258,7 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加标准模版明细";
-    },
+
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
@@ -271,7 +266,7 @@ export default {
       getDetail(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改标准模版明细";
+        this.title = "修改打线图模版明细";
       });
     },
     /** 提交按钮 */

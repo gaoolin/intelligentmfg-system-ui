@@ -5,7 +5,7 @@
  * @returns {string} 百分比字符串
  */
 export function toPercent(point, n = 2) {
-  return `${Number(point * 100).toFixed(n)}%`;
+  return `${Number(point * 100).toFixed(n)}%`
 }
 
 /**
@@ -16,9 +16,9 @@ export function toPercent(point, n = 2) {
  */
 export function getBit(value, bit = 2) {
   if (value != null && value !== '') {
-    return Number(value).toFixed(bit);
+    return Number(value).toFixed(bit)
   }
-  return null;
+  return null
 }
 
 /**
@@ -27,7 +27,7 @@ export function getBit(value, bit = 2) {
  * @returns {boolean} 是否为有效数字
  */
 export function isNumberStr(val) {
-  return /^\d+(\.\d{1,2})?$/.test(val);
+  return /^\d+(\.\d{1,2})?$/.test(val)
 }
 
 /**
@@ -38,27 +38,27 @@ export function isNumberStr(val) {
  * @returns {number} 时间差
  */
 function getDistanceOfDt(date1, date2, unit = 'day') {
-  const msDiff = Math.abs(Date.parse(date1) - Date.parse(date2));
+  const msDiff = Math.abs(Date.parse(date1) - Date.parse(date2))
 
-  let diff;
+  let diff
   switch (unit) {
     case 'day':
-      diff = Math.floor(msDiff / (1000 * 3600 * 24));
-      break;
+      diff = Math.floor(msDiff / (1000 * 3600 * 24))
+      break
     case 'hour':
-      diff = Math.floor(msDiff / (1000 * 3600));
-      break;
+      diff = Math.floor(msDiff / (1000 * 3600))
+      break
     case 'minute':
-      diff = Math.floor(msDiff / (1000 * 60));
-      break;
+      diff = Math.floor(msDiff / (1000 * 60))
+      break
     case 'second':
-      diff = Math.floor(msDiff / 1000);
-      break;
+      diff = Math.floor(msDiff / 1000)
+      break
     default:
-      throw new Error('无效的时间单位');
+      throw new Error('无效的时间单位')
   }
 
-  return diff;
+  return diff
 }
 
 /**
@@ -71,18 +71,17 @@ function getDistanceOfDt(date1, date2, unit = 'day') {
  */
 export function checkDtRange(rule, value, callback, intervalValue = 30, unit = 'day') {
   if (!value || value.length < 2) {
-    return callback(new Error('请选择日期区间'));
+    return callback(new Error('请选择日期区间'))
   }
 
-  const diff = getDistanceOfDt(value[0], value[1], unit);
+  const diff = getDistanceOfDt(value[0], value[1], unit)
 
   if (diff > intervalValue) {
-    return callback(new Error(`时间跨度不能超过${intervalValue} ${unit}s`));
+    return callback(new Error(`时间跨度不能超过${intervalValue} ${unit}s`))
   }
 
-  callback();
+  callback()
 }
-
 
 /** 表格合并行 */
 /**
@@ -98,11 +97,11 @@ export function checkDtRange(rule, value, callback, intervalValue = 30, unit = '
  */
 export function arraySpanMethod({ row, column, rowIndex, columnIndex }, needMergeArr, mergeAction) {
   let needMerge = needMergeArr.some((item) => {
-    return item.colName === column.property;
-  });
+    return item.colName === column.property
+  })
 
   if (needMerge === true) {
-    return mergeAction(column.property, rowIndex, column);
+    return mergeAction(column.property, rowIndex, column)
   }
 }
 
@@ -116,21 +115,21 @@ export function arraySpanMethod({ row, column, rowIndex, columnIndex }, needMerg
  */
 export function mergeAction(val, rowIndex, colData, rowMergeArrs) {
   if (typeof val !== 'string') {
-    throw new TypeError('val must be a string');
+    throw new TypeError('val must be a string')
   }
   if (typeof rowIndex !== 'number') {
-    throw new TypeError('rowIndex must be a number');
+    throw new TypeError('rowIndex must be a number')
   }
   if (typeof colData !== 'object' || colData === null) {
-    throw new TypeError('colData must be an object');
+    throw new TypeError('colData must be an object')
   }
   if (typeof rowMergeArrs !== 'object' || rowMergeArrs === null) {
-    throw new TypeError('rowMergeArrs must be an object');
+    throw new TypeError('rowMergeArrs must be an object')
   }
 
-  let _row = rowMergeArrs[val].rowArr[rowIndex];
-  let _col = _row > 0 ? 1 : 0;
-  return [_row, _col];
+  let _row = rowMergeArrs[val].rowArr[rowIndex]
+  let _col = _row > 0 ? 1 : 0
+  return [_row, _col]
 }
 
 /**
@@ -140,41 +139,41 @@ export function mergeAction(val, rowIndex, colData, rowMergeArrs) {
  * @returns {Object} 返回合并行数据对象
  */
 export function rowMergeHandle(arr, data) {
-  if (!Array.isArray(arr) || !arr.length) return false;
-  if (!Array.isArray(data) || !data.length) return false;
+  if (!Array.isArray(arr) || !arr.length) return false
+  if (!Array.isArray(data) || !data.length) return false
 
-  let needMerge = {};
+  let needMerge = {}
 
   arr.forEach((mergeItem) => {
     // 创建合并管理对象
     needMerge[mergeItem.colName] = {
       rowArr: [],
       rowMergeNum: 0
-    };
+    }
 
-    let currentMergeItemData = needMerge[mergeItem.colName];
+    let currentMergeItemData = needMerge[mergeItem.colName]
 
     // 进行合并管理对象数据的遍历整理
     data.forEach((item, index) => {
       if (index === 0) {
-        currentMergeItemData.rowArr.push(1);
-        currentMergeItemData.rowMergeNum = 0;
+        currentMergeItemData.rowArr.push(1)
+        currentMergeItemData.rowMergeNum = 0
       } else {
-        let currentRowData = data[index];
-        let preRowData = data[index - 1];
+        let currentRowData = data[index]
+        let preRowData = data[index - 1]
 
         if (colMergeCheck(currentRowData, preRowData, mergeItem.mergeCheckNames)) {
-          currentMergeItemData.rowArr[currentMergeItemData.rowMergeNum] += 1;
-          currentMergeItemData.rowArr.push(0);
+          currentMergeItemData.rowArr[currentMergeItemData.rowMergeNum] += 1
+          currentMergeItemData.rowArr.push(0)
         } else {
-          currentMergeItemData.rowArr.push(1);
-          currentMergeItemData.rowMergeNum = index;
+          currentMergeItemData.rowArr.push(1)
+          currentMergeItemData.rowMergeNum = index
         }
       }
-    });
-  });
+    })
+  })
 
-  return needMerge;
+  return needMerge
 }
 
 /**
@@ -185,18 +184,18 @@ export function rowMergeHandle(arr, data) {
  * @returns {boolean} 返回检查结果
  */
 export function colMergeCheck(currentRowData, preRowData, mergeCheckNames) {
-  if (!Array.isArray(mergeCheckNames) || !mergeCheckNames.length) return false;
-  let result = true;
+  if (!Array.isArray(mergeCheckNames) || !mergeCheckNames.length) return false
+  let result = true
 
   for (let index = 0; index < mergeCheckNames.length; index++) {
-    const mergeCheckName = mergeCheckNames[index];
+    const mergeCheckName = mergeCheckNames[index]
     if (currentRowData[mergeCheckName] !== preRowData[mergeCheckName]) {
-      result = false;
-      break;
+      result = false
+      break
     }
   }
 
-  return result;
+  return result
 }
 
 /**
@@ -207,21 +206,61 @@ export function colMergeCheck(currentRowData, preRowData, mergeCheckNames) {
 export function formatFileSize(size) {
   // 参数校验
   if (typeof size !== 'number' || isNaN(size)) {
-    throw new Error('Invalid size provided');
+    throw new Error('Invalid size provided')
   }
 
-  const units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
-  let unitIndex = 0;
+  const units = ['B', 'Kb', 'Mb', 'Gb', 'Tb']
+  let unitIndex = 0
 
   // 动态确定单位
   while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024;
-    unitIndex++;
+    size /= 1024
+    unitIndex++
   }
 
   // 格式化输出
-  return `${size.toFixed(2)} ${units[unitIndex]}`;
+  return `${size.toFixed(2)} ${units[unitIndex]}`
 }
 
+/** 字段校验规则 */
+/**
+ * @param rule
+ * @param value
+ * @param callback
+ */
+export function checkParamsRule(rule, value, callback) {
+  if (!value) {
+    // 如果值为空，则校验通过（视为可选）
+    callback()
+  }
+  const allowedTypes = ['Enable', 'Disable', '']
+  if (allowedTypes.includes(value)) {
+    callback()
+  } else {
+    callback(new Error('请输入正确的参数值, 必须是Enable、Disable或空值'))
+  }
+}
 
+/**
+ * @param rule
+ * @param value
+ * @param callback
+ */
+export function checkNumericOrEmpty(rule, value, callback) {
+  const numericPattern = /^-?\d+(\.\d+)?$/
+  if (!value) {
+    callback()
+  } else if (numericPattern.test(value)) {
+    callback()
+  } else {
+    callback(new Error('请输入数字或留空'))
+  }
+}
 
+/**
+ * @param value
+ * @returns {string|*}
+ */
+export function convertNull(value) {
+  return value === null || value === undefined || '' ? '--' : value
+}

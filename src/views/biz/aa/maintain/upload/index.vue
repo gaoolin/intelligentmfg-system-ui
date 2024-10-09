@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-tabs v-model="activeTab">
-      <el-tab-pane label="人工模版" name="manual" >
+      <el-tab-pane label="人工模版" name="manual">
         <div class="import-container" v-if="activeTab === 'manual'">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
@@ -9,22 +9,22 @@
             </div>
 
             <el-upload
-              ref="upload"
-              :limit="1"
-              accept=".xlsx, .xls"
-              class="upload-demo"
-              :headers="upload.headers"
-              :action="upload.url"
-              :disabled="upload.isUploading"
-              :on-progress="handleFileUploadProgress"
-              :on-success="handleUploadSuccess"
-              :file-list="fileList"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-upload="beforeUpload"
-              :on-change="handleFileChange"
-              :auto-upload="false"
-              drag
+                ref="upload"
+                :limit="1"
+                accept=".xlsx, .xls"
+                class="upload-demo"
+                :headers="upload.headers"
+                :action="upload.url"
+                :disabled="upload.isUploading"
+                :on-progress="handleFileUploadProgress"
+                :on-success="handleUploadSuccess"
+                :file-list="fileList"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :before-upload="beforeUpload"
+                :on-change="handleFileChange"
+                :auto-upload="false"
+                drag
             >
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -60,33 +60,33 @@
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px" :rule="rules">
           <el-form-item label="机型" prop="prodType">
             <el-input
-              v-model="queryParams.prodType"
-              placeholder="请输入机型"
-              clearable
-              @change="dataChange"
-              @keyup.enter.native="handleQuery"
+                v-model="queryParams.prodType"
+                placeholder="请输入机型"
+                clearable
+                @change="dataChange"
+                @keyup.enter.native="handleQuery"
             />
           </el-form-item>
           <el-form-item label="盒子号" prop="simId">
             <el-input
-              v-model="queryParams.simId"
-              placeholder="请输入盒子号"
-              clearable
-              @change="dataChange"
-              @keyup.enter.native="handleQuery"
+                v-model="queryParams.simId"
+                placeholder="请输入盒子号"
+                clearable
+                @change="dataChange"
+                @keyup.enter.native="handleQuery"
             />
           </el-form-item>
 
           <el-form-item prop="dtRange" label-width="50px">
             <el-date-picker
-              v-model="queryParams.dtRange"
-              style="width: 340px"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              type="datetimerange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions"
+                v-model="queryParams.dtRange"
+                style="width: 340px"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :picker-options="pickerOptions"
             ></el-date-picker>
           </el-form-item>
 
@@ -184,130 +184,90 @@
               <div class="prop-container">
               <span class="prop-label">
                 AA1:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.AA1) === 'Enable', 'disabled': $convertNull(scope.row.AA1) === 'Disable'}"
-                >{{ $convertNull(scope.row.AA1) }}</span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.AA1) === 'Enable', 'disabled': $convertNull(scope.row.AA1) === 'Disable'}">{{ $convertNull(scope.row.AA1) }}</span>
               </span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 AA2:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.AA2) === 'Enable', 'disabled': $convertNull(scope.row.AA2) === 'Disable'}"
-                >{{ $convertNull(scope.row.AA2) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.AA2) === 'Enable', 'disabled': $convertNull(scope.row.AA2) === 'Disable'}">{{ $convertNull(scope.row.AA2) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 AA3:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.AA3) === 'Enable', 'disabled': $convertNull(scope.row.AA3) === 'Disable'}"
-                >{{ $convertNull(scope.row.AA3) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.AA3) === 'Enable', 'disabled': $convertNull(scope.row.AA3) === 'Disable'}">{{ $convertNull(scope.row.AA3) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 mtfCheck:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.mtfCheck) === 'Enable', 'disabled': $convertNull(scope.row.mtfCheck) === 'Disable'}"
-                >{{ $convertNull(scope.row.mtfCheck) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.mtfCheck) === 'Enable', 'disabled': $convertNull(scope.row.mtfCheck) === 'Disable'}">{{ $convertNull(scope.row.mtfCheck) }}</span></span>
+              </div>
+              <div class="prop-container">
+              <span class="prop-label">
+                mtfCheck1:
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.mtfCheck1) === 'Enable', 'disabled': $convertNull(scope.row.mtfCheck1) === 'Disable'}">{{ $convertNull(scope.row.mtfCheck1) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 mtfCheck2:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.mtfCheck2) === 'Enable', 'disabled': $convertNull(scope.row.mtfCheck2) === 'Disable'}"
-                >{{ $convertNull(scope.row.mtfCheck2) }}</span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.mtfCheck2) === 'Enable', 'disabled': $convertNull(scope.row.mtfCheck2) === 'Disable'}">{{ $convertNull(scope.row.mtfCheck2) }}</span>
               </span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 mtfCheck3:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.mtfCheck3) === 'Enable', 'disabled': $convertNull(scope.row.mtfCheck3) === 'Disable'}"
-                >{{ $convertNull(scope.row.mtfCheck3) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.mtfCheck3) === 'Enable', 'disabled': $convertNull(scope.row.mtfCheck3) === 'Disable'}">{{ $convertNull(scope.row.mtfCheck3) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 lpOn:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.lpOn) === 'Enable', 'disabled': $convertNull(scope.row.lpOn) === 'Disable'}"
-                >{{ $convertNull(scope.row.lpOn) }}</span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.lpOn) === 'Enable', 'disabled': $convertNull(scope.row.lpOn) === 'Disable'}">{{ $convertNull(scope.row.lpOn) }}</span>
               </span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 lpOff:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.lpOff) === 'Enable', 'disabled': $convertNull(scope.row.lpOff) === 'Disable'}"
-                >{{ $convertNull(scope.row.lpOff) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.lpOff) === 'Enable', 'disabled': $convertNull(scope.row.lpOff) === 'Disable'}">{{ $convertNull(scope.row.lpOff) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 lpOc:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.lpOc) === 'Enable', 'disabled': $convertNull(scope.row.lpOc) === 'Disable'}"
-                >{{ $convertNull(scope.row.lpOc) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.lpOc) === 'Enable', 'disabled': $convertNull(scope.row.lpOc) === 'Disable'}">{{ $convertNull(scope.row.lpOc) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 lpOcCheck:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.lpOcCheck) === 'Enable', 'disabled': $convertNull(scope.row.lpOcCheck) === 'Disable'}"
-                >{{ $convertNull(scope.row.lpOcCheck) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.lpOcCheck) === 'Enable', 'disabled': $convertNull(scope.row.lpOcCheck) === 'Disable'}">{{ $convertNull(scope.row.lpOcCheck) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 lpOnBlemish:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.lpOnBlemish) === 'Enable', 'disabled': $convertNull(scope.row.lpOnBlemish) === 'Disable'}"
-                >{{ $convertNull(scope.row.lpOnBlemish) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.lpOnBlemish) === 'Enable', 'disabled': $convertNull(scope.row.lpOnBlemish) === 'Disable'}">{{ $convertNull(scope.row.lpOnBlemish) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 lpBlemish:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.lpBlemish) === 'Enable', 'disabled': $convertNull(scope.row.lpBlemish) === 'Disable'}"
-                >{{ $convertNull(scope.row.lpBlemish) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.lpBlemish) === 'Enable', 'disabled': $convertNull(scope.row.lpBlemish) === 'Disable'}">{{ $convertNull(scope.row.lpBlemish) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 blemish:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.blemish) === 'Enable', 'disabled': $convertNull(scope.row.blemish) === 'Disable'}"
-                >{{ $convertNull(scope.row.blemish) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.blemish) === 'Enable', 'disabled': $convertNull(scope.row.blemish) === 'Disable'}">{{ $convertNull(scope.row.blemish) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 chartAlignment:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.chartAlignment) === 'Enable', 'disabled': $convertNull(scope.row.chartAlignment) === 'Disable'}"
-                >{{ $convertNull(scope.row.chartAlignment) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.chartAlignment) === 'Enable', 'disabled': $convertNull(scope.row.chartAlignment) === 'Disable'}">{{ $convertNull(scope.row.chartAlignment) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 chartAlignment1:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.chartAlignment1) === 'Enable', 'disabled': $convertNull(scope.row.chartAlignment1) === 'Disable'}"
-                >{{ $convertNull(scope.row.chartAlignment1) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.chartAlignment1) === 'Enable', 'disabled': $convertNull(scope.row.chartAlignment1) === 'Disable'}">{{ $convertNull(scope.row.chartAlignment1) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 chartAlignment2:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.chartAlignment2) === 'Enable', 'disabled': $convertNull(scope.row.chartAlignment2) === 'Disable'}"
-                >{{ $convertNull(scope.row.chartAlignment2) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.chartAlignment2) === 'Enable', 'disabled': $convertNull(scope.row.chartAlignment2) === 'Disable'}">{{ $convertNull(scope.row.chartAlignment2) }}</span></span>
               </div>
             </template>
           </el-table-column>
@@ -318,106 +278,73 @@
               <div class="prop-container">
               <span class="prop-label">
                 vcmHall:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmHall) === 'Enable', 'disabled': $convertNull(scope.row.vcmHall) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmHall) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmHall) === 'Enable', 'disabled': $convertNull(scope.row.vcmHall) === 'Disable'}">{{ $convertNull(scope.row.vcmHall) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmHall2:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmHall2) === 'Enable', 'disabled': $convertNull(scope.row.vcmHall2) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmHall2) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmHall2) === 'Enable', 'disabled': $convertNull(scope.row.vcmHall2) === 'Disable'}">{{ $convertNull(scope.row.vcmHall2) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmPowerOff:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmPowerOff) === 'Enable', 'disabled': $convertNull(scope.row.vcmPowerOff) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmPowerOff) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmPowerOff) === 'Enable', 'disabled': $convertNull(scope.row.vcmPowerOff) === 'Disable'}">{{ $convertNull(scope.row.vcmPowerOff) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmPowerOn:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmPowerOn) === 'Enable', 'disabled': $convertNull(scope.row.vcmPowerOn) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmPowerOn) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmPowerOn) === 'Enable', 'disabled': $convertNull(scope.row.vcmPowerOn) === 'Disable'}">{{ $convertNull(scope.row.vcmPowerOn) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmTop:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmTop) === 'Enable', 'disabled': $convertNull(scope.row.vcmTop) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmTop) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmTop) === 'Enable', 'disabled': $convertNull(scope.row.vcmTop) === 'Disable'}">{{ $convertNull(scope.row.vcmTop) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmTopHall:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmTopHall) === 'Enable', 'disabled': $convertNull(scope.row.vcmTopHall) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmTopHall) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmTopHall) === 'Enable', 'disabled': $convertNull(scope.row.vcmTopHall) === 'Disable'}">{{ $convertNull(scope.row.vcmTopHall) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmZ:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmZ) === 'Enable', 'disabled': $convertNull(scope.row.vcmZ) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmZ) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmZ) === 'Enable', 'disabled': $convertNull(scope.row.vcmZ) === 'Disable'}">{{ $convertNull(scope.row.vcmZ) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmZHall:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmZHall) === 'Enable', 'disabled': $convertNull(scope.row.vcmZHall) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmZHall) }}</span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmZHall) === 'Enable', 'disabled': $convertNull(scope.row.vcmZHall) === 'Disable'}">{{ $convertNull(scope.row.vcmZHall) }}</span>
               </span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmOisInit:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmOisInit) === 'Enable', 'disabled': $convertNull(scope.row.vcmOisInit) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmOisInit) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmOisInit) === 'Enable', 'disabled': $convertNull(scope.row.vcmOisInit) === 'Disable'}">{{ $convertNull(scope.row.vcmOisInit) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmMoveToZ:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmMoveToZ) === 'Enable', 'disabled': $convertNull(scope.row.vcmMoveToZ) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmMoveToZ) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmMoveToZ) === 'Enable', 'disabled': $convertNull(scope.row.vcmMoveToZ) === 'Disable'}">{{ $convertNull(scope.row.vcmMoveToZ) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmPowerOffCheck:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmPowerOffCheck) === 'Enable', 'disabled': $convertNull(scope.row.vcmPowerOffCheck) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmPowerOffCheck) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmPowerOffCheck) === 'Enable', 'disabled': $convertNull(scope.row.vcmPowerOffCheck) === 'Disable'}">{{ $convertNull(scope.row.vcmPowerOffCheck) }}</span></span>
+              </div>
+              <div class="prop-container">
+              <span class="prop-label">
+                vcmRun:
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmRun) === 'Enable', 'disabled': $convertNull(scope.row.vcmRun) === 'Disable'}">{{ $convertNull(scope.row.vcmRun) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmMoveToZPos:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmMoveToZPos) === 'Enable', 'disabled': $convertNull(scope.row.vcmMoveToZPos) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmMoveToZPos) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmMoveToZPos) === 'Enable', 'disabled': $convertNull(scope.row.vcmMoveToZPos) === 'Disable'}">{{ $convertNull(scope.row.vcmMoveToZPos) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 vcmInit:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.vcmInit) === 'Enable', 'disabled': $convertNull(scope.row.vcmInit) === 'Disable'}"
-                >{{ $convertNull(scope.row.vcmInit) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.vcmInit) === 'Enable', 'disabled': $convertNull(scope.row.vcmInit) === 'Disable'}">{{ $convertNull(scope.row.vcmInit) }}</span></span>
               </div>
             </template>
           </el-table-column>
@@ -428,34 +355,27 @@
               <div class="prop-container">
               <span class="prop-label">
                 mtfOffAxisCheck1:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.mtfOffAxisCheck1) === 'Enable', 'disabled': $convertNull(scope.row.mtfOffAxisCheck1) === 'Disable'}"
-                >{{ $convertNull(scope.row.mtfOffAxisCheck1) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.mtfOffAxisCheck1) === 'Enable', 'disabled': $convertNull(scope.row.mtfOffAxisCheck1) === 'Disable'}">{{ $convertNull(scope.row.mtfOffAxisCheck1) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 mtfOffAxisCheck2:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.mtfOffAxisCheck2) === 'Enable', 'disabled': $convertNull(scope.row.mtfOffAxisCheck2) === 'Disable'}"
-                >{{ $convertNull(scope.row.mtfOffAxisCheck2) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.mtfOffAxisCheck2) === 'Enable', 'disabled': $convertNull(scope.row.mtfOffAxisCheck2) === 'Disable'}">{{ $convertNull(scope.row.mtfOffAxisCheck2) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 mtfOffAxisCheck3:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.mtfOffAxisCheck3) === 'Enable', 'disabled': $convertNull(scope.row.mtfOffAxisCheck3) === 'Disable'}"
-                >{{ $convertNull(scope.row.mtfOffAxisCheck3) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.mtfOffAxisCheck3) === 'Enable', 'disabled': $convertNull(scope.row.mtfOffAxisCheck3) === 'Disable'}">{{ $convertNull(scope.row.mtfOffAxisCheck3) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 openCheck:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.openCheck) === 'Enable', 'disabled': $convertNull(scope.row.openCheck) === 'Disable'}"
-                >{{ $convertNull(scope.row.openCheck) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.openCheck) === 'Enable', 'disabled': $convertNull(scope.row.openCheck) === 'Disable'}">{{ $convertNull(scope.row.openCheck) }}</span></span>
+              </div>
+              <div class="prop-container">
+              <span class="prop-label">
+                ocCheck:
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.ocCheck) === 'Enable', 'disabled': $convertNull(scope.row.ocCheck) === 'Disable'}">{{ $convertNull(scope.row.ocCheck) }}</span></span>
               </div>
             </template>
           </el-table-column>
@@ -466,138 +386,82 @@
               <div class="prop-container">
               <span class="prop-label">
                 backToPosition:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.backToPosition) === 'Enable', 'disabled': $convertNull(scope.row.backToPosition) === 'Disable'}"
-                >{{ $convertNull(scope.row.backToPosition) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.backToPosition) === 'Enable', 'disabled': $convertNull(scope.row.backToPosition) === 'Disable'}">{{ $convertNull(scope.row.backToPosition) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 delay:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.delay) === 'Enable', 'disabled': $convertNull(scope.row.delay) === 'Disable'}"
-                >{{ $convertNull(scope.row.delay) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.delay) === 'Enable', 'disabled': $convertNull(scope.row.delay) === 'Disable'}">{{ $convertNull(scope.row.delay) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 destroy:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.destroy) === 'Enable', 'disabled': $convertNull(scope.row.destroy) === 'Disable'}"
-                >{{ $convertNull(scope.row.destroy) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.destroy) === 'Enable', 'disabled': $convertNull(scope.row.destroy) === 'Disable'}">{{ $convertNull(scope.row.destroy) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 destroyStart:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.destroyStart) === 'Enable', 'disabled': $convertNull(scope.row.destroyStart) === 'Disable'}"
-                >{{ $convertNull(scope.row.destroyStart) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.destroyStart) === 'Enable', 'disabled': $convertNull(scope.row.destroyStart) === 'Disable'}">{{ $convertNull(scope.row.destroyStart) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 dispense:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.dispense) === 'Enable', 'disabled': $convertNull(scope.row.dispense) === 'Disable'}"
-                >{{ $convertNull(scope.row.dispense) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.dispense) === 'Enable', 'disabled': $convertNull(scope.row.dispense) === 'Disable'}">{{ $convertNull(scope.row.dispense) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 epoxyInspectionAuto:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.epoxyInspectionAuto) === 'Enable', 'disabled': $convertNull(scope.row.epoxyInspectionAuto) === 'Disable'}"
-                >{{ $convertNull(scope.row.epoxyInspectionAuto) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.epoxyInspectionAuto) === 'Enable', 'disabled': $convertNull(scope.row.epoxyInspectionAuto) === 'Disable'}">{{ $convertNull(scope.row.epoxyInspectionAuto) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 epoxyInspection:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.epoxyInspection) === 'Enable', 'disabled': $convertNull(scope.row.epoxyInspection) === 'Disable'}"
-                >{{ $convertNull(scope.row.epoxyInspection) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.epoxyInspection) === 'Enable', 'disabled': $convertNull(scope.row.epoxyInspection) === 'Disable'}">{{ $convertNull(scope.row.epoxyInspection) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 grab:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.grab) === 'Enable', 'disabled': $convertNull(scope.row.grab) === 'Disable'}"
-                >{{ $convertNull(scope.row.grab) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.grab) === 'Enable', 'disabled': $convertNull(scope.row.grab) === 'Disable'}">{{ $convertNull(scope.row.grab) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 gripperOpen:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.gripperOpen) === 'Enable', 'disabled': $convertNull(scope.row.gripperOpen) === 'Disable'}"
-                >{{ $convertNull(scope.row.gripperOpen) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.gripperOpen) === 'Enable', 'disabled': $convertNull(scope.row.gripperOpen) === 'Disable'}">{{ $convertNull(scope.row.gripperOpen) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 moveToBlemishPos:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.moveToBlemishPos) === 'Enable', 'disabled': $convertNull(scope.row.moveToBlemishPos) === 'Disable'}"
-                >{{ $convertNull(scope.row.moveToBlemishPos) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.moveToBlemishPos) === 'Enable', 'disabled': $convertNull(scope.row.moveToBlemishPos) === 'Disable'}">{{ $convertNull(scope.row.moveToBlemishPos) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 recordPosition:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.recordPosition) === 'Enable', 'disabled': $convertNull(scope.row.recordPosition) === 'Disable'}"
-                >{{ $convertNull(scope.row.recordPosition) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.recordPosition) === 'Enable', 'disabled': $convertNull(scope.row.recordPosition) === 'Disable'}">{{ $convertNull(scope.row.recordPosition) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 saveOc:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.saveOc) === 'Enable', 'disabled': $convertNull(scope.row.saveOc) === 'Disable'}"
-                >{{ $convertNull(scope.row.saveOc) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.saveOc) === 'Enable', 'disabled': $convertNull(scope.row.saveOc) === 'Disable'}">{{ $convertNull(scope.row.saveOc) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 saveMtf:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.saveMtf) === 'Enable', 'disabled': $convertNull(scope.row.saveMtf) === 'Disable'}"
-                >{{ $convertNull(scope.row.saveMtf) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.saveMtf) === 'Enable', 'disabled': $convertNull(scope.row.saveMtf) === 'Disable'}">{{ $convertNull(scope.row.saveMtf) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 uvon:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.uvon) === 'Enable', 'disabled': $convertNull(scope.row.uvon) === 'Disable'}"
-                >{{ $convertNull(scope.row.uvon) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.uvon) === 'Enable', 'disabled': $convertNull(scope.row.uvon) === 'Disable'}">{{ $convertNull(scope.row.uvon) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 uvoff:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.uvoff) === 'Enable', 'disabled': $convertNull(scope.row.uvoff) === 'Disable'}"
-                >{{ $convertNull(scope.row.uvoff) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.uvoff) === 'Enable', 'disabled': $convertNull(scope.row.uvoff) === 'Disable'}">{{ $convertNull(scope.row.uvoff) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 yLevel:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.yLevel) === 'Enable', 'disabled': $convertNull(scope.row.yLevel) === 'Disable'}"
-                >{{ $convertNull(scope.row.yLevel) }}</span>
-              </span>
-              </div>
-              <div class="prop-container">
-              <span class="prop-label">
-                zOffset:
-                <span class="prop-value"
-                      :class="{'enabled': $convertNull(scope.row.zOffset) === 'Enable', 'disabled': $convertNull(scope.row.zOffset) === 'Disable'}"
-                >{{ $convertNull(scope.row.yLevel) }}</span>
-              </span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.yLevel) === 'Enable', 'disabled': $convertNull(scope.row.yLevel) === 'Disable'}">{{ $convertNull(scope.row.yLevel) }}</span></span>
               </div>
             </template>
           </el-table-column>
@@ -606,65 +470,226 @@
           <el-table-column label="Item参数管控详情" align="left">
             <template slot-scope="scope">
               <el-collapse accordion>
-                <el-collapse-item class="prop-label" title="vcmCheck" name="5">
-                  <el-descriptions :column="1" border>
-                    <el-descriptions-item label="resultCheckMin">
-                      {{ $convertNull(scope.row.resultCheckMin) }}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="resultCheckMax">
-                      {{ $convertNull(scope.row.resultCheckMax) }}
-                    </el-descriptions-item>
-                  </el-descriptions>
-                </el-collapse-item>
-                <el-collapse-item class="prop-label" title="EpoxyInspectionAuto" name="4">
-                  <el-descriptions :column="1" border>
-                    <el-descriptions-item label="EpoxyInspection">
-                      {{ $convertNull(scope.row.epoxyInspectionInterval) }}
-                    </el-descriptions-item>
-                  </el-descriptions>
-                </el-collapse-item>
-                <el-collapse-item class="prop-label" title="chartAlignment" name="3">
-                  <el-descriptions :column="1" border>
-                    <el-descriptions-item label="xResMin">
-                      {{ $convertNull(scope.row.xResMin) }}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="xResMax">
-                      {{ $convertNull(scope.row.xResMax) }}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="yResMin">
-                      {{ $convertNull(scope.row.yResMin) }}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="yResMax">
-                      {{ $convertNull(scope.row.yResMax) }}
-                    </el-descriptions-item>
-                  </el-descriptions>
-                </el-collapse-item>
-                <el-collapse-item class="prop-label" title="AA" name="2">
+                <el-collapse-item class="prop-label" title="AA1" name="1">
                   <el-descriptions :column="1" border class="prop-label">
-                    <el-descriptions-item label="roiCc">
-                      {{ $convertNull(scope.row.roiCc) }}
+                    <el-descriptions-item label="Cc">
+                      {{ $convertNull(scope.row.aa1RoiCc) }}
                     </el-descriptions-item>
-                    <el-descriptions-item label="roiUl">
-                      {{ $convertNull(scope.row.roiUl) }}
+                    <el-descriptions-item label="Ul">
+                      {{ $convertNull(scope.row.aa1RoiUl) }}
                     </el-descriptions-item>
-                    <el-descriptions-item label="roiUr">
-                      {{ $convertNull(scope.row.roiUr) }}
+                    <el-descriptions-item label="Ur">
+                      {{ $convertNull(scope.row.aa1RoiUr) }}
                     </el-descriptions-item>
-                    <el-descriptions-item label="roiLl">
-                      {{ $convertNull(scope.row.roiLl) }}
+                    <el-descriptions-item label="Lr">
+                      {{ $convertNull(scope.row.aa1RoiLr) }}
                     </el-descriptions-item>
-                    <el-descriptions-item label="roiLr">
-                      {{ $convertNull(scope.row.roiLr) }}
+                    <el-descriptions-item label="Lr">
+                      {{ $convertNull(scope.row.aa1RoiLr) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="MtfOffAxisCheck1">
+                      {{ $convertNull(scope.row.aa1MtfOffAxisCheck1) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="MtfOffAxisCheck2">
+                      {{ $convertNull(scope.row.aa1MtfOffAxisCheck2) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="MtfOffAxisCheck3">
+                      {{ $convertNull(scope.row.aa1MtfOffAxisCheck3) }}
                     </el-descriptions-item>
                   </el-descriptions>
                 </el-collapse-item>
-                <el-collapse-item class="prop-label" title="mtfCheck" name="1">
+                <el-collapse-item class="prop-label" title="AA2" name="2">
+                  <el-descriptions :column="1" border class="prop-label">
+                    <el-descriptions-item label="Cc">
+                      {{ $convertNull(scope.row.aa2RoiCc) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="Ul">
+                      {{ $convertNull(scope.row.aa2RoiUl) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="Ur">
+                      {{ $convertNull(scope.row.aa2RoiUr) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="Ll">
+                      {{ $convertNull(scope.row.aa2RoiLl) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="Lr">
+                      {{ $convertNull(scope.row.aa2RoiLr) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="MtfOffAxisCheck1">
+                      {{ $convertNull(scope.row.aa2MtfOffAxisCheck1) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="MtfOffAxisCheck2">
+                      {{ $convertNull(scope.row.aa2MtfOffAxisCheck2) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="MtfOffAxisCheck3">
+                      {{ $convertNull(scope.row.aa2MtfOffAxisCheck3) }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </el-collapse-item>
+                <el-collapse-item class="prop-label" title="AA3" name="3">
+                  <el-descriptions :column="1" border class="prop-label">
+                    <el-descriptions-item label="Cc">
+                      {{ $convertNull(scope.row.aa3RoiCc) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="Ul">
+                      {{ $convertNull(scope.row.aa3RoiUl) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="Ur">
+                      {{ $convertNull(scope.row.aa3RoiUr) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="Ll">
+                      {{ $convertNull(scope.row.aa3RoiLl) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="Lr">
+                      {{ $convertNull(scope.row.aa3RoiLr) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="MtfOffAxisCheck1">
+                      {{ $convertNull(scope.row.aa3MtfOffAxisCheck1) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="MtfOffAxisCheck2">
+                      {{ $convertNull(scope.row.aa3MtfOffAxisCheck2) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="MtfOffAxisCheck3">
+                      {{ $convertNull(scope.row.aa3MtfOffAxisCheck3) }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </el-collapse-item>
+                <el-collapse-item class="prop-label" title="chartAlignment" name="4">
+                  <el-descriptions :column="1" border>
+                    <el-descriptions-item label="xMin">
+                      {{ $convertNull(scope.row.chartAlignmentXResMin) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="xMax">
+                      {{ $convertNull(scope.row.chartAlignmentXResMax) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="yMin">
+                      {{ $convertNull(scope.row.chartAlignmentYResMin) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="yMax">
+                      {{ $convertNull(scope.row.chartAlignmentYResMax) }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </el-collapse-item>
+                <el-collapse-item class="prop-label" title="chartAlignment1" name="5">
+                  <el-descriptions :column="1" border>
+                    <el-descriptions-item label="xMin">
+                      {{ $convertNull(scope.row.chartAlignment1XResMin) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="xMax">
+                      {{ $convertNull(scope.row.chartAlignment1XResMax) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="yMin">
+                      {{ $convertNull(scope.row.chartAlignment1YResMin) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="yMax">
+                      {{ $convertNull(scope.row.chartAlignment1YResMax) }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </el-collapse-item>
+                <el-collapse-item class="prop-label" title="chartAlignment2" name="6">
+                  <el-descriptions :column="1" border>
+                    <el-descriptions-item label="xMin">
+                      {{ $convertNull(scope.row.chartAlignment2XResMin) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="xMax">
+                      {{ $convertNull(scope.row.chartAlignment2XResMax) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="yMin">
+                      {{ $convertNull(scope.row.chartAlignment2YResMin) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="yMax">
+                      {{ $convertNull(scope.row.chartAlignment2YResMax) }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </el-collapse-item>
+                <el-collapse-item class="prop-label" title="mtfCheck" name="7">
+                  <el-descriptions :column="1" border class="prop-label">
+                    <el-descriptions-item label="Cc">
+                      {{ $convertNull(scope.row.mtfCheckFC) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F1">
+                      {{ $convertNull(scope.row.mtfCheckF1) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F2">
+                      {{ $convertNull(scope.row.mtfCheckF2) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F3">
+                      {{ $convertNull(scope.row.mtfCheckF3) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F4">
+                      {{ $convertNull(scope.row.mtfCheckF4) }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </el-collapse-item>
+                <el-collapse-item class="prop-label" title="mtfCheck1" name="8">
+                  <el-descriptions :column="1" border class="prop-label">
+                    <el-descriptions-item label="Cc">
+                      {{ $convertNull(scope.row.mtfCheck1FC) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F1">
+                      {{ $convertNull(scope.row.mtfCheck1F1) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F2">
+                      {{ $convertNull(scope.row.mtfCheck1F2) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F3">
+                      {{ $convertNull(scope.row.mtfCheck1F3) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F4">
+                      {{ $convertNull(scope.row.mtfCheck1F4) }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </el-collapse-item>
+                <el-collapse-item class="prop-label" title="mtfCheck2" name="9">
+                  <el-descriptions :column="1" border class="prop-label">
+                    <el-descriptions-item label="Cc">
+                      {{ $convertNull(scope.row.mtfCheck2FC) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F1">
+                      {{ $convertNull(scope.row.mtfCheck2F1) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F2">
+                      {{ $convertNull(scope.row.mtfCheck2F2) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F3">
+                      {{ $convertNull(scope.row.mtfCheck2F3) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="F4">
+                      {{ $convertNull(scope.row.mtfCheck2F4) }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </el-collapse-item>
+                <!--<el-collapse-item class="prop-label" title="mtfCheck2" name="9">
                   <el-descriptions :column="1" border class="prop-label">
                     <el-descriptions-item v-for="(result, index) in Array.from({length: 52}, (_, i) => `result${i+1}`)"
                                           :key="result"
                     >
                       <template slot="label">{{ `Result${index + 1}` }}</template>
                       <span> {{ $convertNull(scope.row[`result${index + 1}`]) }} </span>
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </el-collapse-item>-->
+                <el-collapse-item class="prop-label" title="RecordPosition" name="10">
+                  <el-descriptions :column="1" border>
+                    <el-descriptions-item label="utXyzMove">
+                      {{ $convertNull(scope.row.recordPositionUtXyzMove) }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </el-collapse-item>
+                <el-collapse-item class="prop-label" title="SaveMtf" name="11">
+                  <el-descriptions :column="1" border>
+                    <el-descriptions-item label="ccMin">
+                      {{ $convertNull(scope.row.saveMtfCcMin) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="ccMax">
+                      {{ $convertNull(scope.row.saveMtfCcMax) }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </el-collapse-item>
+                <el-collapse-item class="prop-label" title="EpoxyInspectionAuto" name="12">
+                  <el-descriptions :column="1" border>
+                    <el-descriptions-item label="EpoxyInspection">
+                      {{ $convertNull(scope.row.epoxyInspectionInterval) }}
                     </el-descriptions-item>
                   </el-descriptions>
                 </el-collapse-item>
@@ -683,12 +708,12 @@
           </el-table-column>
         </el-table>
         <pagination
-          v-show="total>0"
-          :total="total"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
-          :page-sizes="[1, 2, 5, 10, 50]"
-          @pagination="getList"
+            v-show="total>0"
+            :total="total"
+            :page.sync="queryParams.pageNum"
+            :limit.sync="queryParams.pageSize"
+            :page-sizes="[1, 2, 5, 10, 50]"
+            @pagination="getList"
         />
 
         <!-- 编辑模态框 -->
@@ -701,488 +726,478 @@
               <el-collapse-item class="main-item" title="初始化和重置" name="1">
                 <el-form-item label="init" prop="init">
                   <el-select v-model="editForm.init" placeholder="请选择" clearable @clear="handleClear('init')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="reInit" prop="reInit">
                   <el-select v-model="editForm.reInit" placeholder="请选择" clearable @clear="handleClear('reInit')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="senserReset" prop="senserReset">
-                  <el-select v-model="editForm.senserReset" placeholder="请选择" clearable
-                             @clear="handleClear('senserReset')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.senserReset" placeholder="请选择" clearable @clear="handleClear('senserReset')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="clampOnOff" prop="clampOnOff">
-                  <el-select v-model="editForm.clampOnOff" placeholder="请选择" clearable
-                             @clear="handleClear('clampOnOff')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.clampOnOff" placeholder="请选择" clearable @clear="handleClear('clampOnOff')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="SID" prop="sid">
                   <el-select v-model="editForm.sid" placeholder="请选择" clearable @clear="handleClear('sid')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
               </el-collapse-item>
               <el-collapse-item class="main-item" title="光学对齐和处理（LP）" name="2">
                 <el-form-item label="AA1" prop="AA1">
                   <el-select v-model="editForm.AA1" placeholder="请选择" clearable @clear="handleClear('AA1')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="AA2" prop="AA2">
                   <el-select v-model="editForm.AA2" placeholder="请选择" clearable @clear="handleClear('AA2')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="AA3" prop="AA3">
                   <el-select v-model="editForm.AA3" placeholder="请选择" clearable @clear="handleClear('AA3')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="mtfCheck" prop="mtfCheck">
                   <el-select v-model="editForm.mtfCheck" placeholder="请选择" clearable @clear="handleClear('mtfCheck')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="mtfCheck1" prop="mtfCheck1">
+                  <el-select v-model="editForm.mtfCheck1" placeholder="请选择" clearable @clear="handleClear('mtfCheck1')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="mtfCheck2" prop="mtfCheck2">
                   <el-select v-model="editForm.mtfCheck2" placeholder="请选择" clearable @clear="handleClear('mtfCheck2')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="mtfCheck3" prop="mtfCheck3">
                   <el-select v-model="editForm.mtfCheck3" placeholder="请选择" clearable @clear="handleClear('mtfCheck3')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="lpOn" prop="lpOn">
                   <el-select v-model="editForm.lpOn" placeholder="请选择" clearable @clear="handleClear('lpOn')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="lpOff" prop="lpOff">
                   <el-select v-model="editForm.lpOff" placeholder="请选择" clearable @clear="handleClear('lpOff')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="lpOc" prop="lpOc">
                   <el-select v-model="editForm.lpOc" placeholder="请选择" clearable @clear="handleClear('lpOc')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="lpOcCheck" prop="lpOcCheck">
                   <el-select v-model="editForm.lpOcCheck" placeholder="请选择" clearable @clear="handleClear('lpOcCheck')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="lpOnBlemish" prop="lpOnBlemish">
-                  <el-select v-model="editForm.lpOnBlemish" placeholder="请选择" clearable
-                             @clear="handleClear('lpOnBlemish')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.lpOnBlemish" placeholder="请选择" clearable @clear="handleClear('lpOnBlemish')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="lpBlemish" prop="lpBlemish">
                   <el-select v-model="editForm.lpBlemish" placeholder="请选择" clearable @clear="handleClear('lpBlemish')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="blemish" prop="blemish">
                   <el-select v-model="editForm.blemish" placeholder="请选择" clearable @clear="handleClear('init')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="chartAlignment" prop="chartAlignment">
-                  <el-select v-model="editForm.chartAlignment" placeholder="请选择" clearable
-                             @clear="handleClear('chartAlignment')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.chartAlignment" placeholder="请选择" clearable @clear="handleClear('chartAlignment')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="chartAlignment1" prop="chartAlignment1">
-                  <el-select v-model="editForm.chartAlignment1" placeholder="请选择" clearable
-                             @clear="handleClear('chartAlignment1')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.chartAlignment1" placeholder="请选择" clearable @clear="handleClear('chartAlignment1')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="chartAlignment2" prop="chartAlignment2">
-                  <el-select v-model="editForm.chartAlignment2" placeholder="请选择" clearable
-                             @clear="handleClear('chartAlignment2')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.chartAlignment2" placeholder="请选择" clearable @clear="handleClear('chartAlignment2')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
               </el-collapse-item>
               <el-collapse-item class="main-item" title="VCM相关" name="3">
                 <el-form-item label="vcmHall" prop="vcmHall">
                   <el-select v-model="editForm.vcmHall" placeholder="请选择" clearable @clear="handleClear('vcmHall')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmHall2" prop="vcmHall2">
                   <el-select v-model="editForm.vcmHall2" placeholder="请选择" clearable @clear="handleClear('vcmHall2')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmPowerOff" prop="vcmPowerOff">
-                  <el-select v-model="editForm.vcmPowerOff" placeholder="请选择" clearable
-                             @clear="handleClear('vcmPowerOff')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.vcmPowerOff" placeholder="请选择" clearable @clear="handleClear('vcmPowerOff')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmPowerOn" prop="vcmPowerOn">
-                  <el-select v-model="editForm.vcmPowerOn" placeholder="请选择" clearable
-                             @clear="handleClear('vcmPowerOn')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.vcmPowerOn" placeholder="请选择" clearable @clear="handleClear('vcmPowerOn')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmTop" prop="vcmTop">
                   <el-select v-model="editForm.vcmTop" placeholder="请选择" clearable @clear="handleClear('vcmTop')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmTopHall" prop="vcmTopHall">
-                  <el-select v-model="editForm.vcmTopHall" placeholder="请选择" clearable
-                             @clear="handleClear('vcmTopHall')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.vcmTopHall" placeholder="请选择" clearable @clear="handleClear('vcmTopHall')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmZ" prop="vcmZ">
                   <el-select v-model="editForm.vcmZ" placeholder="请选择" clearable @clear="handleClear('vcmZ')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmZHall" prop="vcmZHall">
                   <el-select v-model="editForm.vcmZHall" placeholder="请选择" clearable @clear="handleClear('vcmZHall')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmOisInit" prop="vcmOisInit">
-                  <el-select v-model="editForm.vcmOisInit" placeholder="请选择" clearable
-                             @clear="handleClear('vcmOisInit')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.vcmOisInit" placeholder="请选择" clearable @clear="handleClear('vcmOisInit')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmMoveToZ" prop="vcmMoveToZ">
-                  <el-select v-model="editForm.vcmMoveToZ" placeholder="请选择" clearable
-                             @clear="handleClear('vcmMoveToZ')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.vcmMoveToZ" placeholder="请选择" clearable @clear="handleClear('vcmMoveToZ')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmPowerOffCheck" prop="vcmPowerOffCheck">
-                  <el-select v-model="editForm.vcmPowerOffCheck" placeholder="请选择" clearable
-                             @clear="handleClear('vcmPowerOffCheck')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.vcmPowerOffCheck" placeholder="请选择" clearable @clear="handleClear('vcmPowerOffCheck')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmMoveToZPos" prop="vcmMoveToZPos">
-                  <el-select v-model="editForm.vcmMoveToZPos" placeholder="请选择" clearable
-                             @clear="handleClear('vcmMoveToZPos')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.vcmMoveToZPos" placeholder="请选择" clearable @clear="handleClear('vcmMoveToZPos')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="vcmInit" prop="vcmInit">
                   <el-select v-model="editForm.vcmInit" placeholder="请选择" clearable @clear="handleClear('vcmInit')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
               </el-collapse-item>
               <el-collapse-item class="main-item" title="检查和检测" name="4">
                 <el-form-item label="mtfOffAxisCheck1" prop="mtfOffAxisCheck1">
-                  <el-select v-model="editForm.mtfOffAxisCheck1" placeholder="请选择" clearable
-                             @clear="handleClear('mtfOffAxisCheck1')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.mtfOffAxisCheck1" placeholder="请选择" clearable @clear="handleClear('mtfOffAxisCheck1')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="mtfOffAxisCheck2" prop="mtfOffAxisCheck2">
-                  <el-select v-model="editForm.mtfOffAxisCheck2" placeholder="请选择" clearable
-                             @clear="handleClear('mtfOffAxisCheck2')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.mtfOffAxisCheck2" placeholder="请选择" clearable @clear="handleClear('mtfOffAxisCheck2')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="mtfOffAxisCheck3" prop="mtfOffAxisCheck3">
-                  <el-select v-model="editForm.mtfOffAxisCheck3" placeholder="请选择" clearable
-                             @clear="handleClear('mtfOffAxisCheck3')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.mtfOffAxisCheck3" placeholder="请选择" clearable @clear="handleClear('mtfOffAxisCheck3')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="openCheck" prop="openCheck">
                   <el-select v-model="editForm.openCheck" placeholder="请选择" clearable @clear="handleClear('openCheck')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
               </el-collapse-item>
               <el-collapse-item class="main-item" title="其他操作和记录" name="5">
                 <el-form-item label="backToPosition" prop="backToPosition">
-                  <el-select v-model="editForm.backToPosition" placeholder="请选择" clearable
-                             @clear="handleClear('backToPosition')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.backToPosition" placeholder="请选择" clearable @clear="handleClear('backToPosition')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="delay" prop="delay">
                   <el-select v-model="editForm.delay" placeholder="请选择" clearable @clear="handleClear('delay')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="destroy" prop="destroy">
                   <el-select v-model="editForm.destroy" placeholder="请选择" clearable @clear="handleClear('destroy')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="destroyStart" prop="destroyStart">
-                  <el-select v-model="editForm.destroyStart" placeholder="请选择" clearable
-                             @clear="handleClear('destroyStart')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.destroyStart" placeholder="请选择" clearable @clear="handleClear('destroyStart')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="dispense" prop="dispense">
                   <el-select v-model="editForm.dispense" placeholder="请选择" clearable @clear="handleClear('dispense')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="epoxyInspectionAuto" prop="epoxyInspectionAuto">
-                  <el-select v-model="editForm.epoxyInspectionAuto" placeholder="请选择" clearable
-                             @clear="handleClear('epoxyInspectionAuto')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.epoxyInspectionAuto" placeholder="请选择" clearable @clear="handleClear('epoxyInspectionAuto')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="epoxyInspection" prop="epoxyInspection">
-                  <el-select v-model="editForm.epoxyInspection" placeholder="请选择" clearable
-                             @clear="handleClear('epoxyInspection')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.epoxyInspection" placeholder="请选择" clearable @clear="handleClear('epoxyInspection')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="grab" prop="grab">
                   <el-select v-model="editForm.grab" placeholder="请选择" clearable @clear="handleClear('grab')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="gripperOpen" prop="gripperOpen">
-                  <el-select v-model="editForm.gripperOpen" placeholder="请选择" clearable
-                             @clear="handleClear('gripperOpen')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.gripperOpen" placeholder="请选择" clearable @clear="handleClear('gripperOpen')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="moveToBlemishPos" prop="moveToBlemishPos">
-                  <el-select v-model="editForm.moveToBlemishPos" placeholder="请选择" clearable
-                             @clear="handleClear('moveToBlemishPos')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.moveToBlemishPos" placeholder="请选择" clearable @clear="handleClear('moveToBlemishPos')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="recordPosition" prop="recordPosition">
-                  <el-select v-model="editForm.recordPosition" placeholder="请选择" clearable
-                             @clear="handleClear('recordPosition')"
-                  >
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                  <el-select v-model="editForm.recordPosition" placeholder="请选择" clearable @clear="handleClear('recordPosition')">
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="saveOc" prop="saveOc">
                   <el-select v-model="editForm.saveOc" placeholder="请选择" clearable @clear="handleClear('saveOc')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="saveMtf" prop="saveMtf">
                   <el-select v-model="editForm.saveMtf" placeholder="请选择" clearable @clear="handleClear('saveMtf')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="uvon" prop="uvon">
                   <el-select v-model="editForm.uvon" placeholder="请选择" clearable @clear="handleClear('uvon')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="uvoff" prop="uvoff">
                   <el-select v-model="editForm.uvoff" placeholder="请选择" clearable @clear="handleClear('uvoff')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="yLevel" prop="yLevel">
                   <el-select v-model="editForm.yLevel" placeholder="请选择" clearable @clear="handleClear('yLevel')">
-                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label"
-                               :value="dict.value"
-                    />
+                    <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
               </el-collapse-item>
               <el-collapse-item class="main-item" title="Item参数管控详情" name="6">
                 <el-collapse v-model="innerActiveNames" accordion>
-                  <el-collapse-item class="sub-item" title="vcmCheck" name="7" accordion>
-                    <el-form-item label="resultCheckMin" prop="resultCheckMin">
-                      <el-input v-model="editForm.resultCheckMin" @input="handleInputChange('resultCheckMin')"
-                      ></el-input>
+                  <el-collapse-item class="sub-item" title="AA1" name="7">
+                    <el-form-item label="aa1RoiCc" prop="aa1RoiCc">
+                      <el-input v-model="editForm.aa1RoiCc" @input="handleInputChange('Cc')"></el-input>
                     </el-form-item>
-                    <el-form-item label="resultCheckMax" prop="resultCheckMax">
-                      <el-input v-model="editForm.resultCheckMax" @input="handleInputChange('resultCheckMax')"
-                      ></el-input>
+                    <el-form-item label="aa1RoiUl" prop="aa1RoiUl">
+                      <el-input v-model="editForm.aa1RoiUl" @input="handleInputChange('Ul')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="aa1RoiUr" prop="aa1RoiUr">
+                      <el-input v-model="editForm.aa1RoiUr" @input="handleInputChange('Ur')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="aa1RoiLl" prop="aa1RoiLl">
+                      <el-input v-model="editForm.aa1RoiLl" @input="handleInputChange('Ll')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="aa1RoiLr" prop="aa1RoiLr">
+                      <el-input v-model="editForm.aa1RoiLr" @input="handleInputChange('Lr')"></el-input>
                     </el-form-item>
                   </el-collapse-item>
-                  <el-collapse-item class="sub-item" title="EpoxyInspectionAuto" name="8">
-                    <el-form-item label="epoxyInspectionInterval" prop="epoxyInspectionInterval">
+                  <el-collapse-item class="sub-item" title="AA2" name="8">
+                    <el-form-item label="aa2RoiCc" prop="aa2RoiCc">
+                      <el-input v-model="editForm.aa2RoiCc" @input="handleInputChange('Cc')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="aa2RoiUl" prop="aa2RoiUl">
+                      <el-input v-model="editForm.aa2RoiUl" @input="handleInputChange('Ul')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="aa2RoiUr" prop="aa2RoiUr">
+                      <el-input v-model="editForm.aa2RoiUr" @input="handleInputChange('Ur')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="aa2RoiLl" prop="aa2RoiLl">
+                      <el-input v-model="editForm.aa2RoiLl" @input="handleInputChange('Ll')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="aa2RoiLr" prop="aa2RoiLr">
+                      <el-input v-model="editForm.aa2RoiLr" @input="handleInputChange('Lr')"></el-input>
+                    </el-form-item>
+                  </el-collapse-item>
+                  <el-collapse-item class="sub-item" title="AA3" name="9">
+                    <el-form-item label="aa3RoiCc" prop="aa3RoiCc">
+                      <el-input v-model="editForm.aa3RoiCc" @input="handleInputChange('Cc')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="aa3RoiUl" prop="aa3RoiUl">
+                      <el-input v-model="editForm.aa3RoiUl" @input="handleInputChange('Ul')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="aa3RoiUr" prop="aa3RoiUr">
+                      <el-input v-model="editForm.aa3RoiUr" @input="handleInputChange('Ur')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="aa3RoiLl" prop="aa3RoiLl">
+                      <el-input v-model="editForm.aa3RoiLl" @input="handleInputChange('Ll')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="aa3RoiLr" prop="aa3RoiLr">
+                      <el-input v-model="editForm.aa3RoiLr" @input="handleInputChange('Lr')"></el-input>
+                    </el-form-item>
+                  </el-collapse-item>
+
+                  <el-collapse-item class="sub-item" title="chartAlignment" name="10">
+                    <el-form-item label="xResMin" prop="chartAlignmentXResMin">
+                      <el-input v-model="editForm.chartAlignmentXResMin" @input="handleInputChange('chartAlignmentXResMin')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="xResMax" prop="chartAlignmentXResMax">
+                      <el-input v-model="editForm.chartAlignmentXResMax" @input="handleInputChange('chartAlignmentXResMax')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="yResMin" prop="chartAlignmentYResMin">
+                      <el-input v-model="editForm.chartAlignmentYResMin" @input="handleInputChange('chartAlignmentYResMin')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="yResMax" prop="chartAlignmentYResMax">
+                      <el-input v-model="editForm.chartAlignmentYResMax" @input="handleInputChange('chartAlignmentYResMax')"></el-input>
+                    </el-form-item>
+                  </el-collapse-item>
+                  <el-collapse-item class="sub-item" title="chartAlignment1" name="11">
+                    <el-form-item label="xResMin" prop="chartAlignment1XResMin">
+                      <el-input v-model="editForm.chartAlignment1XResMin" @input="handleInputChange('chartAlignment1XResMin')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="xResMax" prop="chartAlignment1XResMax">
+                      <el-input v-model="editForm.chartAlignment1XResMax" @input="handleInputChange('chartAlignment1XResMax')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="yResMin" prop="chartAlignment1YResMin">
+                      <el-input v-model="editForm.chartAlignment1YResMin" @input="handleInputChange('chartAlignment1YResMin')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="yResMax" prop="chartAlignment1YResMax">
+                      <el-input v-model="editForm.chartAlignment1YResMax" @input="handleInputChange('chartAlignment1YResMax')"></el-input>
+                    </el-form-item>
+                  </el-collapse-item>
+                  <el-collapse-item class="sub-item" title="chartAlignment2" name="12">
+                    <el-form-item label="xResMin" prop="chartAlignment2XResMin">
+                      <el-input v-model="editForm.chartAlignment2XResMin" @input="handleInputChange('chartAlignment2XResMin')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="xResMax" prop="chartAlignment2XResMax">
+                      <el-input v-model="editForm.chartAlignment2XResMax" @input="handleInputChange('chartAlignment2XResMax')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="yResMin" prop="chartAlignment2YResMin">
+                      <el-input v-model="editForm.chartAlignment2YResMin" @input="handleInputChange('chartAlignment2YResMin')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="yResMax" prop="chartAlignment2YResMax">
+                      <el-input v-model="editForm.chartAlignment2YResMax" @input="handleInputChange('chartAlignment2YResMax')"></el-input>
+                    </el-form-item>
+                  </el-collapse-item>
+
+                  <el-collapse-item class="sub-item" title="mtfCheck" name="13">
+                    <el-form-item label="FC" prop="mtfCheckFC">
+                      <el-input v-model="editForm.mtfCheckFC" @input="handleInputChange('mtfCheckFC')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F1" prop="mtfCheckF1">
+                      <el-input v-model="editForm.mtfCheckF1" @input="handleInputChange('mtfCheckF1')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F2" prop="mtfCheckF2">
+                      <el-input v-model="editForm.mtfCheckF2" @input="handleInputChange('mtfCheckF2')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F3" prop="mtfCheckF3">
+                      <el-input v-model="editForm.mtfCheckF3" @input="handleInputChange('mtfCheckF3')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F4" prop="mtfCheckF4">
+                      <el-input v-model="editForm.mtfCheckF4" @input="handleInputChange('mtfCheckF4')"></el-input>
+                    </el-form-item>
+                  </el-collapse-item>
+                  <el-collapse-item class="sub-item" title="mtfCheck1" name="14">
+                    <el-form-item label="FC" prop="mtfCheck1FC">
+                      <el-input v-model="editForm.mtfCheck1FC" @input="handleInputChange('mtfCheck1FC')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F1" prop="mtfCheck1F1">
+                      <el-input v-model="editForm.mtfCheck1F1" @input="handleInputChange('mtfCheck1F1')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F2" prop="mtfCheck1F2">
+                      <el-input v-model="editForm.mtfCheck1F2" @input="handleInputChange('mtfCheck1F2')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F3" prop="mtfCheck1F3">
+                      <el-input v-model="editForm.mtfCheck1F3" @input="handleInputChange('mtfCheck1F3')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F4" prop="mtfCheck2F4">
+                      <el-input v-model="editForm.mtfCheck2F4" @input="handleInputChange('mtfCheck2F4')"></el-input>
+                    </el-form-item>
+                  </el-collapse-item>
+                  <el-collapse-item class="sub-item" title="mtfCheck2" name="15">
+                    <el-form-item label="FC" prop="mtfCheck2FC">
+                      <el-input v-model="editForm.mtfCheck2FC" @input="handleInputChange('mtfCheck2FC')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F1" prop="mtfCheck2F1">
+                      <el-input v-model="editForm.mtfCheck2F1" @input="handleInputChange('mtfCheck2F1')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F2" prop="mtfCheck2F2">
+                      <el-input v-model="editForm.mtfCheck2F2" @input="handleInputChange('mtfCheck2F2')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F3" prop="mtfCheck2F3">
+                      <el-input v-model="editForm.mtfCheck2F3" @input="handleInputChange('mtfCheck2F3')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F4" prop="mtfCheck2F4">
+                      <el-input v-model="editForm.mtfCheck2F4" @input="handleInputChange('mtfCheck2F4')"></el-input>
+                    </el-form-item>
+                  </el-collapse-item>
+                  <el-collapse-item class="sub-item" title="mtfCheck3" name="16">
+                    <el-form-item label="FC" prop="mtfCheck3FC">
+                      <el-input v-model="editForm.mtfCheck3FC" @input="handleInputChange('mtfCheck3FC')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F1" prop="mtfCheck3F1">
+                      <el-input v-model="editForm.mtfCheck3F1" @input="handleInputChange('mtfCheck3F1')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F2" prop="mtfCheck3F2">
+                      <el-input v-model="editForm.mtfCheck3F2" @input="handleInputChange('mtfCheck3F2')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F3" prop="mtfCheck3F3">
+                      <el-input v-model="editForm.mtfCheck3F3" @input="handleInputChange('mtfCheck3F3')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="F4" prop="mtfCheck3F4">
+                      <el-input v-model="editForm.mtfCheck3F4" @input="handleInputChange('mtfCheck3F4')"></el-input>
+                    </el-form-item>
+                  </el-collapse-item>
+
+                  <el-collapse-item class="sub-item" title="recordPosition" name="17">
+                    <el-form-item label="utXyzMove" prop="recordPositionUtXyzMove">
+                      <el-input v-model="editForm.recordPositionUtXyzMove" @input="handleInputChange('recordPositionUtXyzMove')"></el-input>
+                    </el-form-item>
+                  </el-collapse-item>
+
+                  <el-collapse-item class="sub-item" title="saveMtf" name="18">
+                    <el-form-item label="ccMin" prop="saveMtfCcMin">
+                      <el-input v-model="editForm.saveMtfCcMin" @input="handleInputChange('saveMtfCcMin')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="ccMax" prop="saveMtfCcMax">
+                      <el-input v-model="editForm.saveMtfCcMax" @input="handleInputChange('saveMtfCcMax')"></el-input>
+                    </el-form-item>
+                  </el-collapse-item>
+
+                  <el-collapse-item class="sub-item" title="EpoxyInspectionAuto" name="20">
+                    <el-form-item label="epoxyInspection" prop="epoxyInspectionInterval">
                       <el-input v-model="editForm.epoxyInspectionInterval"
                                 @input="handleInputChange('epoxyInspectionInterval')"
                       ></el-input>
                     </el-form-item>
                   </el-collapse-item>
-                  <el-collapse-item class="sub-item" title="chartAlignment" name="9">
-                    <el-form-item label="xResMin" prop="xResMin">
-                      <el-input v-model="editForm.xResMin" @input="handleInputChange('xResMin')"></el-input>
-                    </el-form-item>
-                    <el-form-item label="xResMax" prop="xResMax">
-                      <el-input v-model="editForm.xResMax" @input="handleInputChange('xResMax')"></el-input>
-                    </el-form-item>
-                    <el-form-item label="yResMin" prop="yResMin">
-                      <el-input v-model="editForm.yResMin" @input="handleInputChange('yResMin')"></el-input>
-                    </el-form-item>
-                    <el-form-item label="yResMax" prop="yResMax">
-                      <el-input v-model="editForm.yResMax" @input="handleInputChange('yResMax')"></el-input>
-                    </el-form-item>
-                  </el-collapse-item>
-                  <el-collapse-item class="sub-item" title="AA" name="10">
-                    <el-form-item label="roiCc" prop="roiCc">
-                      <el-input v-model="editForm.roiCc" @input="handleInputChange('roiCc')"></el-input>
-                    </el-form-item>
-                    <el-form-item label="roiUl" prop="roiUl">
-                      <el-input v-model="editForm.roiUl" @input="handleInputChange('roiUl')"></el-input>
-                    </el-form-item>
-                    <el-form-item label="roiUr" prop="roiUr">
-                      <el-input v-model="editForm.roiUr" @input="handleInputChange('roiUr')"></el-input>
-                    </el-form-item>
-                    <el-form-item label="roiLl" prop="roiLl">
-                      <el-input v-model="editForm.roiLl" @input="handleInputChange('roiLl')"></el-input>
-                    </el-form-item>
-                    <el-form-item label="roiLr" prop="roiLr">
-                      <el-input v-model="editForm.roiLr" @input="handleInputChange('roiLr')"></el-input>
-                    </el-form-item>
-                  </el-collapse-item>
-                  <el-collapse-item class="sub-item" title="mtfCheck" name="11">
+
+                  <!--<el-collapse-item class="sub-item" title="mtfCheck" name="11">
                     <el-form-item v-for="(result, index) in results" :key="result" :label="`Result${index + 1}`"
                                   :prop="`result${index + 1}`"
                     >
@@ -1190,7 +1205,7 @@
                       </el-input>
                     </el-form-item>
 
-                  </el-collapse-item>
+                  </el-collapse-item>-->
                 </el-collapse>
               </el-collapse-item>
             </el-collapse>
@@ -1207,10 +1222,11 @@
 
 <script>
 import { getToken } from '@/utils/auth'
-import { getAaParamsParsed, addAaParamsModel } from '@/api/biz/aa/params'
+import { addAaParamsModel, getAaParamsParsed } from '@/api/biz/aa/params'
 import { checkPermi, checkRole } from '@/utils/permission'
-import '@/views/biz/common/css/qtech-css.css'
-import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
+import { pickerOptionsSet1 } from '@/views/biz/common/js/pickerOptionsConfig'
+import { bodyCellStyle, headerCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles'
+import { checkNumericOrEmpty, checkParamsRule } from '@/views/biz/common/js/utils'
 
 export default {
   name: 'index',
@@ -1232,7 +1248,6 @@ export default {
         // 上传的文件列表
         fileList: []
       },
-
       activeTab: 'online',
       // 遮罩层
       loading: false,
@@ -1257,130 +1272,168 @@ export default {
         simId: null,
         dtRange: [null, null]
       },
+      pickerOptions: pickerOptionsSet1,
       // 表单参数
       editForm: {},
       results: Array.from({ length: 52 }, (_, i) => `result${i + 1}`),
       // 表单校验
       rules: {
         prodType: [{ required: true, message: '机型不能为空', trigger: 'blur' }],
-        init: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        reInit: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        senserReset: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        clampOnOff: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        sid: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         AA1: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         AA2: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         AA3: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        mtfCheck: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        mtfCheck2: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        mtfCheck3: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        lpOn: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        lpOff: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        lpOc: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        lpOcCheck: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        lpOnBlemish: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        lpBlemish: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        backToPosition: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         blemish: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        clampOnOff: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         chartAlignment: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         chartAlignment1: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         chartAlignment2: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        delay: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        destroy: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        destroyStart: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        dispense: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        epoxyInspection: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        epoxyInspectionAuto: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        grab: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        gripperOpen: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        init: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        lpBlemish: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        lpOc: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        lpOcCheck: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        lpOn: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        lpOnBlemish: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        lpOff: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        moveToBlemishPos: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        mtfCheck: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        mtfCheck1: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        mtfCheck2: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        mtfCheck3: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        openCheck: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        ocCheck: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        recordPosition: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        reInit: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        saveOc: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        saveMtf: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        senserReset: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        sid: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        uvon: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        uvoff: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         vcmHall: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         vcmHall2: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        vcmMoveToZ: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        vcmMoveToZPos: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        vcmPowerOffCheck: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        vcmRun: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        vcmInit: [{ validator: this.checkParamsRule, trigger: 'blur' }],
+        vcmOisInit: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         vcmPowerOff: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         vcmPowerOn: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         vcmTop: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         vcmTopHall: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         vcmZ: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         vcmZHall: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        vcmOisInit: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        vcmMoveToZ: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        vcmPowerOffCheck: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        vcmMoveToZPos: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        vcmInit: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        mtfOffAxisCheck1: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        mtfOffAxisCheck2: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        mtfOffAxisCheck3: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        openCheck: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        backToPosition: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        delay: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        destroy: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        destroyStart: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        dispense: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        epoxyInspectionAuto: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        epoxyInspection: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        grab: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        gripperOpen: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        moveToBlemishPos: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        recordPosition: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        saveOc: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        saveMtf: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        uvon: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        uvoff: [{ validator: this.checkParamsRule, trigger: 'blur' }],
         yLevel: [{ validator: this.checkParamsRule, trigger: 'blur' }],
-        resultCheckMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        resultCheckMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        aa1RoiCc: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1RoiUl: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1RoiUr: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1RoiLr: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1RoiLl: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1FC: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1F1: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1F2: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1F3: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1F4: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1MtfOffAxisCheck1: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1MtfOffAxisCheck2: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa1MtfOffAxisCheck3: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        aa2RoiCc: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2RoiUl: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2RoiUr: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2RoiLr: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2RoiLl: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2FC: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2F1: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2F2: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2F3: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2F4: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2MtfOffAxisCheck1: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2MtfOffAxisCheck2: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa2MtfOffAxisCheck3: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        aa3RoiCc: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3RoiUl: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3RoiUr: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3RoiLr: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3RoiLl: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3FC: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3F1: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3F2: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3F3: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3F4: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3MtfOffAxisCheck1: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3MtfOffAxisCheck2: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        aa3MtfOffAxisCheck3: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        mtfCheckFC: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheckF1: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheckF2: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheckF3: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheckF4: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        mtfCheck1FC: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck1F1: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck1F2: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck1F3: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck1F4: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        mtfCheck2FC: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck2F1: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck2F2: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck2F3: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck2F4: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        mtfCheck3FC: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck3F1: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck3F2: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck3F3: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        mtfCheck3F4: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        chartAlignmentXResMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        chartAlignmentXResMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        chartAlignmentYResMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        chartAlignmentYResMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        chartAlignment1XResMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        chartAlignment1XResMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        chartAlignment1YResMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        chartAlignment1YResMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        chartAlignment2XResMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        chartAlignment2XResMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        chartAlignment2YResMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        chartAlignment2YResMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
         epoxyInspectionInterval: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        xResMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        xResMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        yResMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        yResMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        roiCc: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        roiUl: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        roiUr: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        roiLr: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        roiLl: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result1: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result2: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result3: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result4: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result5: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result6: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result7: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result8: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result9: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result10: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result11: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result12: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result13: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result14: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result15: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result16: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result17: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result18: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result19: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result20: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result21: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result22: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result23: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result24: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result25: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result26: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result27: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result28: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result29: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result30: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result31: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result32: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result33: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result34: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result35: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result36: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result37: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result38: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result39: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result40: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result41: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result42: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result43: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result44: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result45: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result46: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result47: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result48: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result49: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result50: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result51: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
-        result52: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }]
+
+        vcmCheckResultCheckMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        vcmCheckResultCheckMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        recordPositionUtXyzMove: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        ocCheckXOffsetMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        ocCheckXOffsetMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        ocCheckYOffsetMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        ocCheckYOffsetMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        saveOcXOffsetMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        saveOcXOffsetMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        saveOcYOffsetMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        saveOcYOffsetMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+
+        saveMtfCcMin: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }],
+        saveMtfCcMax: [{ validator: this.checkNumericOrEmpty, trigger: 'blur' }]
       },
       outerActiveNames: ['1'], // 默认展开的外部项
       innerActiveNames: [] // 内部项默认不展开
@@ -1392,6 +1445,8 @@ export default {
     headerCellStyle,
     bodyCellStyle,
     tableStyle,
+    checkParamsRule,
+    checkNumericOrEmpty,
 
     uploadFail() {
       this.$modal.msgError('远程服务异常！')
@@ -1449,6 +1504,7 @@ export default {
               endDate: this.$formatDt(this.queryParams.dtRange[1])
             }
             getAaParamsParsed(this.queryParams).then(response => {
+              console.log(response.rows)
               this.resultList = response.rows
               this.total = response.total
               this.loading = false
@@ -1497,7 +1553,7 @@ export default {
     // 表单重置
     reset() {
       this.editForm = {
-        id: null,
+        id: null
 
       }
       this.resetForm('editForm')
@@ -1511,34 +1567,10 @@ export default {
             this.editDialogVisible = false
             this.getList()
           }).catch(error => {
-            this.$message.error('提交失败，请重试');
-          });
+            this.$message.error('提交失败，请重试')
+          })
         }
       })
-    },
-
-    /** 字段校验规则 */
-    checkParamsRule(rule, value, callback) {
-      if (!value) {
-        // 如果值为空，则校验通过（视为可选）
-        callback()
-      }
-      const allowedTypes = ['Enable', 'Disable', '']
-      if (allowedTypes.includes(value)) {
-        callback()
-      } else {
-        callback(new Error('请输入正确的参数值, 必须是Enable、Disable或空值'))
-      }
-    },
-    checkNumericOrEmpty(rule, value, callback) {
-      const numericPattern = /^-?\d+(\.\d+)?$/
-      if (!value) {
-        callback()
-      } else if (numericPattern.test(value)) {
-        callback()
-      } else {
-        callback(new Error('请输入数字或留空'))
-      }
     },
 
     handleClear(field) {
@@ -1549,7 +1581,7 @@ export default {
       if (this.editForm[field] === '') {
         this.$set(this.editForm, field, null)
       }
-    },
+    }
   },
 
   mounted() {
@@ -1698,7 +1730,7 @@ export default {
   margin: 5px 0;
 }
 
-.fade-leave-to{
+.fade-leave-to {
   display: none;
 }
 </style>
