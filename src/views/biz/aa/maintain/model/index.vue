@@ -87,7 +87,7 @@
         </el-table-column>
 
         <!-- 光学对齐和处理（LP） -->
-        <el-table-column label="光学对齐和处理（LP）" align="left">
+        <el-table-column label="光学对齐和处理（LP）" >
           <template slot-scope="scope">
             <div class="prop-container" v-if="convertNull(scope.row.aa1) !== '--'">
               <span class="prop-label">
@@ -215,7 +215,7 @@
         </el-table-column>
 
         <!-- VCM（音圈电机）相关 -->
-        <el-table-column label="VCM相关" align="left">
+        <el-table-column label="VCM相关" align="left" >
           <template slot-scope="scope">
             <div class="prop-container" v-if="convertNull(scope.row.vcmHall) !== '--'">
               <span class="prop-label">
@@ -321,7 +321,7 @@
         </el-table-column>
 
         <!-- 检查和检测 -->
-        <el-table-column label="检查和检测" align="left">
+        <el-table-column label="检查和检测" align="left" width="300">
           <template slot-scope="scope">
             <div class="prop-container" v-if="convertNull(scope.row.mtfOffAxisCheck1) !== '--'">
               <span class="prop-label">
@@ -365,7 +365,7 @@
         </el-table-column>
 
         <!-- 其他操作和记录 -->
-        <el-table-column label="其他操作和记录" align="left">
+        <el-table-column label="其他操作和记录" align="left" width="300">
           <template slot-scope="scope">
             <div class="prop-container" v-if="convertNull(scope.row.backToPosition) !== '--'">
               <span class="prop-label">
@@ -1466,6 +1466,7 @@ export default {
       this.queryParams.params = {}
       getAaParamsStdModels(this.queryParams).then(response => {
         this.resultList = response.rows
+        console.log(response.rows)
         this.total = response.total
         this.loading = false
       })

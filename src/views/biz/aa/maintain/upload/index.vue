@@ -184,18 +184,18 @@
               <div class="prop-container">
               <span class="prop-label">
                 AA1:
-                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.AA1) === 'Enable', 'disabled': $convertNull(scope.row.AA1) === 'Disable'}">{{ $convertNull(scope.row.AA1) }}</span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.aa1) === 'Enable', 'disabled': $convertNull(scope.row.aa1) === 'Disable'}">{{ $convertNull(scope.row.aa1) }}</span>
               </span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 AA2:
-                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.AA2) === 'Enable', 'disabled': $convertNull(scope.row.AA2) === 'Disable'}">{{ $convertNull(scope.row.AA2) }}</span></span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.aa2) === 'Enable', 'disabled': $convertNull(scope.row.aa2) === 'Disable'}">{{ $convertNull(scope.row.aa2) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
                 AA3:
-                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.AA3) === 'Enable', 'disabled': $convertNull(scope.row.AA3) === 'Disable'}">{{ $convertNull(scope.row.AA3) }}</span></span>
+                <span class="prop-value" :class="{'enabled': $convertNull(scope.row.aa3) === 'Enable', 'disabled': $convertNull(scope.row.aa3) === 'Disable'}">{{ $convertNull(scope.row.aa3) }}</span></span>
               </div>
               <div class="prop-container">
               <span class="prop-label">
@@ -752,17 +752,17 @@
               </el-collapse-item>
               <el-collapse-item class="main-item" title="光学对齐和处理（LP）" name="2">
                 <el-form-item label="AA1" prop="AA1">
-                  <el-select v-model="editForm.AA1" placeholder="请选择" clearable @clear="handleClear('AA1')">
+                  <el-select v-model="editForm.aa1" placeholder="请选择" clearable @clear="handleClear('AA1')">
                     <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="AA2" prop="AA2">
-                  <el-select v-model="editForm.AA2" placeholder="请选择" clearable @clear="handleClear('AA2')">
+                  <el-select v-model="editForm.aa2" placeholder="请选择" clearable @clear="handleClear('AA2')">
                     <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="AA3" prop="AA3">
-                  <el-select v-model="editForm.AA3" placeholder="请选择" clearable @clear="handleClear('AA3')">
+                  <el-select v-model="editForm.aa3" placeholder="请选择" clearable @clear="handleClear('AA3')">
                     <el-option v-for="dict in dict.type.aa_list_params_power" :key="dict.value" :label="dict.label" :value="dict.value"/>
                   </el-select>
                 </el-form-item>

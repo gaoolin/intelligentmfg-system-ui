@@ -1,7 +1,7 @@
 <template>
 <div class="app-container">
   <el-form ref="headQueryForm" :model="queryParams" :inline="false" label-width="68px" label-position="right">
-    <el-row :gutter="20">
+    <el-row :gutter="20" class="vertical-center-row">
       <el-col :md="6" :sm="12">
         <el-form-item label="料号" prop="materialId">
           <el-input v-model="queryParams.materialId" placeholder="查询单个料号的参数" clearable />
@@ -235,7 +235,7 @@
     </el-row>
   </el-form>
 
-  <el-row :gutter="10" class="mb8">
+  <el-row :gutter="10" class="mb5">
     <el-col :span="1.5">
       <el-button
         type="primary"
@@ -275,26 +275,22 @@
   <el-table
     v-loading="loading"
     :data="tableData"
-    fit
-    class="tableArea mt10"
-    style="font-size: 14px;"
-    cell-mouse-enter
-    cell-mouse-leave
-    :header-cell-style="tableHeaderCellStyle"
-    border
+    :header-cell-style="headerCellStyle"
+    :cell-style="bodyCellStyle"
+    :style="tableStyle()"
   >
-    <el-table-column prop="materialId" label="料号" align="center" width="120" fixed />
-    <el-table-column prop="fixtureName" label="品名" align="center" width="120" fixed show-overflow-tooltip />
-    <el-table-column prop="fixtureSpec" label="规格" align="center" width="120" fixed  show-overflow-tooltip />
-    <el-table-column prop="buckle" label="连接器朝向" align="center" width="120" >
+    <el-table-column prop="materialId" label="料号" align="center" width="130" fixed />
+    <el-table-column prop="fixtureName" label="品名" align="center" width="130" fixed show-overflow-tooltip />
+    <el-table-column prop="fixtureSpec" label="规格" align="center" width="130" fixed show-overflow-tooltip />
+    <el-table-column prop="buckle" label="连接器朝向" align="center" width="70" >
       <template slot-scope="scope">
         <dict-tag :options="dict.type.fixture_buckle_status" :value="scope.row.buckle"></dict-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="fixtureVersion" label="治具版本" align="center" width="120" />
-    <el-table-column prop="connectorModel" label="连接器型号" align="center" width="120" />
-    <el-table-column prop="fixtureCategory" label="治具类型" align="center" width="120" />
-    <el-table-column prop="fixtureSharedStatus" label="使用机型" align="center" width="120" >
+    <el-table-column prop="fixtureVersion" label="治具版本" align="center" width="70" />
+    <el-table-column prop="connectorModel" label="连接器型号" align="center" width="120" show-overflow-tooltip />
+    <el-table-column prop="fixtureCategory" label="治具类型" align="center" width="120"  show-overflow-tooltip />
+    <el-table-column prop="fixtureSharedStatus" label="使用机型" align="center" width="70" >
       <template slot-scope="scope">
         <span v-if="scope.row.fixtureSharedStatus===1">
            <router-link :to="{path: '/biz/fixture/search', query: {
@@ -309,52 +305,52 @@
         </span>
       </template>
     </el-table-column>
-    <el-table-column prop="connectorTtlWidth" label="连接器总宽" align="center" width="120" />
-    <el-table-column prop="connectorTtlLength" label="连接器总长" align="center" width="120" />
-    <el-table-column prop="connectorExposedCopperWidth" label="连接器露铜部宽" align="center" width="120" />
-    <el-table-column prop="pinPins" label="引脚pin数" align="center" width="120" />
-    <el-table-column prop="pinSpacing" label="引脚PIN间距" align="center" width="120"/>
-    <el-table-column prop="isFixedPin" label="是否有固定PIN" align="center" width="120" >
+    <el-table-column prop="connectorTtlWidth" label="连接器总宽" align="center" width="70" />
+    <el-table-column prop="connectorTtlLength" label="连接器总长" align="center" width="70" />
+    <el-table-column prop="connectorExposedCopperWidth" label="连接器露铜部宽" align="center" width="70" />
+    <el-table-column prop="pinPins" label="引脚pin数" align="center" width="70" />
+    <el-table-column prop="pinSpacing" label="引脚PIN间距" align="center" width="70"/>
+    <el-table-column prop="isFixedPin" label="是否有固定PIN" align="center" width="70" >
       <template slot-scope="scope">
         <dict-tag :options="dict.type.fixture_pogopin_fixed_pin" :value="scope.row.isFixedPin"></dict-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="connectorSheetWidth" label="连接器钢片宽度" align="center" width="120" />
-    <el-table-column prop="connectorSheetLength" label="连接器钢片长度" align="center" width="120"/>
-    <el-table-column prop="moduleHeadWidth" label="模组头部宽度" align="center" width="120" />
-    <el-table-column prop="moduleHeadLength" label="模组头部长度" align="center" width="120" />
-    <el-table-column prop="moduleBodyHeight" label="模组本体高度" align="center" width="120" />
+    <el-table-column prop="connectorSheetWidth" label="连接器钢片宽度" align="center" width="70" />
+    <el-table-column prop="connectorSheetLength" label="连接器钢片长度" align="center" width="70"/>
+    <el-table-column prop="moduleHeadWidth" label="模组头部宽度" align="center" width="70" />
+    <el-table-column prop="moduleHeadLength" label="模组头部长度" align="center" width="70" />
+    <el-table-column prop="moduleBodyHeight" label="模组本体高度" align="center" width="70" />
     <el-table-column prop="heightOfLensCenterToConnectorCenter" label="LENS中心到连接器中心高度" align="center" width="120" />
-    <el-table-column prop="connectorSubstrateThickness" label="连接器基板厚度" align="center" width="120" />
+    <el-table-column prop="connectorSubstrateThickness" label="连接器基板厚度" align="center" width="70" />
     <el-table-column prop="leftRightOffsetHeightLensCenterToConnectorCenter" label="LENS中心到连接器中心左右偏移量" align="center" width="120" />
-    <el-table-column prop="fovAngle" label="FOV角度" align="center" width="120" />
-    <el-table-column prop="isRegularFpc" label="是否常规FPC" align="center" width="120" >
+    <el-table-column prop="fovAngle" label="FOV角度" align="center" width="70" />
+    <el-table-column prop="isRegularFpc" label="是否常规FPC" align="center" width="70" >
       <template slot-scope="scope">
         <dict-tag :options="dict.type.fixture_pogopin_is_regular_fpc" :value="scope.row.isRegularFpc"></dict-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="fpcMaximumWidth" label="FPC最大宽度" align="center" width="120" />
-    <el-table-column prop="modulePlacement" label="模组摆放方向" align="center" width="120" >
+    <el-table-column prop="fpcMaximumWidth" label="FPC最大宽度" align="center" width="70" />
+    <el-table-column prop="modulePlacement" label="模组摆放方向" align="center" width="70" >
       <template slot-scope="scope">
         <dict-tag :options="dict.type.fixture_pogopin_module_placement" :value="scope.row.modulePlacement"></dict-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="mcId" label="机台" align="center" width="120" >
+    <el-table-column prop="mcId" label="机台" align="center" width="90" >
       <template slot-scope="scope">
         <dict-tag :options="dict.type.fixture_pogopin_mc_id" :value="scope.row.mcId"></dict-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="testFixtures" label="测试工装" align="center" width="120" >
+    <el-table-column prop="testFixtures" label="测试工装" align="center" width="90" >
       <template slot-scope="scope">
         <dict-tag :options="dict.type.fixtrue_pogopin_test_fixture" :value="scope.row.testFixtures"></dict-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="prodLevel" label="产品类型" align="center" width="120" >
+    <el-table-column prop="prodLevel" label="产品类型" align="center" width="70" >
       <template slot-scope="scope">
         <dict-tag :options="dict.type.fixture_pogopin_prod_level" :value="scope.row.prodLevel"></dict-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="remark" label="备注" align="center" width="130" />
+    <el-table-column prop="remark" label="备注" align="center" width="130" show-overflow-tooltip />
     <el-table-column label="操作" align="center" width="110" fixed="right" >
       <template slot-scope="scope">
         <div class="box-ops">
@@ -380,7 +376,7 @@
   <!--   添加治具对话框   -->
   <modal-udf :title="title" :dialogShow="addFixtureDialogVisible" :width="'30%'" :isCloseOnClick="false" :resetBtn="dialogReset" @closeChildDialog="closeChildDialog" v-dialogDrag v-dialogDragWidth v-dialogDragHeight >
     <el-form ref="fixturePoGoPinForm" :model="form" :rules="rulesFlag === 0 ? rules : rulesFlag === 1 ? rulesAddShared : rulesFlag === 2 ? rulesUpdate : rulesFlag === 3 ? rules : rules" label-width="110px" >
-      <el-form-item label="料号" prop="materialId">
+      <el-form-item label="料号" prop="materialId" class="recover-form-item">
         <el-input v-model="form.materialId" :disabled="materialIdDisabled" placeholder="请输入料号" />
       </el-form-item>
       <el-form-item label="品名" prop="fixtureName">
@@ -402,7 +398,7 @@
           </el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="治具类型" prop="fixtureCategory">
+      <el-form-item label="治具类型" prop="fixtureCategory" class="recover-form-item">
         <!-- 请求返回的form.fixtureCategory是 int 类型，字典的key是string类型，需要把int转成string，否则输入框不能自动转换成value/label -->
         <el-select v-model="form.fixtureCategory" placeholder="请选择治具类型" clearable :disabled="materialInfoDisabled" >
           <el-option
@@ -413,7 +409,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="使用机型" prop="prodType" v-if="prodTypeShow">
+      <el-form-item label="使用机型" prop="prodType" v-if="prodTypeShow" class="recover-form-item">
         <el-input v-model="form.prodType" placeholder="使用机型" clearable />
       </el-form-item>
       <el-form-item label="连接器型号" prop="connectorModel" v-if="formItemShow">
@@ -588,6 +584,7 @@ import {
   materialIdRules
 } from '@/api/biz/fixture/fixture'
 import ModalUdf from '@/views/biz/common/ModalUdf'
+import { headerCellStyle, bodyCellStyle, tableStyle } from '@/views/biz/common/js/tableStyles';
 
 export default {
   name: 'Pogopin',
@@ -735,6 +732,10 @@ export default {
   },
 
   methods: {
+    headerCellStyle,
+    bodyCellStyle,
+    tableStyle,
+
     /** 获取pogopin治具因子 */
     getList() {
       this.loading = true
@@ -1159,11 +1160,6 @@ export default {
         callback();
       }
     },
-
-    /** 表格样式函数 */
-    tableHeaderCellStyle({ row, column, rowIndex, columnIndex }) {
-      return ''
-    }
   }
 }
 </script>
@@ -1187,4 +1183,22 @@ export default {
   padding: 2px;
   margin: 0;
 }
+
+.vertical-center-row {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  height: 100%; /* 高度设为 100%，确保垂直居中 */
+}
+
+.right-handle-group {
+  display: flex;
+  height: 100%;
+  align-items: center; /* 垂直居中 */
+  float: left;
+}
+
+.recover-form-item {
+  margin-bottom: 15px !important;
+}
+
 </style>
